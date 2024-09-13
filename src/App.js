@@ -13,6 +13,8 @@ import Dashboard from './Screens/Dashboard/Admin/Dashboard';
 
 function App() {
   Aos.init();
+
+function App() {
   return (
     <Routes>
       <Route path="/" element={<HomeScreen />} />
