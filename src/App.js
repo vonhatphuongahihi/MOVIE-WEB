@@ -10,11 +10,16 @@ import SingleMovie from './Screens/SingleMovie';
 import FavoritesMovies from './Screens/Dashboard/FavoriteMovies';
 import Password from './Screens/Dashboard/Password';
 import Dashboard from './Screens/Dashboard/Admin/Dashboard';
+import WatchPage from './Screens/WatchPage';
+import Login from './Screens/Login';
+import Register from './Screens/Register';
+import Profile from './Screens/Dashboard/Profile';
+
 
 function App() {
   Aos.init();
 
-function App() {
+
   return (
     <Routes>
       <Route path="/" element={<HomeScreen />} />
@@ -23,6 +28,10 @@ function App() {
       <Route path="/contact-us" element={<ContactUs />} />
       <Route path="/movies" element={<MoviesPage/>} />
       <Route path="/movie/:id" element={<SingleMovie/>} />
+      <Route path="/watch/:id" element={<WatchPage/>} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/favorites" element={<FavoritesMovies/>} />
       <Route path="/password" element={<Password/>} />
       <Route path="/dashboard" element={<Dashboard/>} />
