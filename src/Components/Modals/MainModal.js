@@ -5,7 +5,7 @@ import { IoClose } from "react-icons/io5";
 function MainModal({ modalOpen, setModalOpen, children }) {
   const cancelButtonRef = useRef();
   return (
-    <>
+    <>   
       <Transition show={modalOpen} as={Fragment} appear>
         <Dialog
           as="div"
@@ -47,8 +47,7 @@ function MainModal({ modalOpen, setModalOpen, children }) {
                 onClick={() => setModalOpen(false)}
                 type="button"
                 className="
-              transitions w-10 h-10 flex-colo text-base text-subMain bg-white rounded-full hover:bg-subMain hover:text-white
-              "
+                transitions w-10 h-10 flex-colo text-base text-subMain bg-white rounded-full hover:bg-subMain hover:text-white"
               >
                 <IoClose />
               </button>
@@ -61,3 +60,4 @@ function MainModal({ modalOpen, setModalOpen, children }) {
 }
 
 export default MainModal;
+
