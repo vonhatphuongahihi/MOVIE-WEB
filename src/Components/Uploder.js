@@ -28,5 +28,4 @@ function Uploder() {
     </div>
   );
 }
-
 export default Uploder;
