@@ -1,20 +1,27 @@
-import React from 'react'
 import Aos from 'aos';
-import { Routes, Route } from 'react-router-dom';
-import HomeScreen from './Screens/HomeScreen';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 import AboutUs from './Screens/AboutUs';
-import NotFound from './Screens/NotFound';
 import ContactUs from './Screens/ContactUs';
-import MoviesPage from './Screens/Movies';
-import SingleMovie from './Screens/SingleMovie';
+import AddMovie from './Screens/Dashboard/Admin/AddMovie';
+import Categories from './Screens/Dashboard/Admin/Categories';
+import Dashboard from './Screens/Dashboard/Admin/Dashboard';
+import Users from './Screens/Dashboard/Admin/Users';
 import FavoritesMovies from './Screens/Dashboard/FavoriteMovies';
 import Password from './Screens/Dashboard/Password';
+import HomeScreen from './Screens/HomeScreen';
+import MoviesPage from './Screens/Movies';
+import NotFound from './Screens/NotFound';
+import SingleMovie from './Screens/SingleMovie';
 import Dashboard from './Screens/Dashboard/Admin/Dashboard';
+import WatchPage from './Screens/WatchPage';
+import Login from './Screens/Login';
+import Register from './Screens/Register';
+import Profile from './Screens/Dashboard/Profile';
+
 
 function App() {
   Aos.init();
-
-function App() {
   return (
     <Routes>
       <Route path="/" element={<HomeScreen />} />
@@ -23,11 +30,18 @@ function App() {
       <Route path="/contact-us" element={<ContactUs />} />
       <Route path="/movies" element={<MoviesPage/>} />
       <Route path="/movie/:id" element={<SingleMovie/>} />
+      <Route path="/watch/:id" element={<WatchPage/>} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/favorites" element={<FavoritesMovies/>} />
       <Route path="/password" element={<Password/>} />
       <Route path="/dashboard" element={<Dashboard/>} />
+      <Route path="/categories" element={<Categories/>} />
+      <Route path="/users" element={<Users/>} />
+      <Route path="/addmovie" element={<AddMovie/>} />
     </Routes>
   );
 }
 
-export default App
+export default App;
