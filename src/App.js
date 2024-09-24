@@ -13,7 +13,6 @@ import HomeScreen from './Screens/HomeScreen';
 import MoviesPage from './Screens/Movies';
 import NotFound from './Screens/NotFound';
 import SingleMovie from './Screens/SingleMovie';
-import Dashboard from './Screens/Dashboard/Admin/Dashboard';
 import WatchPage from './Screens/WatchPage';
 import Login from './Screens/Login';
 import Register from './Screens/Register';
