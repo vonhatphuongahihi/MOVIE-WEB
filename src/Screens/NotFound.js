@@ -10,15 +10,12 @@ function NotFound() {
         src="/images/404.png"
         alt="notfound"
       />
-      <h1 className="lg:text-4xl font-bold">Oops ... Page not found</h1>
-      <p className="font-medium text-border italic leading-6">
-        The page you are looking for does not exist or other error occurred. Click the button below to return to the home page.
-      </p>
+      <h1 className="lg:text-4xl font-bold">Oops ... Không tìm thấy trang</h1>
       <Link
         to="/"
         className="bg-subMain transitions text-white flex-rows gap-4 font-medium py-3 hover:text-main px-6 rounded-md"
       >
-        <BiHomeAlt />Go back Home
+        <BiHomeAlt />Trở về Trang chủ
       </Link>
     </div>
   );
