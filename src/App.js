@@ -19,12 +19,14 @@ import Login from './Screens/Login';
 import Register from './Screens/Register';
 import Profile from './Screens/Dashboard/Profile';
 import SplashScreen from './Splash'; // Import SplashScreen component
+import axios from 'axios';
 
 function App() {
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     Aos.init();
+    
   }, []);
 
   const handleLoad = () => {
