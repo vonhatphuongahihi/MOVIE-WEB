@@ -1,5 +1,4 @@
 import React,{useState} from "react";
-import Filters from "../Components/Filters";
 import Layout from "../Layout/Layout";
 import Movie from "../Components/Movie";
 import { Movies } from "../Data/MovieData";
@@ -15,7 +14,6 @@ function MoviesPage() {
   return (
     <Layout>
       <div className="min-height-screen container mx-auto px-2 my-6">
-        <Filters />
         <p className="text-lg font-medium my-6">
           Total <span className="font-bold text-subMain">{Movies?.length}</span>{" "}
           items Found

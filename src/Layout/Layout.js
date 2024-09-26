@@ -1,12 +1,12 @@
 import React from 'react'
-import NavBar from './Navbar/NavBar'
+import Navbar from './Navbar/Navbar'
 import Footer from './Footer/Footer'
 
 function Layout({children}) {
   return (
    <>
     <div className='bg-main text-white'>
-        <NavBar />
+        <Navbar />
         {children}
         <Footer />
     </div>
