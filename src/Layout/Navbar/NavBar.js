@@ -4,41 +4,30 @@ import { FaSearch, FaHeart } from "react-icons/fa";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
 
-function NavBar() {
+function Navbar() {
   const hover = "hover:text-subMain transitions text-white";
   const activeClassName = "text-subMain border-b-2 border-green-500"; // Class cho trạng thái active
 
   const Hover = ({ isActive }) =>
     isActive ? activeClassName : hover;
-
   return (
     <div>
       {/* Thanh NavBar chính */}
       <div className="bg-main shadow-md sticky top-0 z-20 border-b border-gray-300 border-opacity-50">
-        <div className="container mx-auto py-2 px-2 lg:grid gap-12 grid-cols-10 justify-between items-center">
+        <div className="container mx-auto py-0 px-2 lg:grid gap-12 grid-cols-10 justify-between items-center">
           <div className="col-span-4 flex items-center">
-            <Link to="/" className="mr-2">
+            <Link to="/" className="mr-2 mb-1">
               <img src="/images/logo.png" alt="logo" className="w-20 h-6 object-contain" />
             </Link>
-            <NavLink to="/" className={`${Hover} mx-2`}>
-              <img src="/images/trangchu.png" alt="trangchu" className="w-30 h-12 object-contain" />
-            </NavLink>
-            <NavLink to="/truyenhinh" className={`${Hover} mx-2`}>
-              <img src="/images/truyenhinh.png" alt="truyenhinh" className="w-30 h-12 object-contain"/>
-            </NavLink>
-            <NavLink to="/hbg" className={`${Hover} mx-2`}>
-              <img src="/images/hbg.png" alt="hbg" className="w-30 h-12 object-contain"/>
-            </NavLink>
-            <NavLink to="/thethao" className={`${Hover} mx-2`}>
-              <img src="/images/thethao.png" alt="thethao" className="w-30 h-12 object-contain"/>
-            </NavLink>
-            <NavLink to="/thieunhi" className={`${Hover} mx-2`}>
-              <img src="/images/thieunhi.png" alt="thieunhi" className="w-30 h-12 object-contain"/>
-            </NavLink>
+            <NavLink to="/" className="mx-4 w-30 h-10 object-contain hover:class-name mt-4 hover:text-subMain text-[15px]">Trang chủ</NavLink>
+            <NavLink to="/truyenhinh" className="mx-4 mt-4 w-30 h-10 object-contain hover:class-name hover:text-subMain text-[15px]">
+            Show truyền hình</NavLink>
+            <NavLink to="/phim" className="mx-4 mt-4 w-30 h-10 object-contain hover:class-name hover:text-subMain text-[15px]">
+            Phim</NavLink>
           </div>
-          
+  
           {/* search Form */}
-          <div className="col-span-3 flex items-center justify-end">
+          <div className="col-span-3 flex items-center ">
             <form className="w-full text-sm bg-white rounded flex items-center gap-2">
               <button
                 type="submit"
@@ -49,7 +38,7 @@ function NavBar() {
               <input
                 type="text"
                 placeholder="Tìm kiếm"
-                className="font-medium placeholder:text-border text-sm w-11/12 h-8 bg-transparent border-none px-2 text-black"
+                className="font-medium placeholder:text-border text-sm w-full h-8 bg-transparent border-none px-2 text-black"
               />
               <div className="flex items-center">
                 <svg
@@ -108,4 +97,4 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+export default Navbar;
