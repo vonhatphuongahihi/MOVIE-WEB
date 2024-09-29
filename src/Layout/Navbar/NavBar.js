@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { FaSearch, FaHeart } from "react-icons/fa";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
+import { logout } from "../../firebase";
 
 function Navbar() {
   const hover = "hover:text-subMain transitions text-white";
@@ -66,6 +67,9 @@ function Navbar() {
             </NavLink>
             <IoMdNotificationsOutline className="w-7 h-7 text-subMain cursor-pointer mr-2" />
             <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer ml-4 mr-2" />
+            <div className="dropdown">
+              <button onClick={()=>{logout()}}>Đăng xuất</button>
+            </div>
           </div>
         </div>
       </div>
