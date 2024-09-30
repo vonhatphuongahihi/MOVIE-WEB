@@ -1,0 +1,84 @@
+.collapseAlign {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.containerSupport {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.collapseButton {
+    display: block;
+    width: 30%;
+    background-color: none;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: right;
+    margin-right: 20px;
+}
+
+.collapseButton:hover {
+    color: #28bd11;
+}
+
+.groupContainer {
+    margin: 20px 0;
+    border: none;
+    border-radius: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.groupTitle {
+    padding: none;
+    background-color: none;
+    margin: 0;
+    text-align: left;
+    color: #28bd11;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.accordionItem {
+    margin: 10px 0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: none;
+}
+
+.title {
+    margin: 10px 0px 10px 15px;
+}
+
+.title:hover {
+    color: #28bd11;
+}
+
+.button {
+    cursor: pointer;
+    background-color: none;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.content {
+    padding: 15px;
+    border-top: 1px solid #ccc;
+    background-color: none;
+}
+
+.arrow {
+    font-size: 25px;
+}
