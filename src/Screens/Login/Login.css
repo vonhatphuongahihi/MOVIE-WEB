@@ -77,3 +77,26 @@
     font-weight: 500;
     cursor: pointer;
 }
+.loading {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+}
+
+.loading img {
+    width: 100px;
+    height: 100px;
+}
+
+@media (max-width: 500px){
+    .login{
+        padding: 15 5%
+    }
+    .login-form{
+        padding: 20px;
+        margin-top: 30px;
+    }
+}
