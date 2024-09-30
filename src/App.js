@@ -1,18 +1,18 @@
 // src/App.js
-import React, { useState, useEffect } from 'react';
 import Aos from 'aos';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AboutUs from './Screens/AboutUs';
 import ContactUs from './Screens/ContactUs';
 import HomeScreen from './Screens/HomeScreen';
+import Login from './Screens/Login/Login';
 import MoviesPage from './Screens/Movies';
 import NotFound from './Screens/NotFound';
-import SingleMovie from './Screens/SingleMovie';
-import WatchPage from './Screens/WatchPage';
-import Login from './Screens/Login/Login';
 import Register from './Screens/Register';
+import SingleMovie from './Screens/SingleMovie';
+import Support from './Screens/Support'; // Import Support component
+import WatchPage from './Screens/WatchPage';
 import SplashScreen from './Splash'; // Import SplashScreen component
-import axios from 'axios';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -41,6 +41,7 @@ function App() {
           <Route path="/watch/:id" element={<WatchPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/support" element={<Support />} />
         </Routes>
       )}
     </>
