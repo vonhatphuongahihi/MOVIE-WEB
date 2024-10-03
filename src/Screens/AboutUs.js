@@ -1,12 +1,12 @@
 import React from "react";
 import Head from "../Components/Head";
-import Layout from "./../Layout/Layout";
+import Layout_2 from "./../Layout/Layout_2";
 
 function AboutUs() {
   return (
-    <Layout>
+    <Layout_2>
       <div className="min-height-screen container mx-auto px-2 my-6">
-        <Head title="About Us" />
+        
         <div className="xl:py-20 py-10 px-4">
           <div className="grid grid-flow-row xl:grid-cols-2 gap-4 xl:gap-16 items-center">
             <div>
@@ -99,7 +99,7 @@ function AboutUs() {
           </div>
         </div>
       </div>
-    </Layout>
+    </Layout_2>
   );
 }
 
