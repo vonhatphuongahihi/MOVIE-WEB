@@ -1,69 +1,60 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 function Footer() {
   const Links = [
     {
-      title: 'Company',
+      title: "Giới thiệu",
       links: [
         {
-          name: 'Home',
-          link: '/',
+          name: "Trang chủ",
+          link: "/",
         },
         {
-          name: 'About Us',
-          link: '/about-us',
+          name: "Giới thiệu về Melon",
+          link: "/about-us",
         },
         {
-          name: 'Contact Us',
-          link: '/contact-us',
+          name: "Liên hệ",
+          link: "/contact-us",
         },
-        {
-          name: 'Movies',
-          link: '/movies',
-        },
+        
       ],
     },
     {
-      title: 'Top Categories',
+      title: "Quy định",
       links: [
         {
-          name: 'Action',
-          link: '#',
+          name: "Hợp đồng điện tử",
+          link: "#",
         },
         {
-          name: 'Romantic',
-          link: '#',
+          name: "Điều khoản và điều kiện",
+          link: "#",
         },
         {
-          name: 'Drama',
-          link: '#',
+          name: "Chính sách bảo vệ thông tin cá nhân",
+          link: "#",
         },
-        {
-          name: 'Historical',
-          link: '#',
-        },
+        
       ],
     },
     {
-      title: 'My Account',
+      title: "Thông tin",
       links: [
         {
-          name: 'Dashboard',
-          link: '/dashboard',
+          name: "Thông báo",
+          link: "#",
         },
         {
-          name: 'My Favorites',
-          link: '/favorite',
+          name: "FAQs",
+          link: "#",
         },
         {
-          name: 'Profile',
-          link: '/profile',
+          name: "Tải ứng dụng",
+          link: "#",
         },
-        {
-          name: 'Change Password',
-          link: '/password',
-        },
+        
       ],
     },
   ];
@@ -71,6 +62,27 @@ function Footer() {
     <div className="bg-dry py-4 bprder=t-2 border-black">
       <div className="container mx-auto px-2">
         <div className="grid grid-cols-2 md:grid-cols-7 xl:grid-cols-12 gap-5 sm:gap-9 lg:gap-11 xl:gap-7 py-10 justify-between">
+          <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-3 mx-10">
+            <Link to="/">
+              <img
+                src="/images/logo.png"
+                alt="logo"
+                className="w-2/4 object-contain h-15"
+              />
+            </Link>
+
+            <img
+              src="/images/Link_2.png"
+              alt="logo"
+              className="w-2/4 object-contain h-10 mt-3"
+            />
+            <img
+              src="/images/Link.png"
+              alt="logo"
+              className="w-2/4 object-contain h-10 mt-3"
+            />
+          </div>
+
           {Links.map((link, index) => (
             <div
               key={index}
@@ -93,24 +105,49 @@ function Footer() {
               </ul>
             </div>
           ))}
+        </div>
 
-          <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-3">
-            <Link to="/">
+        <div className="flex flex-row justify-between">
+          <p className="leading-7 text-sm text-border mt-3">
+            <span>UIT ĐHQG HCM, Đông Hòa, Dĩ An, Bình Dương, Việt Nam</span>
+            <br />
+            <span>Hotline: +84 365 486 141</span>
+            <br />
+            <span>
+              Giấy phép Cung cấp Dịch vụ Phát thanh, Truyền hình trả tiền số
+              247/GP-BTTTT cấp ngày 21/07/2023.
+            </span>{" "}
+            <br />
+            <span>
+              Giấy Chứng Nhận Đăng Ký Doanh Nghiệp số: 0314415573 do Sở Kế Hoạch
+              Đầu Tư Thành Phố Hồ Chí Minh cấp ngày 19/05/2017
+            </span>
+          </p>
+          <div className="mr-40 mt-8">
+            <p>Liên hệ với chúng tôi</p>
+            <div className="flex flex-row gap-5">
               <img
-                src="/images/logo.png"
+                src="/images/Facebook.png"
                 alt="logo"
-                className="w-2/4 object-contain h-12"
+                className="w-2/4 object-contain h-10 mt-3"
               />
-            </Link>
-            <p className="leading-7 text-sm text-border mt-3">
-              <span>
-                KTX Khu B ĐHQG HCM, Đông Hòa, Dĩ An, Bình Dương<br /> Việt Nam
-              </span>
-              <br />
-              <span>Tell: +84 365 486 141</span>
-              <br />
-              <span>Email: vonhatphuongahihi@gmail.com</span>
-            </p>
+              <img
+                src="/images/Tiktok.png"
+                alt="logo"
+                className="w-2/4 object-contain h-10 mt-3"
+              />
+
+              <img
+                src="/images/Instagram.png"
+                alt="logo"
+                className="w-2/4 object-contain h-10 mt-3"
+              />
+              <img
+                src="/images/Youtube.png"
+                alt="logo"
+                className="w-2/4 object-contain h-10 mt-3"
+              />
+            </div>
           </div>
         </div>
       </div>

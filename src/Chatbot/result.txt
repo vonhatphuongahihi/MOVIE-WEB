@@ -1,0 +1,60 @@
+1	Chào	Np	O	_		_
+
+1	Xin	V	O	_		_
+2	chào	V	O	_		_
+
+1	Chào	V	O	_		_
+2	cậu	N	O	_		_
+
+1	Tìm	V	O	_		_
+2	phim	N	O	_		_
+
+1	Phim	N	O	_		_
+2	nào	P	O	_		_
+3	hot	V	O	_		_
+4	?	CH	O	_		_
+
+1	Gợi_ý	V	O	_		_
+2	phim	N	O	_		_
+
+1	Liên_hệ	Np	O	_		_
+
+1	Làm_sao	X	O	_		_
+2	để	E	O	_		_
+3	liên_hệ	V	O	_		_
+4	?	CH	O	_		_
+
+1	Liên_lạc	V	O	_		_
+2	qua	E	O	_		_
+3	đâu	P	O	_		_
+4	?	CH	O	_		_
+
+1	Thông_tin	N	O	_		_
+2	về	E	O	_		_
+3	MELON	Np	B-ORG	_		_
+
+1	MELON	Ny	B-ORG	_		_
+2	có	V	O	_		_
+3	những	L	O	_		_
+4	thể_loại	N	O	_		_
+5	phim	N	O	_		_
+6	nào	P	O	_		_
+7	?	CH	O	_		_
+
+1	MELON	Ny	O	_		_
+2	có	V	O	_		_
+3	gì	P	O	_		_
+4	đặc_biệt	A	O	_		_
+5	?	CH	O	_		_
+
+1	Tạm_biệt	V	O	_		_
+
+1	Hẹn	V	O	_		_
+2	gặp	V	O	_		_
+3	lại	R	O	_		_
+
+1	Chào	V	O	_		_
+2	tạm_biệt	V	O	_		_
+
+1	Kết_thúc	V	O	_		_
+
