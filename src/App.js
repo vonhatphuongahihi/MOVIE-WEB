@@ -12,6 +12,7 @@ import Register from './Screens/Register';
 import SingleMovie from './Screens/SingleMovie';
 import Support from './Screens/Support'; 
 import WatchPage from './Screens/WatchPage';
+import ForgotPassword from './Screens/ForgotPassword';
 import SplashScreen from './Splash'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
@@ -59,6 +60,7 @@ function App() {
           <Route path="/watch/:id" element={<WatchPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
         </Routes>
       )}

@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import './Login.css'
 import { login, signup } from '../../firebase'
+import { Link } from "react-router-dom";
 const Login =()=>{
     const [signState, setSignState] = useState("Đăng nhập");
     const [name, setName] = useState("");
@@ -38,7 +39,7 @@ const Login =()=>{
                             <input type="checkbox"/>
                             <label htmlFor=''>Ghi nhớ</label> 
                         </div>
-                        <p>Bạn cần giúp đỡ?</p>
+                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>
                     </div>
                 </form>
                 <div className="form-switch">
