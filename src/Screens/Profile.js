@@ -32,7 +32,7 @@ function Profile() {
 
       <div className="min-h-screen flex items-center justify-center bg-[#080a1a] p-4">
         <form
-          className="bg-[#0b0f29] p-8 rounded shadow-md w-full max-w-lg" // Thay đổi từ max-w-md thành max-w-lg
+          className="bg-[#0b0f29] p-8 rounded shadow-md w-full max-w-lg"
           onSubmit={(e) => e.preventDefault()}
         >
           <h2 className="text-3xl font-semibold mb-6 text-center text-green-500">
@@ -40,7 +40,7 @@ function Profile() {
           </h2>
 
           {/* Ảnh đại diện */}
-          <div className="flex flex-col items-center mb-6 text-base"> {/* Thay đổi text-sm thành text-base */}
+          <div className="flex flex-col items-center mb-6 text-base">
             {avatar ? (
               <img
                 src={avatar}
@@ -73,19 +73,14 @@ function Profile() {
             >
               Tên người dùng
             </label>
-            <div className="flex items-center">
-              <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                readOnly={!isEditingUsername}
-                className={`w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base ${
-                  isEditingUsername ? "border-blue-500" : "border-gray-300"
-                }`}
-                placeholder="Nhập tên của bạn"
-              />
-            </div>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base border-gray-300"
+              placeholder="Nhập tên của bạn"
+            />
           </div>
 
           {/* Email */}
@@ -96,19 +91,14 @@ function Profile() {
             >
               Email
             </label>
-            <div className="flex items-center">
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                readOnly={!isEditingEmail}
-                className={`w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base ${
-                  isEditingEmail ? "border-blue-500" : "border-gray-300"
-                }`}
-                placeholder="Nhập email của bạn"
-              />
-            </div>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base border-gray-300"
+              placeholder="Nhập email của bạn"
+            />
           </div>
 
           {/* Mật khẩu */}
@@ -119,19 +109,14 @@ function Profile() {
             >
               Mật khẩu
             </label>
-            <div className="flex items-center">
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                readOnly={!isEditingPassword}
-                className={`w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base ${
-                  isEditingPassword ? "border-blue-500" : "border-gray-300"
-                }`}
-                placeholder="Nhập mật khẩu mới"
-              />
-            </div>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base border-gray-300"
+              placeholder="Nhập mật khẩu mới"
+            />
           </div>
 
           {/* Nút để thực hiện hành động */}
