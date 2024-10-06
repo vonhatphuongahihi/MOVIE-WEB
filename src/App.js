@@ -10,6 +10,7 @@ import MoviesPage from './Screens/Movies';
 import NotFound from './Screens/NotFound';
 import Register from './Screens/Register';
 import SingleMovie from './Screens/SingleMovie';
+import Profile from './Screens/Profile';
 import Support from './Screens/Support'; 
 import WatchPage from './Screens/WatchPage';
 import ForgotPassword from './Screens/ForgotPassword';
@@ -57,6 +58,7 @@ function App() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/movies" element={<MoviesPage />} />
           <Route path="/movie/:id" element={<SingleMovie />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/watch/:id" element={<WatchPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/support" element={<Support />} />
