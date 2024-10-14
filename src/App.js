@@ -1,25 +1,25 @@
 // src/App.js
 import Aos from 'aos';
+import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { auth } from './firebase';
 import AboutUs from './Screens/AboutUs';
+import ChangePassword from './Screens/ChangePassword';
 import ContactUs from './Screens/ContactUs';
+import ForgotPassword from './Screens/ForgotPassword';
 import HomeScreen from './Screens/HomeScreen';
 import Login from './Screens/Login/Login';
 import MoviesPage from './Screens/Movies';
 import NotFound from './Screens/NotFound';
+import Profile from './Screens/Profile';
 import Register from './Screens/Register';
 import SingleMovie from './Screens/SingleMovie';
-import Profile from './Screens/Profile';
-import Support from './Screens/Support'; 
+import Support from './Screens/Support';
 import WatchPage from './Screens/WatchPage';
-import ForgotPassword from './Screens/ForgotPassword';
-import SplashScreen from './Splash'; 
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebase';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import ChangePassword from './Screens/ChangePassword';
+import SplashScreen from './Splash';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -64,6 +64,7 @@ function App() {
           <Route path="/support" element={<Support />} />
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
+          <Route path="/:movieId" element={<WatchPage />} />
         </Routes>
       )}
     </>
