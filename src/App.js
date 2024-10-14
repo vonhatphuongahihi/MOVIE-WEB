@@ -59,7 +59,7 @@ function App() {
           <Route path="/watch/:id" element={<WatchPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/support" element={<Support />} />
-          <Route path="/change" element={<ChangePassword />} />
+          <Route path="/change" element={<MoviesPage />} />
         </Routes>
       )}
     </>

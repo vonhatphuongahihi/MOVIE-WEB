@@ -52,7 +52,7 @@ function Footer() {
         },
         {
           name: "Tải ứng dụng",
-          link: "#",
+          link: "/change",
         },
         
       ],
