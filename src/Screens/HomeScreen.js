@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import TopRated from '../Components/Home/TopRated';
-import Layout from '../Layout/Layout';
+//import TopRated from '../Components/Home/TopRated';
 import { FaPlay } from "react-icons/fa";
+import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import TitleCards from '../Components/Home/TitleCards/TitleCards';
-import { IoIosChatbubbles } from "react-icons/io";
+import Layout from '../Layout/Layout';
+import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
 
 const ChatbotIconWrapper = styled.div`
@@ -53,7 +54,8 @@ const BannerButton = styled.button`
 `;
 
 function HomeScreen() {
-  const [isPopupOpen, setPopupOpen] = useState(false); 
+  const [isPopupOpen, setPopupOpen] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null); 
 
   const openPopup = () => {
     setPopupOpen(true); 
@@ -61,6 +63,14 @@ function HomeScreen() {
 
   const closePopup = () => {
     setPopupOpen(false); 
+  };
+
+  const handleMovieClick = (movie) => {
+    setSelectedMovie(movie);
+  };
+
+  const closeMoviePopup = () => {
+    setSelectedMovie(null);
   };
 
   const bannerStyle = {
@@ -151,13 +161,13 @@ function HomeScreen() {
           </div>
 
           <div className="title-cards" style={titleCardsStyle}>
-            <TitleCards />
+            <TitleCards onMovieClick={handleMovieClick}/>
           </div>
         </div>
         <div className="more-card" style={moreCardStyle}>
-          <TitleCards title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} />
-          <TitleCards title={"SẮP PHÁT SÓNG"} category={"upcoming"} />
-          <TitleCards title={"ĐANG CHIẾU"} category={"now_playing"} />
+          <TitleCards title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick}/>
+          <TitleCards title={"SẮP PHÁT SÓNG"} category={"upcoming"} onMovieClick={handleMovieClick}/>
+          <TitleCards title={"ĐANG CHIẾU"} category={"now_playing"} onMovieClick={handleMovieClick}/>
         </div>
       </div>
       {!isPopupOpen && (  
@@ -165,7 +175,11 @@ function HomeScreen() {
           <IoIosChatbubbles />
         </ChatbotIconWrapper>
       )}
-      {isPopupOpen && <ChatbotPopup closePopup={closePopup} isOpen={isPopupOpen} />} 
+      {isPopupOpen && <ChatbotPopup closePopup={closePopup} isOpen={isPopupOpen} />}
+
+      {selectedMovie && (
+        <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />
+      )}
     </Layout>
   );
 }
