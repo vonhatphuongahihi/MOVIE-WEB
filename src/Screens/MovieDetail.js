@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { FavoritesContext } from '../Context/FavoritesContext';
 import { FaHeart, FaPlay } from "react-icons/fa";
 import { RiCloseLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
@@ -123,6 +124,15 @@ const ImageButton = styled.button`
         background-color: #8E8D8D;
         color: #ffffff;
         }
+
+        &.liked { 
+            color: red; 
+            background-color: #fffffff;
+
+            svg {
+                color: red; 
+            }
+        }
     }
 `;
 
@@ -157,8 +167,23 @@ const Detail = {
 }
 
 function MovieDetail({ movie, onClose }) {
-
   const backdropUrl = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
+  const { addFavorite, favorites } = useContext(FavoritesContext);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const checkIfFavorite = () => {
+    const favoriteMovie = favorites.find(fav => fav.id === movie.id);
+    return favoriteMovie !== undefined;
+  };
+
+  const handleAddFavorite = () => {
+    addFavorite(movie);
+    setIsFavorite(true);
+  };
+
+  React.useEffect(() => {
+    setIsFavorite(checkIfFavorite());
+  }, [favorites, movie.id]);
 
   return (
     <Backdrop onClick={onClose}>
@@ -169,26 +194,29 @@ function MovieDetail({ movie, onClose }) {
             <CloseButton onClick={onClose}>
               <RiCloseLine />
             </CloseButton>
-          
             <BtnGroup>
               <Link to={`/${movie.id}`}>
-                  <ImageButton className="btn-watch">
-                    <FaPlay /> Xem ngay
-                  </ImageButton>
+                <ImageButton className="btn-watch">
+                  <FaPlay /> Xem ngay
+                </ImageButton>
               </Link>
-              <ImageButton className="btn-like">
-                <FaHeart/> Yêu thích
+              <ImageButton
+                className={`btn-like ${isFavorite ? 'liked' : ''}`}
+                onClick={handleAddFavorite}
+              >
+                <FaHeart /> {isFavorite ? 'Đã thích' : 'Yêu thích'}
+
               </ImageButton>
             </BtnGroup>
           </ImageContainer>
           <Content>
-          <div style={Title}>{movie.title}</div>
-          <div style={Evaluation}>
-            <p>{movie.vote_count} lượt đánh giá</p>
-            <p>|</p>
-            <p>Điểm đánh giá: {movie.vote_average}</p>
-          </div>
-          <p style={Detail}>{movie.overview}</p>
+            <div style={Title}>{movie.title}</div>
+            <div style={Evaluation}>
+              <p>{movie.vote_count} lượt đánh giá</p>
+              <p>|</p>
+              <p>Điểm đánh giá: {movie.vote_average}</p>
+            </div>
+            <p style={Detail}>{movie.overview}</p>
           </Content>
         </ModalContent>
 

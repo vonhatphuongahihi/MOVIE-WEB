@@ -1,4 +1,3 @@
-// src/App.js
 import Aos from 'aos';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
@@ -20,6 +19,7 @@ import SingleMovie from './Screens/SingleMovie';
 import Support from './Screens/Support';
 import WatchPage from './Screens/WatchPage';
 import SplashScreen from './Splash';
+import FavoriteMovies from "./Screens/FavoriteMovies";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -62,6 +62,7 @@ function App() {
           <Route path="/watch/:id" element={<WatchPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/phimyeuthich" element={<FavoriteMovies />} />
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/:movieId" element={<WatchPage />} />

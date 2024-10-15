@@ -115,6 +115,9 @@ function Navbar() {
           <NavLink to="/anhtraisayhi" className={getNavLinkClass}>
             Anh Trai Say Hi
           </NavLink>
+          <NavLink to="/phimyeuthich" className={getNavLinkClass}>
+            Phim Yêu Thích
+          </NavLink>
         </div>
       </div>
     </div>

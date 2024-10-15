@@ -1,13 +1,12 @@
 // src/Pages/Profile.jsx
-import React, { useState } from "react";
-import { FaUserCircle } from "react-icons/fa";
-import Head from "../Components/Head";
+import React, { useState, useEffect } from "react";
+import { FaUserCircle, FaCamera } from "react-icons/fa";
 import Layout from "../Layout/Layout";
 
 function Profile() {
-  const [username, setUsername] = useState("User");
-  const [email, setEmail] = useState("22521172@gm.uit.edu.vn");
-  const [password, setPassword] = useState("********");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
 
   const handleAvatarChange = (e) => {
@@ -26,16 +25,23 @@ function Profile() {
     alert("Profile update functionality is not implemented yet.");
   };
 
+  // Cleanup URL object to avoid memory leaks
+  useEffect(() => {
+    return () => {
+      if (avatar) {
+        URL.revokeObjectURL(avatar);
+      }
+    };
+  }, [avatar]);
+
   return (
     <Layout>
-      <Head title="HỒ SƠ" />
-
       <div className="min-h-screen flex items-center justify-center bg-[#080a1a] p-4">
         <form
           className="bg-[#0b0f29] p-8 rounded shadow-md w-full max-w-lg"
           onSubmit={(e) => e.preventDefault()}
         >
-          <h2 className="text-3xl font-semibold mb-6 text-center text-green-500">
+          <h2 className="text-3xl font-semibold mb-6 text-center text-subMain">
             HỒ SƠ
           </h2>
 
@@ -48,12 +54,13 @@ function Profile() {
                 className="w-24 h-24 rounded-full object-cover mb-2"
               />
             ) : (
-              <FaUserCircle className="w-24 h-24 text-green-500 mb-2" />
+              <FaUserCircle className="w-24 h-24 text-subMain mb-2" />
             )}
             <label
               htmlFor="avatar"
-              className="cursor-pointer text-white hover:underline text-base"
+              className="cursor-pointer text-white hover:underline text-base flex items-center"
             >
+              <FaCamera className="mr-2" />
               Thay đổi ảnh đại diện
             </label>
             <input
@@ -68,7 +75,7 @@ function Profile() {
           {/* Tên người dùng */}
           <div className="mb-4">
             <label
-              className="block text-green-500 mb-2 text-lg"
+              className="block text-subMain mb-2 text-lg"
               htmlFor="username"
             >
               Tên người dùng
@@ -86,7 +93,7 @@ function Profile() {
           {/* Email */}
           <div className="mb-4">
             <label
-              className="block text-green-500 mb-2 text-lg"
+              className="block text-subMain mb-2 text-lg"
               htmlFor="email"
             >
               Email
@@ -104,7 +111,7 @@ function Profile() {
           {/* Mật khẩu */}
           <div className="mb-6">
             <label
-              className="block text-green-500 mb-2 text-lg"
+              className="block text-subMain mb-2 text-lg"
               htmlFor="password"
             >
               Mật khẩu
@@ -131,7 +138,7 @@ function Profile() {
             <button
               type="button"
               onClick={handleUpdate}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none text-base"
+              className="bg-[#23bf0e] text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none text-base"
             >
               CẬP NHẬT
             </button>
