@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { FaSearch, FaRegUserCircle } from 'react-icons/fa';
+import { FaRegUserCircle, FaSearch } from 'react-icons/fa';
 import { IoMdNotificationsOutline } from 'react-icons/io';
+import { Link, NavLink } from 'react-router-dom';
+import { logout } from '../../firebase';
 // Make sure to import any other necessary icons or components
 
 function Navbar() {
@@ -113,6 +114,9 @@ function Navbar() {
           </NavLink>
           <NavLink to="/anhtraisayhi" className={getNavLinkClass}>
             Anh Trai Say Hi
+          </NavLink>
+          <NavLink to="/phimyeuthich" className={getNavLinkClass}>
+            Phim Yêu Thích
           </NavLink>
         </div>
       </div>

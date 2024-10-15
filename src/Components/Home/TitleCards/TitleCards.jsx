@@ -1,10 +1,8 @@
-import React from 'react'
-import { useRef, useEffect } from 'react'
-import { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './titleCards.css'
-import cards_data from '../../../Data/Cards_data'
+//import cards_data from '../../../Data/Cards_data'
 
-const TitleCards = ({title, category}) => {
+const TitleCards = ({title, category, onMovieClick}) => {
   const [apiData, setApiData] = useState([]);
   const cardsRef = useRef();
   const options = {
@@ -31,7 +29,7 @@ const TitleCards = ({title, category}) => {
       <h2>{title?title:"THỊNH HÀNH"}</h2>
       <div className="card-list" ref={cardsRef}>
         {apiData.map((card, index) => {
-            return <div key={index} className="card">
+            return <div key={index} className="card" onClick={() => onMovieClick(card)}>
                 <img src={`https://image.tmdb.org/t/p/w500`+card.backdrop_path} alt="" />
                 <p>{card.original_title}</p>
                 </div>
