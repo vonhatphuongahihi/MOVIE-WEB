@@ -205,6 +205,7 @@ function MovieDetail({ movie, onClose }) {
                 onClick={handleAddFavorite}
               >
                 <FaHeart /> {isFavorite ? 'Đã thích' : 'Yêu thích'}
+
               </ImageButton>
             </BtnGroup>
           </ImageContainer>
@@ -218,6 +219,7 @@ function MovieDetail({ movie, onClose }) {
             <p style={Detail}>{movie.overview}</p>
           </Content>
         </ModalContent>
+
       </ModalContainer>
     </Backdrop>
   );

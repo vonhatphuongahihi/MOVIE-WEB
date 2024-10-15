@@ -28,7 +28,9 @@ function Navbar2() {
             <NavLink to="/support" className="w-auto px-4 h-10 flex items-center justify-center object-contain hover:text-subMain text-[15px]">
               Hỗ trợ
             </NavLink>
-            <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer" />
+            <NavLink to="/profile" className="mx-4">
+              <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer" />
+            </NavLink>
           </div>
         </div>
       </div>

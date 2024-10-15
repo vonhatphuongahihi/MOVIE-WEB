@@ -1,4 +1,3 @@
-// src/App.js
 import Aos from 'aos';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
