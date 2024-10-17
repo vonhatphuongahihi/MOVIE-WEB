@@ -3,17 +3,22 @@ import Layout from "../Layout/Layout";
 import Movie from "../Components/Movie";
 import { Movies } from "../Data/MovieData";
 import { CgSpinner } from "react-icons/cg";
+import MovieDataTest1 from "../Data/MovieDataTest1";
 
 function MoviesPage() {
   const maxPage = 10;
   const [page, setPage] = useState(maxPage);
   const HandleLoadingMore = () => {
     setPage(page + maxPage);
-  };
+  }; 
 
   return (
     <Layout>
-      <div className="min-height-screen container mx-auto px-2 my-6">
+      <div className="min-height-screen container mx-auto px-2 my-6" >
+
+
+
+
         <p className="text-lg font-medium my-6">
           Total <span className="font-bold text-subMain">{Movies?.length}</span>{" "}
           items Found
@@ -23,7 +28,7 @@ function MoviesPage() {
             <Movie key={index} movie={movie} />
           ))}
         </div>
-        {/* Loading More */}
+        
         <div className="w-full flex-colo md:my-20 my-10">
           <button
             onClick={HandleLoadingMore}
@@ -32,6 +37,7 @@ function MoviesPage() {
             Load More <CgSpinner className="animate-spin" />
           </button>
         </div>
+
       </div>
     </Layout>
   );

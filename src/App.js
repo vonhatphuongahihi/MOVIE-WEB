@@ -59,13 +59,19 @@ function App() {
           <Route path="/movies" element={<MoviesPage />} />
           <Route path="/movie/:id" element={<SingleMovie />} />
           <Route path="/profile" element={<Profile />} />
+
           <Route path="/watch/:id" element={<WatchPage />} />
+          
           <Route path="/register" element={<Register />} />
           <Route path="/support" element={<Support />} />
+
+          
+
           <Route path="/phimyeuthich" element={<FavoriteMovies />} />
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
-          <Route path="/:movieId" element={<WatchPage />} />
+          
+
         </Routes>
       )}
     </>

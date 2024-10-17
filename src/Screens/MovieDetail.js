@@ -195,7 +195,7 @@ function MovieDetail({ movie, onClose }) {
               <RiCloseLine />
             </CloseButton>
             <BtnGroup>
-              <Link to={`/${movie.id}`}>
+              <Link to={`/movie/${movie?.id}`}>
                 <ImageButton className="btn-watch">
                   <FaPlay /> Xem ngay
                 </ImageButton>
