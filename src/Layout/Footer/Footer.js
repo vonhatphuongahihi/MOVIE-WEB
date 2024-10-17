@@ -26,15 +26,15 @@ function Footer() {
       links: [
         {
           name: "Hợp đồng điện tử",
-          link: "#",
+          link: "/support",
         },
         {
           name: "Điều khoản và điều kiện",
-          link: "#",
+          link: "/support",
         },
         {
           name: "Chính sách bảo vệ thông tin cá nhân",
-          link: "#",
+          link: "/support",
         },
         
       ],
@@ -52,7 +52,7 @@ function Footer() {
         },
         {
           name: "Tải ứng dụng",
-          link: "/change",
+          link: "#",
         },
         
       ],

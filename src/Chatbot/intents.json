@@ -1,0 +1,34 @@
+{
+    "intents": [
+      {
+        "tag": "chaohoi",
+        "patterns": ["Chào", "Xin chào", "Chào cậu"],
+        "responses": ["Xin chào!", "Chào cậu, cậu cần chúng tớ giúp gì không?"]
+      },
+      {
+        "tag": "timphim",
+        "patterns": ["Tìm phim", "Phim nào hot?", "Gợi ý phim"],
+        "responses": ["Phim hot hiện nay là Deadpool & Wolverine, The Crow và Despicable Me 4,...", "Cậu có thể xem thử các phim Deadpool & Wolverine, The Crow và Despicable Me 4 nhé!"]
+      },
+      {
+        "tag": "lienhe",
+        "patterns": ["Liên hệ", "Làm sao để liên hệ?", "Liên lạc qua đâu?"],
+        "responses": [
+          "Cậu có thể liên hệ chúng tớ qua Facebook: https://www.facebook.com/phuong.vonhat.tuhy/, Instagram: https://www.instagram.com/tuhy.sapoche.99/ hoặc Twitter: https://x.com/home?lang=vi"
+        ]
+      },
+      {
+        "tag": "thongtin",
+        "patterns": ["Thông tin về MELON", "MELON có những thể loại phim nào?", "MELON có gì đặc biệt?"],
+        "responses": [
+          "Website MELON cung cấp một kho phim đa dạng từ nhiều thể loại, bao gồm phim Thái, phim Trung, phim Hàn và nhiều bộ phim hấp dẫn khác. Cậu sẽ tìm thấy những bộ phim mới nhất và những tác phẩm kinh điển trên MELON!"
+        ]
+      },
+      {
+        "tag": "tambiet",
+        "patterns": ["Tạm biệt", "Hẹn gặp lại", "Chào tạm biệt", "Kết thúc"],
+        "responses": ["Chúc cậu xem phim vui vẻ, hẹn gặp lại!"]
+      }
+    ]
+  }
+  

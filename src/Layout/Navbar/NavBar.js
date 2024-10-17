@@ -1,38 +1,53 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
-import { FaSearch, FaHeart } from "react-icons/fa";
-import { FaRegUserCircle } from "react-icons/fa";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { logout } from "../../firebase";
+import React from 'react';
+import { FaRegUserCircle, FaSearch } from 'react-icons/fa';
+import { IoMdNotificationsOutline } from 'react-icons/io';
+import { Link, NavLink } from 'react-router-dom';
+import { logout } from '../../firebase';
+// Make sure to import any other necessary icons or components
 
 function Navbar() {
-  const hover = "hover:text-subMain transitions text-white";
-  const activeClassName = "text-subMain border-b-2 border-green-500"; // Class cho trạng thái active
+  const hover = "hover:text-subMain transition text-white";
+  const activeClassName = "text-subMain border-b-2 border-green-500"; // Class for active state
 
-  const Hover = ({ isActive }) =>
+  // Function to determine class based on active state
+  const getNavLinkClass = ({ isActive }) =>
     isActive ? activeClassName : hover;
+
   return (
     <div>
-      {/* Thanh NavBar chính */}
+      {/* Main NavBar */}
       <div className="bg-main shadow-md sticky top-0 z-20 border-b border-gray-300 border-opacity-50">
         <div className="container mx-auto py-0 px-2 lg:grid gap-12 grid-cols-10 justify-between items-center">
           <div className="col-span-4 flex items-center">
             <Link to="/" className="mr-2 mb-1">
               <img src="/images/logo.png" alt="logo" className="w-20 h-6 object-contain" />
             </Link>
-            <NavLink to="/" className="mx-4 w-30 h-10 object-contain hover:class-name mt-4 hover:text-subMain text-[15px]">Trang chủ</NavLink>
-            <NavLink to="/truyenhinh" className="mx-4 mt-4 w-30 h-10 object-contain hover:class-name hover:text-subMain text-[15px]">
-            Show truyền hình</NavLink>
-            <NavLink to="/phim" className="mx-4 mt-4 w-30 h-10 object-contain hover:class-name hover:text-subMain text-[15px]">
-            Phim</NavLink>
+            <NavLink
+              to="/"
+              className={getNavLinkClass}
+            >
+              Trang chủ
+            </NavLink>
+            <NavLink
+              to="/truyenhinh"
+              className={getNavLinkClass}
+            >
+              Show truyền hình
+            </NavLink>
+            <NavLink
+              to="/phim"
+              className={getNavLinkClass}
+            >
+              Phim
+            </NavLink>
           </div>
-  
-          {/* search Form */}
+
+          {/* Search Form */}
           <div className="col-span-3 flex items-center ">
             <form className="w-full text-sm bg-white rounded flex items-center gap-2">
               <button
                 type="submit"
-                className="w-12 flex-colo h-8 rounded text-subMain"
+                className="w-12 flex justify-center items-center h-8 rounded text-subMain"
               >
                 <FaSearch />
               </button>
@@ -61,39 +76,47 @@ function Navbar() {
               </div>
             </form>
           </div>
+
+          {/* Right Side Icons and Links */}
           <div className="col-span-3 flex items-center justify-end">
-            <NavLink to="/dangkyvip" className={`${Hover} mx-9`}>
-              <img src="/images/dang_ky_goi_vip.png" alt="dangkyvip" className="w-20 h-10 object-contain"/>
+            <NavLink to="/dangkyvip" className={getNavLinkClass}>
+              <img src="/images/dang_ky_goi_vip.png" alt="dangkyvip" className="w-20 h-10 object-contain" />
             </NavLink>
             <IoMdNotificationsOutline className="w-7 h-7 text-subMain cursor-pointer mr-2" />
-            <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer ml-4 mr-2" />
+            {/* Wrap the user icon with NavLink to navigate to Profile */}
+            <NavLink to="/profile" className="mx-4">
+              <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer" />
+            </NavLink>
             <div className="dropdown">
-              <button onClick={()=>{logout()}}>Đăng xuất</button>
+              <button onClick={() => { logout(); }}>Đăng xuất</button>
             </div>
           </div>
         </div>
       </div>
-    
-      {/* Thanh NavBar phụ */}
+
+      {/* Secondary NavBar */}
       <div className="bg-secondary shadow-md sticky top-12 z-10">
         <div className="container mx-auto py-2 px-2 lg:flex gap-4 justify-center items-center">
-          <NavLink to="/phimbo" className={`${Hover} mx-4 text-subMain text-[13px] hover:text-customGreen`}>
+          <NavLink to="/phimbo" className={getNavLinkClass}>
             Phim Bộ
           </NavLink>
-          <NavLink to="/phimdienanh" className={`${Hover} mx-4 text-subMain text-[13px] hover:text-customGreen`}>
+          <NavLink to="/phimdienanh" className={getNavLinkClass}>
             Phim Điện Ảnh
           </NavLink>
-          <NavLink to="/hoathinh" className={`${Hover} mx-4 text-subMain text-[13px] hover:text-customGreen`}>
+          <NavLink to="/hoathinh" className={getNavLinkClass}>
             Hoạt Hình
           </NavLink>
-          <NavLink to="/tvshow" className={`${Hover} mx-4 text-subMain text-[13px] hover:text-customGreen`}>
+          <NavLink to="/tvshow" className={getNavLinkClass}>
             TV Show
           </NavLink>
-          <NavLink to="/2n1d" className={`${Hover} mx-4 text-subMain text-[13px] hover:text-customGreen`}>
+          <NavLink to="/2n1d" className={getNavLinkClass}>
             2N1D
           </NavLink>
-          <NavLink to="/anhtraisayhi" className={`${Hover} mx-4 text-subMain text-[13px] hover:text-customGreen`}>
+          <NavLink to="/anhtraisayhi" className={getNavLinkClass}>
             Anh Trai Say Hi
+          </NavLink>
+          <NavLink to="/phimyeuthich" className={getNavLinkClass}>
+            Phim Yêu Thích
           </NavLink>
         </div>
       </div>

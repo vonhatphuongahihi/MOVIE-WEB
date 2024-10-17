@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 import FlexMovieItems from "../FlexMovieItems";
 import { FiLogIn } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa6";
+import { MdShare } from "react-icons/md";
 
 function MovieInfo({ movie, onWatchClick }) {
-  const languages = movie.spoken_languages.map(spoken_languages => spoken_languages.name).join(', ');
+  const languages = movie.spoken_languages.map(spoken_languages => spoken_languages.english_name).join(', ');
   let overview = movie.overview;
   if (!overview) { 
     overview = "Khám phá thế giới điện ảnh với những câu chuyện đa dạng và hấp dẫn. Từ những cuộc phiêu lưu kỳ thú đến những tâm tư sâu sắc, mỗi bộ phim đều mang đến cho bạn những trải nghiệm độc đáo. Hãy cùng theo dõi hành trình của các nhân vật, cảm nhận những cảm xúc chân thật và tận hưởng những khoảnh khắc đáng nhớ. Chúng tôi hy vọng bạn sẽ tìm thấy niềm vui trong từng khung hình!";
@@ -44,19 +45,19 @@ function MovieInfo({ movie, onWatchClick }) {
               <p className="text-text text-sm leading-7">{overview}</p>
               <div className="grid sm:grid-cols-5 grid-cols-3 gap-4 p-6 bg-main border border-gray-800 rounded-lg">
                 {/* share */}
-                <div className="col-span-1 flex-colo border-r border-border">
+                <div className="col-span-1 flex-colo mr-2 pr-5 border-r border-border">
                   <button
                     
                     className="w-10 h-10 flex-colo rounded-lg bg-white bg-opacity-20 hover:bg-subMain"
                   >
-                    <FaHeart />
+                    <MdShare />
                   </button>
                 </div>
                 {/* language */}
                 <div className="col-span-2 flex-colo font-medium text-sm">
                   <p>
                     Ngôn ngữ :{" "}
-                    <span className="ml-2 truncate">{languages}</span>
+                    <span className="ml-2 truncate w-32">{languages}</span>
                   </p>
                 </div>
                 {/* watch button */}
@@ -65,7 +66,7 @@ function MovieInfo({ movie, onWatchClick }) {
                     
                     className="bg-dry py-4 hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3"
                   >
-                    <FaPlay className="w-3 h-3" /> Xem Ngay
+                    <FaPlay className="w-3 h-3" /> Xem
                   </Link>
                 </div>
               </div>

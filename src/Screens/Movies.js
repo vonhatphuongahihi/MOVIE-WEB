@@ -15,28 +15,11 @@ function MoviesPage() {
   return (
     <Layout>
       <div className="min-height-screen container mx-auto px-2 my-6" >
-<MovieDataTest1/>
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        {/* <p className="text-lg font-medium my-6">
+        <p className="text-lg font-medium my-6">
           Total <span className="font-bold text-subMain">{Movies?.length}</span>{" "}
           items Found
         </p>
@@ -53,7 +36,7 @@ function MoviesPage() {
           >
             Load More <CgSpinner className="animate-spin" />
           </button>
-        </div> */}
+        </div>
 
       </div>
     </Layout>

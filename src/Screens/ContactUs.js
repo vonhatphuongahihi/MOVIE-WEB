@@ -1,28 +1,27 @@
 import React from 'react';
 import { FiPhoneCall, FiMapPin, FiMail } from 'react-icons/fi';
-import Head from '../Components/Head';
 import Layout from '../Layout/Layout';
 
 function ContactUs() {
   const ContactData = [
     {
       id: 1,
-      title: 'Email Us',
-      info: 'Interactively grow backend ideas for cross-platform models.',
+      title: 'Email',
+      info: 'Quý khách có thể liên hệ với chúng tôi thông qua địa chỉ thư điện tử.',
       icon: FiMail,
-      contact: 'info@zpunet.com',
+      contact: 'melon@gmail.com',
     },
     {
       id: 2,
-      title: 'Call Us',
-      info: 'Distinctively exploit optimal alignments for intuitive bandwidth.',
+      title: 'Điện thoại',
+      info: 'Hoặc gọi về số điện thoại. Chúng tôi luôn sẵn sàng phục vụ quý khách.',
       icon: FiPhoneCall,
-      contact: '+255 789 456 123',
+      contact: '+84 365 486 141',
     },
     {
       id: 3,
-      title: 'Location',
-      info: 'Dar es salaam, Tanzania. 345 Kigamboni, Street No. 12,',
+      title: 'Địa chỉ',
+      info: 'UIT ĐHQG HCM, Đông Hòa, Dĩ An, Bình Dương, Việt Nam,',
       icon: FiMapPin,
       contact: '',
     },
@@ -30,7 +29,9 @@ function ContactUs() {
   return (
     <Layout>
       <div className="min-height-screen container mx-auto px-2 my-6">
-        <Head title="Contact Us" />
+      <h3 className="text-xl lg:text-3xl mb-4 font-semibold text-subMain">
+                LIÊN HỆ
+      </h3>
         <div className="grid mg:grid-cols-2 gap-6 lg:my-20 my-10 lg:grid-cols-3 xl:gap-8">
           {ContactData.map((item) => (
             <div
