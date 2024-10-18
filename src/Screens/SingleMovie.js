@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
+import { RecentlyContext } from '../Context/RecentlyContext';
 import { useParams } from "react-router-dom";
 import MovieCasts from "../Components/Single/MovieCasts";
 import MovieInfo from "../Components/Single/MovieInfo";
@@ -10,7 +11,7 @@ import { BsCollectionFill } from "react-icons/bs";
 import { MdOutlineOndemandVideo } from "react-icons/md";
 import Movie from "../Components/Movie";
 import ShareMovieModal from "../Components/Modals/ShareModal";
-import fetch from "node-fetch";
+import fetch from 'node-fetch';
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -20,6 +21,7 @@ import { PiShareFat } from "react-icons/pi";
 import { PiHeart } from "react-icons/pi";
 function SingleMovie() {
   // const [modalOpen, setModalOpen] = useState(false);
+  const { addRecently} = useContext(RecentlyContext);
   const watchRef = useRef(null); // Tạo một ref
 
   const scrollToWatch = () => {
@@ -112,7 +114,10 @@ function SingleMovie() {
             <div className="w-full h-screen rounded-lg overflow-hidden relative">
               <div className="absolute top-0 left-0 bottom-0 right-0 bg-main bg-opacity-30 flex-colo">
                 <button
-                  onClick={() => setPlay(true)}
+                  onClick={() => {
+                    setPlay(true)
+                    addRecently(movie)
+                  }}                  
                   className="bg-white text-subMain flex-colo border border-subMain rounded-full w-20 h-20 font-medium text-xl"
                 >
                   <FaPlay />

@@ -9,6 +9,7 @@ import 'aos';
 import 'aos/dist/aos.css';
 import { BrowserRouter } from 'react-router-dom';
 import { FavoritesProvider } from './Context/FavoritesContext';
+import { RecentlyProvider } from './Context/RecentlyContext';
 import axios from 'axios';
 
 
@@ -17,7 +18,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
     <FavoritesProvider>
+    <RecentlyProvider>
         <App />
+    </RecentlyProvider>
     </FavoritesProvider> 
     </BrowserRouter>
   </React.StrictMode>

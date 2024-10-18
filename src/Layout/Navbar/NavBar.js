@@ -112,8 +112,8 @@ function Navbar() {
           <NavLink to="/2n1d" className={getNavLinkClass}>
             2N1D
           </NavLink>
-          <NavLink to="/anhtraisayhi" className={getNavLinkClass}>
-            Anh Trai Say Hi
+          <NavLink to="/recently" className={getNavLinkClass}>
+            Lịch sử xem phim
           </NavLink>
           <NavLink to="/phimyeuthich" className={getNavLinkClass}>
             Phim Yêu Thích
