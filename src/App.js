@@ -20,6 +20,7 @@ import Support from './Screens/Support';
 import WatchPage from './Screens/WatchPage';
 import SplashScreen from './Splash';
 import FavoriteMovies from "./Screens/FavoriteMovies";
+import RecentlyWatch from "./Screens/RecentlyWatch";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -66,7 +67,7 @@ function App() {
           <Route path="/support" element={<Support />} />
 
           
-
+          <Route path="/recently" element={<RecentlyWatch />} />
           <Route path="/phimyeuthich" element={<FavoriteMovies />} />
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
