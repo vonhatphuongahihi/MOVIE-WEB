@@ -70,6 +70,8 @@ function Navbar() {
             <div className="dropdown">
               <button onClick={()=>{logout()}}>Đăng xuất</button>
             </div>
+            <img src="/images/moon.png" id="icon" alt="avatar" className="w-8 h-8 object-contain" 
+            style={{width: '40px', cursor: 'pointer'}}/>
           </div>
         </div>
       </div>
