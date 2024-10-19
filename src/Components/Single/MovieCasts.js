@@ -2,13 +2,13 @@ import React from "react";
 import { FaUserFriends } from "react-icons/fa";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { UsersData } from "../../Data/MovieData";
+
 import Titles from "../Titles";
 
-function MovieCasts() {
+function MovieCasts({ movie }) {
   return (
     <div className="my-12">
-      <Titles title="Casts" Icon={FaUserFriends} />
+      <Titles title="Diễn Viên" Icon={FaUserFriends} />
       <div className="mt-10">
         <Swiper
           autoplay={{
@@ -38,15 +38,15 @@ function MovieCasts() {
             },
           }}
         >
-          {UsersData.map((user, i) => (
-            <SwiperSlide key={i}>
-              <div className="w-full p-3 italic text-xs text-text rounded flex-colo bg-dry border border-gray-800">
+          {movie.casts.cast.map(actor => (
+            <SwiperSlide key={actor.id}>
+              <div className="w-full p-3 italic text-xs text-text rounded flex-colo">
                 <img
-                  src={`/images/${user.image}`}
-                  alt={user.fullName}
-                  className="w-full h-64 object-cover rounded mb-4"
+                  src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`} 
+                  alt={actor.name}
+                  className="w-full h-64 object-cover rounded-full mb-4"
                 />
-                <p>{user?.fullName}</p>
+                <p>{actor.name}</p>
               </div>
             </SwiperSlide>
           ))}

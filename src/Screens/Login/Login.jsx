@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import './Login.css';
 import { login, signup } from '../../firebase';
@@ -87,6 +88,7 @@ const Login = () => {
                         ) : (
                             <p>Đã có tài khoản Melon? <span onClick={() => setSignState("Đăng nhập")}>Đăng nhập ngay</span></p>
                         )}
+                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>>>>>>>> main
                     </div>
                 </div>
             </div>

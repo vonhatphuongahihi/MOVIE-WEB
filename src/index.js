@@ -8,6 +8,8 @@ import 'swiper/css/pagination';
 import 'aos';
 import 'aos/dist/aos.css';
 import { BrowserRouter } from 'react-router-dom';
+import { FavoritesProvider } from './Context/FavoritesContext';
+import { RecentlyProvider } from './Context/RecentlyContext';
 import axios from 'axios';
 
 
@@ -15,7 +17,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+    <FavoritesProvider>
+    <RecentlyProvider>
+        <App />
+    </RecentlyProvider>
+    </FavoritesProvider> 
     </BrowserRouter>
   </React.StrictMode>
 );

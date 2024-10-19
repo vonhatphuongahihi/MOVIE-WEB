@@ -5,7 +5,7 @@ import Layout from "../Layout/Layout";
 
 import { MdLockReset } from "react-icons/md";
 
-function Login() {
+function ChangePassword() {
   return (
     <Layout>       
       <div className=" my-14 justify-center ">
@@ -43,4 +43,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ChangePassword;
