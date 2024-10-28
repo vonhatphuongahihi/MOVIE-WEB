@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import './Login.css';
-import { login, signup } from '../../firebase';
-import { useNavigate, Link } from 'react-router-dom'; // Đảm bảo import Link
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { login, signup } from '../../firebase';
+import './Login.css';
+
+
 
 const Login = () => {
     const navigate = useNavigate(); 
@@ -32,10 +34,11 @@ const Login = () => {
             } else {
                 await signup(name, email, password);
                 toast.info("Email xác thực đã được gửi. Vui lòng kiểm tra hộp thư của bạn.");
-                navigate('/login'); 
+            
+                setSignState("Đăng nhập"); 
             }
         } catch (error) {
-            toast.error(error.message || "Đã có lỗi xảy ra. Vui lòng thử lại.");
+            toast.error(error.message);
         } finally {
             setLoading(false); 
         }
@@ -51,7 +54,7 @@ const Login = () => {
                 <img src="/images/logo.png" alt="" className='login-logo' />
                 <div className="login-form">
                     <h1>{signState}</h1>
-                    <form onSubmit={user_auth}>
+                    <form>
                         {signState === "Đăng ký" && (
                             <input
                                 value={name}
@@ -72,7 +75,7 @@ const Login = () => {
                             type="password"
                             placeholder='Mật khẩu'
                         />
-                        <button type="submit" className='button'>{signState}</button>
+                        <button onClick={user_auth} type="submit" className='button'>{signState}</button>
                         <div className="form-help">
                             <div className="remember">
                                 <input type="checkbox" />

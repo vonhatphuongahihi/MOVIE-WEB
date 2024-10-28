@@ -6,7 +6,7 @@ import { FiLogIn } from "react-icons/fi";
 import { FaHeart } from "react-icons/fa6";
 import { MdShare } from "react-icons/md";
 
-function MovieInfo({ movie, onWatchClick }) {
+function MovieInfo({ movie }) {
   const languages = movie.spoken_languages.map(spoken_languages => spoken_languages.english_name).join(', ');
   let overview = movie.overview;
   if (!overview) { 
@@ -62,7 +62,7 @@ function MovieInfo({ movie, onWatchClick }) {
                 </div>
                 {/* watch button */}
                 <div className="sm:col-span-2 col-span-3 flex justify-end font-medium text-sm">
-                  <Link onClick={onWatchClick}
+                  <Link 
                     
                     className="bg-dry py-4 hover:bg-subMain transitions border-2 border-subMain rounded-full flex-rows gap-4 w-full sm:py-3"
                   >

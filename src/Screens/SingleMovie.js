@@ -1,27 +1,31 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { RecentlyContext } from '../Context/RecentlyContext';
-import { useParams } from "react-router-dom";
+
+import fetch from 'node-fetch';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { BiArrowBack } from "react-icons/bi";
+import { BsCollectionFill } from "react-icons/bs";
+import { MdOutlineOndemandVideo } from "react-icons/md";
+import { PiHeart, PiShareFat } from "react-icons/pi";
+import { Link, useParams } from "react-router-dom";
+import { Autoplay } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import Movie from "../Components/Movie";
 import MovieCasts from "../Components/Single/MovieCasts";
 import MovieInfo from "../Components/Single/MovieInfo";
 import MovieRates from "../Components/Single/MovieRates";
 import Titles from "../Components/Titles";
-import { Movies } from "../Data/MovieData";
+import { RecentlyContext } from '../Context/RecentlyContext';
 import Layout from "../Layout/Layout";
-import { BsCollectionFill } from "react-icons/bs";
-import { MdOutlineOndemandVideo } from "react-icons/md";
-import Movie from "../Components/Movie";
 import ShareMovieModal from "../Components/Modals/ShareModal";
-import fetch from 'node-fetch';
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { BiArrowBack } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { PiShareFat } from "react-icons/pi";
-import { PiHeart } from "react-icons/pi";
+import Rating from "../Components/Stars";
+import { FaRegCalendar } from "react-icons/fa";
+import { IoTimeOutline } from "react-icons/io5";
+import { RiGlobalLine } from "react-icons/ri";
+import { IoIosRadioButtonOn } from "react-icons/io";
+
 function SingleMovie() {
   // const [modalOpen, setModalOpen] = useState(false);
-  const { addRecently} = useContext(RecentlyContext);
+  const { addRecently } = useContext(RecentlyContext);
   const watchRef = useRef(null); // Tạo một ref
 
   const scrollToWatch = () => {
@@ -87,21 +91,20 @@ function SingleMovie() {
   // }
   // const movie = Movies.find((movie) => movie.name === id);
   // const RelatedMovies = Movies.filter((m) => m.category === movie.category);
+  
   return (
     <Layout>
-      <div className="flex-btn flex-wrap mb-6 gap-2 bg-main rounded border border-gray-800 p-6">
+      <div className="flex-btn flex-wrap  gap-2 bg-main rounded border border-gray-800 p-6">
         <Link
           to={`/`}
           className="md:text-xl text-sm flex gap-5 items-center font-bold text-dryGray"
         >
-          <BiArrowBack /> Home
+          <BiArrowBack /> {movie?.title}
         </Link>
       </div>
 
-      <MovieInfo movie={movie} onWatchClick={scrollToWatch} />
-      <div id="Watch" ref={watchRef} className="my-16">
-        <Titles title="VIDEO" Icon={MdOutlineOndemandVideo} />
-
+      {/* <MovieInfo movie={movie} onWatchClick={scrollToWatch} /> */}
+      <div id="Watch" ref={watchRef} className="my-8">
         <div className="container mx-auto bg-dry p-12 mb-12">
           {play ? (
             <iframe
@@ -115,9 +118,9 @@ function SingleMovie() {
               <div className="absolute top-0 left-0 bottom-0 right-0 bg-main bg-opacity-30 flex-colo">
                 <button
                   onClick={() => {
-                    setPlay(true)
-                    addRecently(movie)
-                  }}                  
+                    setPlay(true);
+                    addRecently(movie);
+                  }}
                   className="bg-white text-subMain flex-colo border border-subMain rounded-full w-20 h-20 font-medium text-xl"
                 >
                   <FaPlay />
@@ -132,32 +135,97 @@ function SingleMovie() {
           )}
         </div>
 
-        <div className="flex justify-between items-center mx-20">
-          <div className="flex flex-col items-center">
-            <h1 className="font-bold">{movie?.title} </h1>
-            <h1 className="font-medium mb-8 ">( Tên gốc: {movie.original_title} )</h1>
+        <div className="flex justify-between mx-20">
+          <div className="flex flex-col w-1/2 mb-15">
+            <h1 className="font-bold mb-10 text-3xl">{movie?.title} </h1>
+            {/* <h1 className="font-medium mb-8 ">( Tên gốc: {movie.original_title} )</h1> */}
+
+            <p className="mb-4">{movie.production_companies[0]?.name} ™</p>
+            <div className="flex items-center gap-6">
+              <div class="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
+                <img class="size-6" src="/rate-star.png" />
+                <p className="font-bold text-xl ">{movie.vote_average} </p>
+
+                <p className="size-6 text-gray-500">({movie.vote_count})</p>
+              </div>
+              <div className="flex text-lg gap-2 items-center text-star">
+                <Rating value={movie.vote_average} />
+              </div>
+            </div>
+
+            {/* FlexItem */}
+            <div className="flex gap-5 mb-8">
+              <div className="flex-2 w-2/5 flex items-center gap-2">
+              <RiGlobalLine className="text-subMain w-4 h-4" />
+                <span className="text-sm font-medium">
+                  {movie.production_countries[0]?.name}
+                </span>
+              </div>
+              <div className="flex-2 w-1/5 flex items-center gap-2">
+                <FaRegCalendar className="text-subMain w-3 h-3" />
+                <span className="text-sm font-medium">
+                  {movie.release_date.substring(0, 4)}
+                </span>
+              </div>
+              <div className="flex-2 w-2/5 flex items-center gap-2">
+                <IoTimeOutline className="text-subMain w-3 h-3" />
+                <span className="text-sm font-medium">
+                  {movie.runtime} phút
+                </span>
+              </div>
+            </div>
+
+            <hr className="border-t-1 border-gray-300 mb-8" />
             
-            <p>{movie.production_companies[0]?.name} ™</p>
-            <p>Quốc gia: {movie.production_countries[0]?.name} </p>
-            <p className="mt-8">Doanh thu: {movie.revenue} $</p>
+            <div className="mb-4 flex"> 
+            <IoIosRadioButtonOn />
+            <span className="text-sm font-medium "> {movie.genres.map(genre => genre.name).join(', ')}</span>
+
+            </div>
+
+            <p className="mb-10">{movie.overview}</p>
           </div>
 
-          <div className="flex flex-col items-center justify-center mt-10">
-            <div className="flex gap-4 mb-8">
-              <PiShareFat /> <span>Chia sẻ</span>
-              <PiHeart /> <span>Yêu thích</span>
+          <div className="flex flex-col  justify-center mt-10">
+            <div className="flex gap-20 mb-8 ">
+              <div className="flex gap-3 items-center">
+              <PiShareFat /> <p>Chia sẻ</p>
+              </div>
+              <div className="flex gap-3 items-center">
+              <PiHeart /> <p>Yêu thích</p>
+              </div>
             </div>
-            <p className="font-medium">Điểm trung bình: {movie.vote_average} ⭐</p>
-            <p>({movie.vote_count} lượt đánh giá)</p>
-            <p className="mt-4">Lượt xem: {movie.popularity}</p>
+            <div className="flex justify-between">
+            <p className="font-medium">Diễn Viên: </p>
+            <p className="font-medium">
+            {movie.casts.cast[0].name} <br />
+            {movie.casts.cast[1].name}
+            </p>
+            </div>
+
+            <div className="flex justify-between mt-4">
+            <p className="font-medium">Đạo diễn: </p>
+            <p className="font-medium ">
+              {movie.casts.cast[2].name}
+            </p>
+            </div>
+
+            <div className="flex justify-between mt-4">
+            <p className="font-medium">Lượt xem: </p>
+            <p className="font-medium ">
+            {movie.popularity} views
+            </p>
+            </div>
+            
           </div>
+          
         </div>
       </div>
 
       <MovieCasts movie={movie} />
 
       <div className="my-16">
-        <Titles title="Phim liên quan" Icon={BsCollectionFill} />
+        <Titles title="Nội dung liên quan" Icon={BsCollectionFill} />
         <div className="flex overflow-x-auto mt-6 sm:mt-10 gap-6">
           <Swiper
             autoplay={{
