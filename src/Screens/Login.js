@@ -1,8 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { FiLogIn } from "react-icons/fi";
+import { Link } from 'react-router-dom';
 import { Input } from "../Components/UsedInputs";
 import Layout from "../Layout/Layout";
-import { FiLogIn } from "react-icons/fi";
 
 function Login() {
   return (

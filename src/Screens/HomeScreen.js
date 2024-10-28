@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { FaPlay } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import { GetMovieInfo } from '../Components/Home/GetMovieInfo';
 import TitleCards from '../Components/Home/TitleCards/TitleCards';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
@@ -65,8 +66,10 @@ function HomeScreen() {
     setPopupOpen(false); 
   };
 
-  const handleMovieClick = (movie) => {
-    setSelectedMovie(movie);
+  const handleMovieClick = async (movie) => {
+    const pmovie = await GetMovieInfo(movie.id);
+    console.log(pmovie);
+    setSelectedMovie(pmovie);
   };
 
   const closeMoviePopup = () => {

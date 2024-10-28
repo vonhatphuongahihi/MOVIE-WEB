@@ -1,9 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { FavoritesContext } from '../Context/FavoritesContext';
-import { FaHeart, FaPlay } from "react-icons/fa";
+import { FaHeart, FaPlay, FaRegCalendar } from "react-icons/fa";
+import { IoTimeOutline } from 'react-icons/io5';
 import { RiCloseLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { FavoritesContext } from '../Context/FavoritesContext';
+import './MovieDetail/MovieDetail.css';
 
 const Backdrop = styled.div`
     position: fixed;
@@ -35,6 +37,13 @@ const ModalContainer = styled.div`
         bottom: 50px;
         height: calc(100vh - 100px);
     }
+    
+    @media (max-width: 480px) {
+      top: 0;
+      bottom: 0;
+      height: 100vh;
+      width: 100vw;
+    }
 `;
 
 const ModalContent = styled.div`
@@ -59,6 +68,18 @@ const CloseButton = styled.button`
     color: #fff;
 
     &:hover { background-color: rgba(33, 33, 33, 0.5); }
+
+    @media (max-width: 768px) {
+        font-size: 30px;
+        top: 8px;
+        right: 8px;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 25px;
+        top: 5px;
+        right: 5px;
+    }
 `;
 
 const ImageContainer = styled.div`
@@ -81,8 +102,9 @@ const BtnGroup = styled.div`
     gap: 10px;
 
     @media (max-width: 768px) {
+        bottom: 10px;
         left: 15px;
-    },
+    }
 
     @media (max-width: 480px) {
         left: 10px;
@@ -93,7 +115,7 @@ const ImageButton = styled.button`
     padding: 12px 27px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     transition: background-color 0.3s, color 0.3s;
 
     @media (max-width: 768px) {
@@ -102,8 +124,8 @@ const ImageButton = styled.button`
     }
 
     @media (max-width: 480px) {
-        padding: 5px 10px;
-        font-size: 10px; 
+        padding: 7px 10px;
+        font-size: 13px;
     }
 
     &.btn-watch {
@@ -111,8 +133,8 @@ const ImageButton = styled.button`
         color: #ffffff;
 
         &:hover {
-        background-color: #24a70f;
-        color: #000000;
+        background-color: #23a30f;
+        color: #fff;
         }
     }
 
@@ -121,8 +143,8 @@ const ImageButton = styled.button`
         color: #000;
 
         &:hover {
-        background-color: #8E8D8D;
-        color: #ffffff;
+        background-color: #ffb3b3;
+        color: #000;
         }
 
         &.liked { 
@@ -137,37 +159,25 @@ const ImageButton = styled.button`
 `;
 
 const Content = styled.div`
-    margin: 30px 25px 15px 25px;
+    margin: 20px 25px 15px 25px;
 
     @media (max-width: 768px) {
-        margin: 25px 15px 10px 15px;
+        margin: 15px 15px 10px 15px;
     }
 `;
 
-const Title = {
-    position: 'relative',
-    color: '#fff',
-    fontSize: '30px',
-    fontWeight: 'bold',
-    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)'
-}
-
-const Evaluation = {
-    marginTop: '10px',
-    marginBottom: '20px',
-    display: 'flex',
-    gap: '20px',
-    fontSize: '16px',
-}
-
-const Detail = {
-    color: '#fff',
-    fontSize: '16px',
-    textAlign: 'justify',
-}
-
 function MovieDetail({ movie, onClose }) {
+
+  //Kiểm tra phim có nội dung không
+  if (!movie.overview){
+    movie.overview = "Khám phá thế giới điện ảnh với những câu chuyện đa dạng và hấp dẫn. Từ những cuộc phiêu lưu kỳ thú đến những tâm tư sâu sắc, mỗi bộ phim đều mang đến cho bạn những trải nghiệm độc đáo. Hãy cùng theo dõi hành trình của các nhân vật, cảm nhận những cảm xúc chân thật và tận hưởng những khoảnh khắc đáng nhớ. Chúng tôi hy vọng bạn sẽ tìm thấy niềm vui trong từng khung hình!";
+  }
+
+  const languages = movie.spoken_languages.map(spoken_languages => spoken_languages.english_name).join(', ');
+  const genreNames = movie.genres.map(genre => genre.name).join(', ');
   const backdropUrl = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
+  
+
   const { addFavorite, favorites } = useContext(FavoritesContext);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -184,6 +194,10 @@ function MovieDetail({ movie, onClose }) {
   React.useEffect(() => {
     setIsFavorite(checkIfFavorite());
   }, [favorites, movie.id]);
+
+  if (!movie) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <Backdrop onClick={onClose}>
@@ -209,14 +223,43 @@ function MovieDetail({ movie, onClose }) {
               </ImageButton>
             </BtnGroup>
           </ImageContainer>
+
           <Content>
-            <div style={Title}>{movie.title}</div>
-            <div style={Evaluation}>
-              <p>{movie.vote_count} lượt đánh giá</p>
-              <p>|</p>
-              <p>Điểm đánh giá: {movie.vote_average}</p>
+            <div >
+              <div className="title_info">{movie.title}</div>
+              <div className="evaluation">
+                <p className="evaluationItem">{movie.vote_count} lượt đánh giá</p>
+                <p className="evaluationItem">Điểm đánh giá: {movie.vote_average}</p>
+                <div className="evaluationItem">
+                  <FaRegCalendar className="text-subMain w-4 h-4" />
+                  <span>{movie.release_date}</span>
+                </div>
+                <div className="evaluationItemLast">
+                  <IoTimeOutline className="text-subMain w-5 h-5" />
+                  <span>{movie.runtime} phút</span>
+                </div>
+              </div>
+              
+              <div className="main_content">
+                <div className="content_left">
+                  <p className="detail">{movie.overview}</p>
+                </div>
+                <div className="content_right">
+                  <div className="language">
+                    <p>Ngôn ngữ: {" "}
+                      <span>{languages}</span>
+                    </p>
+                  </div>
+                  <div className="genre">
+                    <p>Thể loại: {" "}
+                      <span>{genreNames}</span>
+                    </p>
+                  </div>
+                </div>
+                
+              </div>
             </div>
-            <p style={Detail}>{movie.overview}</p>
+
           </Content>
         </ModalContent>
 

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import './Login.css';
-import { login, signup } from '../../firebase';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
+import { login, signup } from '../../firebase';
+import './Login.css';
+
+
 
 const Login = () => {
     const navigate = useNavigate(); 

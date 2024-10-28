@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import './titleCards.css'
+import React, { useEffect, useRef, useState } from 'react';
+import './titleCards.css';
 //import cards_data from '../../../Data/Cards_data'
 
 const TitleCards = ({title, category, onMovieClick}) => {
@@ -18,7 +18,7 @@ const TitleCards = ({title, category, onMovieClick}) => {
     cardsRef.current.scrollLeft += event.deltaY;
   }
   useEffect(()=>{
-    fetch(`https://api.themoviedb.org/3/movie/${category ? category : 'popular'}?language=en-US&page=1`, options)
+    fetch(`https://api.themoviedb.org/3/movie/${category ? category : 'popular'}?language=vi-VN&page=1`, options)
     .then(response => response.json())
     .then(response => setApiData(response.results))
     .catch(err => console.error(err));
@@ -31,7 +31,7 @@ const TitleCards = ({title, category, onMovieClick}) => {
         {apiData.map((card, index) => {
             return <div key={index} className="card" onClick={() => onMovieClick(card)}>
                 <img src={`https://image.tmdb.org/t/p/w500`+card.backdrop_path} alt="" />
-                <p>{card.original_title}</p>
+                <p>{card.title}</p>
                 </div>
         })}
       </div>

@@ -1,29 +1,28 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { RecentlyContext } from "../Context/RecentlyContext";
-import { useParams } from "react-router-dom";
+
+import fetch from 'node-fetch';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { BiArrowBack } from "react-icons/bi";
+import { BsCollectionFill } from "react-icons/bs";
+import { MdOutlineOndemandVideo } from "react-icons/md";
+import { PiHeart, PiShareFat } from "react-icons/pi";
+import { Link, useParams } from "react-router-dom";
+import { Autoplay } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import Movie from "../Components/Movie";
 import MovieCasts from "../Components/Single/MovieCasts";
 import MovieInfo from "../Components/Single/MovieInfo";
 import MovieRates from "../Components/Single/MovieRates";
 import Titles from "../Components/Titles";
-import { Movies } from "../Data/MovieData";
+import { RecentlyContext } from '../Context/RecentlyContext';
 import Layout from "../Layout/Layout";
-import { BsCollectionFill } from "react-icons/bs";
-import { MdOutlineOndemandVideo } from "react-icons/md";
-import Movie from "../Components/Movie";
 import ShareMovieModal from "../Components/Modals/ShareModal";
-import fetch from "node-fetch";
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { BiArrowBack } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { PiShareFat } from "react-icons/pi";
-import { PiHeart } from "react-icons/pi";
 import Rating from "../Components/Stars";
 import { FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { RiGlobalLine } from "react-icons/ri";
 import { IoIosRadioButtonOn } from "react-icons/io";
+
 function SingleMovie() {
   // const [modalOpen, setModalOpen] = useState(false);
   const { addRecently } = useContext(RecentlyContext);
