@@ -1,8 +1,11 @@
-.login{
-    height:100vh;
-    background-color: black;
+.login {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+            url('http://localhost:3000/images/background.png') no-repeat center center;
+    background-size: cover;
     padding: 20px 8%;
 }
+
 .login-logo{
     width: 120px;
 }

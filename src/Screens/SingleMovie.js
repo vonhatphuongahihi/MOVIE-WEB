@@ -11,7 +11,6 @@ import { BsCollectionFill } from "react-icons/bs";
 import { MdOutlineOndemandVideo } from "react-icons/md";
 import Movie from "../Components/Movie";
 import ShareMovieModal from "../Components/Modals/ShareModal";
-import fetch from "node-fetch";
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";

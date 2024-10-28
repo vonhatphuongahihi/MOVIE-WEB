@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-//import TopRated from '../Components/Home/TopRated';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 import { FaPlay } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
@@ -55,14 +56,14 @@ const BannerButton = styled.button`
 
 function HomeScreen() {
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState(null); 
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   const openPopup = () => {
-    setPopupOpen(true); 
+    setPopupOpen(true);
   };
 
   const closePopup = () => {
-    setPopupOpen(false); 
+    setPopupOpen(false);
   };
 
   const handleMovieClick = (movie) => {
@@ -71,21 +72,6 @@ function HomeScreen() {
 
   const closeMoviePopup = () => {
     setSelectedMovie(null);
-  };
-
-  const bannerStyle = {
-    position: 'relative',
-    height: '112vh',
-    marginTop: '-40px',
-    overflow: 'hidden',
-  };
-
-  const bannerImgStyle = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    maskImage: 'linear-gradient(to right, transparent, black 75%)',
-    WebkitMaskImage: 'linear-gradient(to right, transparent, black 75%)',
   };
 
   const bannerCaptionStyle = {
@@ -114,72 +100,91 @@ function HomeScreen() {
   };
 
   const titleCardsStyle = {
-    position: 'absolute',  
-    bottom: '0',          
-    left: '20px',         
-    width: 'calc(100% - 20px)',  
+    position: 'absolute',
+    bottom: '0',        
+    left: '0',          
+    width: '100%',       
+    padding: '20px',     
   };
 
+
   const moreCardStyle = {
-    marginTop: '70px',
+    paddingTop: '50px',
     paddingLeft: '20px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '40px'
+    gap: '40px',
   };
-
+  
   return (
     <Layout>
       <div className="home">
-        <div className="banner" style={bannerStyle}>
-          <img
-            src="/images/movies/banner.png"
-            alt="Banner"
-            className="banner-img"
-            style={bannerImgStyle}
-          />
-          <div className="banner-caption" style={bannerCaptionStyle}>
-            <img
-              src="/images/movies/banner-caption.png"
-              alt="Caption"
-              className="caption-img"
-              style={captionImgStyle}
-            />
-            <p className="text-white" style={captionPStyle}>
-              Ah Nian, a young girl from the Ji tribe, encounters Xiao Zisu, a
-              boy from a different tribe, in her hometown of Sushui. They
-              eventually fall in love...
-            </p>
-            <div className="banner-btns" style={bannerBtnsStyle}>
-              <BannerButton className="btn-watch">
-                <FaPlay /> Xem ngay
-              </BannerButton>
-              <BannerButton className="btn-detail">
-                <IoInformationCircleOutline /> Thông tin phim
-              </BannerButton>
+        <Swiper
+          spaceBetween={0}
+          slidesPerView={1}
+          loop
+          autoplay={{ delay: 5000 }}
+        >
+          <SwiperSlide>
+            <div className="banner">
+              <video
+                src="/videos/movies/mo_dom_dom.mp4"
+                alt="Banner Video 1"
+                autoPlay
+                loop
+                muted
+                style={{
+                  width: '100%',
+                  height: '100vh',
+                  objectFit: 'cover',
+                  maskImage: 'linear-gradient(to right, transparent, black 75%)',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent, black 75%)',
+                }}
+              />
+              <div className="banner-caption" style={bannerCaptionStyle}>
+                <img
+                  src="/images/movies/banner-caption.png"
+                  alt="Caption"
+                  style={captionImgStyle}
+                />
+                <p className="text-white" style={captionPStyle}>
+                  Ah Nian, a young girl from the Ji tribe, encounters Xiao Zisu, a boy from a different tribe...
+                </p>
+                <div className="banner-btns" style={bannerBtnsStyle}>
+                  <BannerButton className="btn-watch">
+                    <FaPlay /> Xem ngay
+                  </BannerButton>
+                  <BannerButton className="btn-detail">
+                    <IoInformationCircleOutline /> Thông tin phim
+                  </BannerButton>
+                </div>
+              </div>
             </div>
-          </div>
+            <div style={{ position: 'absolute', bottom: 0, width: '100%',  ...titleCardsStyle }}>
+              <TitleCards 
+                title={"PHIM HAY MỖI NGÀY"} 
+                category={"top_rated"} 
+                onMovieClick={handleMovieClick} 
+                style={titleCardsStyle}
+              />
+            </div>
+          </SwiperSlide>
+        </Swiper>
 
-          <div className="title-cards" style={titleCardsStyle}>
-            <TitleCards onMovieClick={handleMovieClick}/>
-          </div>
-        </div>
         <div className="more-card" style={moreCardStyle}>
-          <TitleCards title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick}/>
-          <TitleCards title={"SẮP PHÁT SÓNG"} category={"upcoming"} onMovieClick={handleMovieClick}/>
-          <TitleCards title={"ĐANG CHIẾU"} category={"now_playing"} onMovieClick={handleMovieClick}/>
+          <TitleCards title={"SẮP PHÁT SÓNG"} category={"upcoming"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"ĐANG CHIẾU"} category={"now_playing"} onMovieClick={handleMovieClick} />
         </div>
       </div>
-      {!isPopupOpen && (  
+
+      {!isPopupOpen && (
         <ChatbotIconWrapper onClick={openPopup}>
           <IoIosChatbubbles />
         </ChatbotIconWrapper>
       )}
       {isPopupOpen && <ChatbotPopup closePopup={closePopup} isOpen={isPopupOpen} />}
 
-      {selectedMovie && (
-        <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />
-      )}
+      {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
     </Layout>
   );
 }
