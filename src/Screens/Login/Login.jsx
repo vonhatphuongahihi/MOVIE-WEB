@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import './Login.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { login, signup } from '../../firebase';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'; 
+import './Login.css';
 
 const Login = () => {
     const navigate = useNavigate(); 
@@ -88,7 +88,7 @@ const Login = () => {
                         ) : (
                             <p>Đã có tài khoản Melon? <span onClick={() => setSignState("Đăng nhập")}>Đăng nhập ngay</span></p>
                         )}
-                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>>>>>>>> main
+                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>
                     </div>
                 </div>
             </div>

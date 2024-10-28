@@ -1,0 +1,175 @@
+.title_info {
+    position: relative;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .title_info {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title_info {
+        font-size: 20px;
+    }
+}
+
+.evaluation {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 16px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .evaluation {
+        font-size: 15px;
+        margin-bottom: 15px;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .evaluation {
+        font-size: 14px;
+    }
+}
+
+.evaluationItem {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  padding-right: 20px;
+}
+
+@media (max-width: 768px) {
+    .evaluationItem {
+        padding-right: 10px;
+        gap: 7px;
+    }
+}
+
+@media (max-width: 480px) {
+    .evaluationItem {
+        gap: 5px;
+    }
+}
+
+.evaluationItemLast {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+    .evaluationItemLast {
+        gap: 7px;
+    }
+}
+
+@media (max-width: 480px) {
+    .evaluationItemLast {
+        gap: 5px;
+    }
+}
+
+
+.language {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+@media (max-width: 768px) {
+    .language {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .language {
+        font-size: 13.5px;
+        margin-bottom: 6px;
+    }
+}
+
+.genre {
+    font-size: 15px;
+}
+
+@media (max-width: 768px) {
+    .genre {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .genre {
+        font-size: 13.5px;
+    }
+}
+
+.detail {
+    color: #fff;
+    font-size: 15px;
+    text-align: justify;
+}
+
+@media (max-width: 768px) {
+    .detail {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .detail {
+        font-size: 13.5px;
+    }
+}
+
+.main_content {
+    display: flex;
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .main_content {
+        flex-direction: column;
+    }
+}
+
+.content_left {
+    flex-basis: 70%;
+    padding-right: 30px;
+}
+
+@media (max-width: 768px) {
+    .content_left {
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content_left {
+        padding-right: 0;
+    }
+}
+
+.content_right {
+    flex-basis: 30%;
+}
+
+@media (max-width: 480px) {
+    .content_right {
+        margin-top: 15px;
+    }
+}
+
