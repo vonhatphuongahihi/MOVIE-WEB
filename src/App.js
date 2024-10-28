@@ -1,7 +1,7 @@
 import Aos from 'aos';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from './firebase';
@@ -25,6 +25,8 @@ import RecentlyWatch from "./Screens/RecentlyWatch";
 function App() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation(); // Lấy đường dẫn hiện tại
+
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -36,19 +38,22 @@ function App() {
       }
     });
   }, []);
+
   useEffect(() => {
     Aos.init();
-    
   }, []);
 
   const handleLoad = () => {
     setLoading(false);
   };
 
+  // Kiểm tra đường dẫn hiện tại
+  const showSplash = location.pathname === '/';
+
   return (
     <>
       <ToastContainer theme="dark" />
-      {loading ? (
+      {showSplash && loading ? ( // Chỉ hiển thị Splash khi ở đường dẫn chính
         <SplashScreen onLoad={handleLoad} />
       ) : (
         <Routes>
@@ -60,19 +65,13 @@ function App() {
           <Route path="/movies" element={<MoviesPage />} />
           <Route path="/movie/:id" element={<SingleMovie />} />
           <Route path="/profile" element={<Profile />} />
-
           <Route path="/watch/:id" element={<WatchPage />} />
-          
           <Route path="/register" element={<Register />} />
           <Route path="/support" element={<Support />} />
-
-          
           <Route path="/recently" element={<RecentlyWatch />} />
           <Route path="/phimyeuthich" element={<FavoriteMovies />} />
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
-          
-
         </Routes>
       )}
     </>

@@ -2,6 +2,7 @@ import React from 'react';
 import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 
 function Rating({ value }) {
+  
   return (
     <>
       <span>

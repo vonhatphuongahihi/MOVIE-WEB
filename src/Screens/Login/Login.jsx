@@ -1,9 +1,10 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { login, signup } from '../../firebase';
 import './Login.css';
+
+
 
 const Login = () => {
     const navigate = useNavigate(); 
@@ -33,7 +34,8 @@ const Login = () => {
             } else {
                 await signup(name, email, password);
                 toast.info("Email xác thực đã được gửi. Vui lòng kiểm tra hộp thư của bạn.");
-                navigate('/login'); 
+            
+                setSignState("Đăng nhập"); 
             }
         } catch (error) {
             toast.error(error.message);
