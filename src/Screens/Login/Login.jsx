@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import './Login.css';
 import { login, signup } from '../../firebase';
@@ -33,7 +32,8 @@ const Login = () => {
             } else {
                 await signup(name, email, password);
                 toast.info("Email xác thực đã được gửi. Vui lòng kiểm tra hộp thư của bạn.");
-                navigate('/login'); 
+            
+                setSignState("Đăng nhập"); 
             }
         } catch (error) {
             toast.error(error.message);
