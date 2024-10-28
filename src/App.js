@@ -11,6 +11,7 @@ import ContactUs from './Screens/ContactUs';
 import ForgotPassword from './Screens/ForgotPassword';
 import HomeScreen from './Screens/HomeScreen';
 import Login from './Screens/Login/Login';
+import Signup from './Screens/Login/Signup';
 import MoviesPage from './Screens/Movies';
 import NotFound from './Screens/NotFound';
 import Profile from './Screens/Profile';
@@ -58,6 +59,7 @@ function App() {
       ) : (
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<HomeScreen />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="*" element={<NotFound />} />
