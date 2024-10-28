@@ -11,7 +11,6 @@ import { BsCollectionFill } from "react-icons/bs";
 import { MdOutlineOndemandVideo } from "react-icons/md";
 import Movie from "../Components/Movie";
 import ShareMovieModal from "../Components/Modals/ShareModal";
-import fetch from 'node-fetch';
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,6 +18,7 @@ import { BiArrowBack } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { PiShareFat } from "react-icons/pi";
 import { PiHeart } from "react-icons/pi";
+
 function SingleMovie() {
   // const [modalOpen, setModalOpen] = useState(false);
   const { addRecently} = useContext(RecentlyContext);

@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import './Login.css';
 import { login, signup } from '../../firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; 
 import { toast } from 'react-toastify'; 
 
 const Login = () => {
@@ -33,7 +32,8 @@ const Login = () => {
             } else {
                 await signup(name, email, password);
                 toast.info("Email xác thực đã được gửi. Vui lòng kiểm tra hộp thư của bạn.");
-                navigate('/login'); 
+            
+                setSignState("Đăng nhập"); 
             }
         } catch (error) {
             toast.error(error.message);
@@ -88,7 +88,7 @@ const Login = () => {
                         ) : (
                             <p>Đã có tài khoản Melon? <span onClick={() => setSignState("Đăng nhập")}>Đăng nhập ngay</span></p>
                         )}
-                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>>>>>>>> main
+                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>
                     </div>
                 </div>
             </div>
