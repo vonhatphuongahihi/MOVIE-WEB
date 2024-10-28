@@ -1,46 +1,36 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { login, signup } from '../../firebase';
+import { login } from '../../firebase';
 import './Login.css';
-
-
 
 const Login = () => {
     const navigate = useNavigate(); 
-    const [signState, setSignState] = useState("Đăng nhập");
-    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const user_auth = async (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault();
         setLoading(true);
-        
+
         try {
-            if (signState === "Đăng nhập") {
-                const userCredential = await login(email, password);
-                const user = userCredential.user;
+            const userCredential = await login(email, password);
+            const user = userCredential.user;
 
-                if (!user.emailVerified) {
-                    toast.error("Vui lòng kiểm tra email của bạn để xác thực tài khoản.");
-                    setLoading(false);
-                    return; 
-                }
-
-                toast.success("Đăng nhập thành công.");
-                navigate('/'); 
-            } else {
-                await signup(name, email, password);
-                toast.info("Email xác thực đã được gửi. Vui lòng kiểm tra hộp thư của bạn.");
-            
-                setSignState("Đăng nhập"); 
+            if (!user.emailVerified) {
+                toast.error("Vui lòng kiểm tra email của bạn để xác thực tài khoản.");
+                setLoading(false);
+                return; 
             }
+
+            toast.success("Đăng nhập thành công.");
+            navigate('/');
         } catch (error) {
             toast.error(error.message);
         } finally {
-            setLoading(false); 
+            setLoading(false);
         }
     };
 
@@ -51,18 +41,10 @@ const Login = () => {
             </div>
         ) : (
             <div className="login">
-                <img src="/images/logo.png" alt="" className='login-logo' />
+                <img src="/images/logo.png" alt="Logo" className='login-logo' />
                 <div className="login-form">
-                    <h1>{signState}</h1>
-                    <form>
-                        {signState === "Đăng ký" && (
-                            <input
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                type="text"
-                                placeholder='Tên người dùng'
-                            />
-                        )}
+                    <img src="/images/logo.png" alt="Logo" className='form-logo' />
+                    <form onSubmit={handleLogin}>
                         <input
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -75,22 +57,21 @@ const Login = () => {
                             type="password"
                             placeholder='Mật khẩu'
                         />
-                        <button onClick={user_auth} type="submit" className='button'>{signState}</button>
+                        <button type="submit" className='button'>Đăng nhập</button>
                         <div className="form-help">
                             <div className="remember">
-                                <input type="checkbox" />
-                                <label htmlFor=''>Ghi nhớ</label>
+                                <input
+                                    type="checkbox"
+                                    checked={rememberMe}
+                                    onChange={() => setRememberMe(!rememberMe)}
+                                />
+                                <label>Ghi nhớ</label>
                             </div>
-                            <p>Bạn cần giúp đỡ?</p>
+                            <p>Quên mật khẩu?</p>
                         </div>
                     </form>
                     <div className="form-switch">
-                        {signState === "Đăng nhập" ? (
-                            <p>Chưa có tài khoản Melon? <span onClick={() => setSignState("Đăng ký")}>Đăng ký ngay</span></p>
-                        ) : (
-                            <p>Đã có tài khoản Melon? <span onClick={() => setSignState("Đăng nhập")}>Đăng nhập ngay</span></p>
-                        )}
-                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>
+                        <p>Chưa có tài khoản? <span onClick={() => navigate('/signup')}>Đăng ký ngay</span></p>
                     </div>
                 </div>
             </div>
