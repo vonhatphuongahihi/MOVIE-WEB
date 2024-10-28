@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
-import { FiFilm, FiTrash, FiPlay } from "react-icons/fi"; 
+import { FiFilm, FiPlay } from "react-icons/fi"; 
+import { FaHeart } from "react-icons/fa";
 import Layout from "../Layout/Layout";
 import { FavoritesContext } from '../Context/FavoritesContext'; // Import context
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const MovieContainer = styled.div`
   background: #0b0f2a;
@@ -34,19 +36,10 @@ const Title = styled.div`
   margin: 10px 0;
 `;
 
-const Evaluation = styled.div`
-  margin-top: 10px;
-  margin-bottom: 20px;
-  display: flex;
-  gap: 20px;
-  font-size: 14px;
-  color: #fff;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between; /* Space between buttons */
-  margin-top: 10px; /* Add some space above the buttons */
+  justify-content: space-between;
+  margin-top: 10px;
 `;
 
 const RemoveButton = styled.button`
@@ -128,19 +121,15 @@ function FavoriteMovies() {
                   <Image src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`} alt={movie.title} />
                 </ImageContainer>
                 <Title>{movie.title}</Title>
-                <Evaluation>
-                  <p>{movie.vote_count} lượt đánh giá</p>
-                  <p>|</p>
-                  <p>Điểm đánh giá: {movie.vote_average}</p>
-                </Evaluation>
 
                 <ButtonContainer>
-                  <WatchButton aria-label={`Xem ngay ${movie.title}`}>
-                    <FiPlay /> Xem Ngay
-                  </WatchButton>
-
+                  <Link to={`/movie/${movie?.id}`}>
+                    <WatchButton aria-label={`Xem ngay ${movie.title}`}>
+                      <FiPlay /> Xem Ngay
+                   </WatchButton>
+                  </Link>
                   <RemoveButton onClick={() => removeFavorite(movie.id)} aria-label={`Xóa ${movie.title} khỏi danh sách yêu thích`}>
-                    <FiTrash />
+                    <FaHeart />
                   </RemoveButton>
                 </ButtonContainer>
               </MovieContainer>

@@ -4,33 +4,27 @@ export const accordionGroups = [
       groupTitle: 'TRỢ GIÚP',
       accordions: [
         { id: 1, title: 'Đăng ký tài khoản', content: 
-            `<h6>1. Đăng ký tài khoản Melon bằng cách nào ? </h6><br>
-            <p>Bạn có thể đăng ký theo các cách sau:<br>
+            `<h6>ĐĂNG KÝ TÀI KHOẢN MELON BẰNG CÁCH NÀO ?</h6>
+
             - Bằng số điện thoại Việt Nam:<br>
-            Bạn điền đầy đủ thông tin vào mục "Đăng ký ngay" gồm Số điện thoại và Mật khẩu. Sau đó, hệ thống sẽ gửi mã OTP gồm 04 chữ số (có hiệu lực trong 60 giây) về điện thoại của bạn trong phần tin nhắn SMS. Bạn nhập mã OTP vừa nhận được và kết thúc bằng nút "Xác nhận".</p>
+            Đăng ký ngay -> SĐT và Mật khẩu -> Mã OTP qua SMS gồm 04 chữ số -> Nhập mã OTP -> Xác nhận.</p>
 
             <p>- Bằng liên kết Facebook:<br>
-            Bạn chọn hình thức là Đăng nhập -> chọn biểu tượng Facebook trên màn hình, và sau đó nhập thông tin tài khoản và mật khẩu của địa chỉ Facebook muốn liên kết.</p>
+            Đăng nhập -> Biểu tượng Facebook -> Nhập thông tin tài khoản và mật khẩu Facebook.</p>
 
             <p>- Bằng liên kết Google:<br>
-            Bạn chọn hình thức là Đăng nhập -> chọn biểu tượng Google trên màn hình và sau đó nhập thông tin tài khoản và mật khẩu của địa chỉ email muốn liên kết.</p>
+            Đăng nhập -> Biểu tượng Google -> Nhập thông tin tài khoản và mật khẩu email.</p>
             <br>
-            <h6>2. Tôi không nhận được mã OTP khi đăng ký tài khoản?<h6><br>
-            <p>Hãy kiểm tra bạn có đang gặp phải một trong những trường hợp sau và làm theo hướng dẫn để khắc phục:<br>
-            - Bạn nhập số điện thoại chưa đúng hoặc không hợp lệ khi đăng ký? Hiện tại Melon chỉ chấp nhận đăng ký với số điện thoại Việt Nam.<br>
-            - Điện thoại của bạn đang bật tính năng chặn tin nhắn SMS.<br>
-            - Bạn đang ở trong khu vực có sóng điện thoại yếu?<br>
-            Hãy di chuyển đến khu vực có sóng điện thoại tốt hơn và thử lại.<br>
-            Nếu đã thực hiện đúng các bước trên nhưng vẫn không nhận được OTP, hãy liên hệ đến bộ phận chăm sóc khách hàng của Melon thông qua số 1800 599920 (miễn phí).</p>
-
-            <p>- Đối với điện thoại sử dụng hệ điều hành Android:<br>
-            Bước 1: Kiểm tra điện thoại có chặn tin nhắn từ Melon hay không bằng cách vào phần "Cài đặt" của tin nhắn, chọn "Chặn và lọc", và sau đó chọn "Danh sách đen/Danh sách chặn".<br>
-            Bước 2: Gỡ chặn tin nhắn từ Melon hoặc gỡ các ứng dụng chặn tin nhắn đang cài đặt trong điện thoại của bạn.<br>
-            - Đối với điện thoại sử dụng hệ điều hành iOS (iPhone, iPad):<br>
-            Bước 1: Vào mục cài đặt và chọn mục tin nhắn.<br>
-            Bước 2: Ở mục "Lọc tin nhắn", gạt sang trái để tắt thanh công cụ "Lọc người gửi không xác định"</p>
+            <h6>KHÔNG NHẬN ĐƯỢC MÃ OTP ?<h6>
+            <p>Nguyên nhân và khắc phục<br>
+            - SĐT chưa đúng hoặc không hợp lệ. Hiện tại Melon chỉ chấp nhận SĐT Việt Nam.<br>
+            - Điện thoại đang bật chặn tin nhắn SMS.<br>
+            - Sóng điện thoại yếu.<br>
+            - Hãy di chuyển đến khu vực có sóng điện thoại tốt hơn và thử lại.<br>
+            - Nếu đã thực hiện đúng các bước trên nhưng vẫn không nhận được OTP, hãy liên hệ đến bộ phận chăm sóc khách hàng của Melon thông qua số 1800 599920 (miễn phí).</p>
             <br>
-            <h6>3. Tôi không nhớ mật khẩu đăng nhập (Chỉ áp dụng đối với hình thức đăng ký tài khoản ban đầu bằng số điện thoại).</h6><br>
+          
+            <h6>TÔI KHÔNG NHỚ MẬT KHẨU.</h6>
             <p>Để đặt mật khẩu mới, vui lòng thao tác theo các bước sau:<br>
             - Chọn "Đăng nhập"<br>
             - Chọn "Quên mật khẩu?",<br>
@@ -40,35 +34,17 @@ export const accordionGroups = [
             - Nhập mã OTP và đặt lại mật khẩu mới.<br>
             - Nhấn nút "Xác nhận" để hoàn tất đổi mật khẩu.</p>
             <br>
-            <h6>4. Thay đổi thông tin cá nhân trên Melon như thế nào?</h6><br>
+            <h6>THAY ĐỔI THÔNG TIN CÁ NHÂN</h6>
             <p>Bạn có thể thay đổi thông tin cá nhân theo các bước sau:<br>
             - Người dùng vào tài khoản cá nhân<br>
             - Cài đặt tài khoản<br>
             - Chọn vào thông tin muốn thay đổi, tiến hành thay đổi và xác nhận</p>` },
+            
         { id: 2, title: 'Hướng dẫn khắc phục lỗi', content: 
-            `<h6>1. Khi bạn ở Việt Nam nhưng hệ thống báo "không khả dụng ở quốc gia của bạn".</h6><br>
+            `<h6>KHÔNG KHẢ DỤNG TẠI QUỐC GIA CỦA BẠN.</h6>
             <p>Bạn vui lòng kiểm tra nếu đang bật dịch vụ mạng ảo VPN trên thiết bị của mình thì tắt đi, sau đó truy cập ứng dụng để thử lại. Nếu vẫn chưa xem được thì liên hệ bộ phận chăm sóc khách hàng Hotline : 1800.599.920 (Miễn phí) để được hỗ trợ thêm.</p>
             <br>
-            <h6>2. Hướng dẫn khắc phục lỗi trên Android TV (TCL, Sony).</h6><br>
-            <p>Có 02 cách để khắc phục lỗi thường gặp trên Android TV (TCL, Sony), như sau:</p>
-
-            <p>Cách 1: Buộc dừng ứng dụng<br>
-            Bước 1: Ở góc phải màn hình TV, vào mục Cài đặt (Settings)<br>
-            Bước 2: Vào danh mục Ứng dụng (Application)<br>
-            Bước 3: Tìm ứng dụng Melon và click chọn<br>
-            Bước 4: Bấm chọn Buộc dừng (Force stop)<br>
-            Bước 5: Trở về Trang chủ (Home) và mở lại app Melon.</p>
-
-            Cách 2: Cài đặt lại ứng dụng<br>
-            Gỡ cài đặt (Uninstall) và Cài đặt lại (Install) ứng dụng Melon để khắc phục:<br>
-            Bước 1: Vào mục Cài đặt (Settings) trên TV<br>
-            Bước 2: Vào Ứng dụng (Application)<br>
-            Bước 3: Tìm ứng dụng Melon và click chọn<br>
-            Bước 4: Bấm chọn Gỡ cài đặt (Uninstall) và chọn OK<br>
-            Bước 5: Trở về Trang chủ (Home), truy cập Google Play Store trong danh mục Apps. Tìm kiếm ứng dụng Melon và chọn Cài đặt.<br>
-            <br>
-            <h6>3. Hướng dẫn khắc phục lỗi trên Samsung TV.</h6><br>
-            <p>Trên điều khiển từ xa, bạn ấn và giữ phím “Quay lại” hoặc “Trở về” khoảng 5-7 giây để thoát hẳn về màn hình chính. Sau đó, truy cập lại ứng dụng Melon.</h6>` },
+            ` },
         { id: 3, title: 'Hướng dẫn thanh toán', content: 
             `<p>Melon chấp nhận nhiều phương thức thanh toán khác nhau bao gồm:<br>
             ▸ Ví điện tử: Ví MoMo, ZaloPay, Ví điện tử ShopeePay<br>
@@ -125,48 +101,7 @@ export const accordionGroups = [
                   <h5 style="text-align: center">
                     HỢP ĐỒNG CUNG CẤP DỊCH VỤ TRUYỀN HÌNH TRẢ TIỀN<br />(Hợp Đồng Điện Tử)
                   </h5>
-                  &nbsp;
-                  <ul style="list-style-type: disc; line-height: 2.2">
-                    <li>
-                      Căn cứ Bộ luật Dân sự số 91/2015/QH13 có hiệu lực kể từ ngày 01/01/2017;
-                    </li>
-                    <li>
-                      Căn cứ Luật Bảo vệ quyền lợi người tiêu dùng số 59/2010/QH12 có hiệu lực
-                      kể từ ngày 01/7/2011;
-                    </li>
-                    <li>
-                      Căn cứ Luật Sở hữu trí tuệ số 50/2005/QH11 có hiệu lực kể từ ngày
-                      01/7/2006 (được sửa đổi, bổ sung bởi Luật sửa đổi, bổ sung một số điều
-                      của Luật Sở hữu trí tuệ số 07/2022/QH15 từ ngày 01/01/2023)
-                    </li>
-                    <li>
-                      Căn cứ Luật Giao dịch điện tử số 51/2005/QH11 có hiệu lực kể từ ngày
-                      01/3/2006;
-                    </li>
-                    <li>
-                      Căn cứ Nghị định số 52/2013/NĐ-CP về thương mại điện tử có hiệu lực ngày
-                      01/7/2013, được sửa đổi, bổ sung bởi Nghị định số 85/2021/NĐ-CP có hiệu
-                      lực từ ngày 01/01/2022;
-                    </li>
-                    <li>
-                      Căn cứ Nghị định số 06/2016/NĐ-CP về quản lý, cung cấp và sử dụng dịch
-                      vụ phát thanh, truyền hình có hiệu lực ngày 15/3/2016, được sửa đổi, bổ
-                      sung bởi Nghị định số 71/2022/NĐ-CP có hiệu lực ngày 01/10/2022;&nbsp;
-                    </li>
-                    <li>
-                      Căn cứ Nghị định số 99/2011/NĐ-CP quy định chi tiết và hướng dẫn thi
-                      hành một số điều của Luật Bảo vệ quyền lợi người tiêu dùng có hiệu lực
-                      ngày 15/12/2011;
-                    </li>
-                    <li>
-                      Căn cứ Giấy phép cung cấp dịch vụ phát thanh, truyền hình trả tiền số
-                      247/GP-BTTTT do Bộ Thông tin và Truyền thông cấp cho Công ty Cổ phần
-                      Melon vào ngày 21/07/2023;
-                    </li>
-                    <li>
-                      Căn cứ vào yêu cầu của khách hàng và khả năng của Công ty Cổ phần Melon.
-                    </li>
-                  </ul>
+                  &nbsp;            
                   <p>
                     Hợp Đồng Cung Cấp Dịch Vụ Truyền Hình Trả Tiền (Hợp Đồng Điện Tử) này (“
                     <strong>Hợp Đồng</strong> ”) được lập ngày ___/___/____ (“
@@ -181,7 +116,7 @@ export const accordionGroups = [
                         </tr>
                         <tr>
                           <td>Địa chỉ</td>
-                          <td>: Số 222 Pasteur, Phường Võ Thị Sáu, Quận 3, TP.HCM.</td>
+                          <td>: Khu phố 6, phường Linh Trung, Tp. Thủ Đức, Tp.HCM</td>
                         </tr>
                         <tr>
                           <td>Mã số thuế&nbsp;</td>
@@ -192,7 +127,7 @@ export const accordionGroups = [
                           <td>
                             : (Ông)
                             <strong
-                              >&nbsp;HOÀNG TRỌNG KHẢI&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                              >&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                               &nbsp;</strong
                             >
                             Chức vụ: Giám Đốc

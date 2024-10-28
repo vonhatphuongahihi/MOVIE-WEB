@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FaHeart, FaPlay, FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from 'react-icons/io5';
 import { RiCloseLine } from 'react-icons/ri';
@@ -149,7 +149,7 @@ const ImageButton = styled.button`
 
         &.liked { 
             color: red; 
-            background-color: #fffffff;
+            background-color: #ffffff;
 
             svg {
                 color: red; 
@@ -168,30 +168,31 @@ const Content = styled.div`
 
 function MovieDetail({ movie, onClose }) {
 
-  //Kiểm tra phim có nội dung không
-  if (!movie.overview){
+  if (!movie.overview) {
     movie.overview = "Khám phá thế giới điện ảnh với những câu chuyện đa dạng và hấp dẫn. Từ những cuộc phiêu lưu kỳ thú đến những tâm tư sâu sắc, mỗi bộ phim đều mang đến cho bạn những trải nghiệm độc đáo. Hãy cùng theo dõi hành trình của các nhân vật, cảm nhận những cảm xúc chân thật và tận hưởng những khoảnh khắc đáng nhớ. Chúng tôi hy vọng bạn sẽ tìm thấy niềm vui trong từng khung hình!";
   }
 
-  const languages = movie.spoken_languages.map(spoken_languages => spoken_languages.english_name).join(', ');
+  const languages = movie.spoken_languages.map(lang => lang.english_name).join(', ');
   const genreNames = movie.genres.map(genre => genre.name).join(', ');
   const backdropUrl = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
-  
 
-  const { addFavorite, favorites } = useContext(FavoritesContext);
+  const { addFavorite, removeFavorite, favorites } = useContext(FavoritesContext);
   const [isFavorite, setIsFavorite] = useState(false);
 
   const checkIfFavorite = () => {
-    const favoriteMovie = favorites.find(fav => fav.id === movie.id);
-    return favoriteMovie !== undefined;
+    return favorites.some(fav => fav.id === movie.id);
   };
 
-  const handleAddFavorite = () => {
-    addFavorite(movie);
-    setIsFavorite(true);
+  const handleToggleFavorite = () => {
+    if (isFavorite) {
+      removeFavorite(movie.id);
+    } else {
+      addFavorite(movie);
+    }
+    setIsFavorite(!isFavorite);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setIsFavorite(checkIfFavorite());
   }, [favorites, movie.id]);
 
@@ -209,23 +210,22 @@ function MovieDetail({ movie, onClose }) {
               <RiCloseLine />
             </CloseButton>
             <BtnGroup>
-              <Link to={`/movie/${movie?.id}`}>
+              <Link to={`/movie/${movie.id}`}>
                 <ImageButton className="btn-watch">
                   <FaPlay /> Xem ngay
                 </ImageButton>
               </Link>
               <ImageButton
                 className={`btn-like ${isFavorite ? 'liked' : ''}`}
-                onClick={handleAddFavorite}
+                onClick={handleToggleFavorite}
               >
                 <FaHeart /> {isFavorite ? 'Đã thích' : 'Yêu thích'}
-
               </ImageButton>
             </BtnGroup>
           </ImageContainer>
 
           <Content>
-            <div >
+            <div>
               <div className="title_info">{movie.title}</div>
               <div className="evaluation">
                 <p className="evaluationItem">{movie.vote_count} lượt đánh giá</p>
@@ -246,23 +246,16 @@ function MovieDetail({ movie, onClose }) {
                 </div>
                 <div className="content_right">
                   <div className="language">
-                    <p>Ngôn ngữ: {" "}
-                      <span>{languages}</span>
-                    </p>
+                    <p>Ngôn ngữ: <span>{languages}</span></p>
                   </div>
                   <div className="genre">
-                    <p>Thể loại: {" "}
-                      <span>{genreNames}</span>
-                    </p>
+                    <p>Thể loại: <span>{genreNames}</span></p>
                   </div>
                 </div>
-                
               </div>
             </div>
-
           </Content>
         </ModalContent>
-
       </ModalContainer>
     </Backdrop>
   );
