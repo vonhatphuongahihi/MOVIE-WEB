@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import './Login.css';
 import { login, signup } from '../../firebase';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'; 
+import { useNavigate, Link } from 'react-router-dom'; // Đảm bảo import Link
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const navigate = useNavigate(); 
@@ -36,7 +35,7 @@ const Login = () => {
                 navigate('/login'); 
             }
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message || "Đã có lỗi xảy ra. Vui lòng thử lại.");
         } finally {
             setLoading(false); 
         }
@@ -52,7 +51,7 @@ const Login = () => {
                 <img src="/images/logo.png" alt="" className='login-logo' />
                 <div className="login-form">
                     <h1>{signState}</h1>
-                    <form>
+                    <form onSubmit={user_auth}>
                         {signState === "Đăng ký" && (
                             <input
                                 value={name}
@@ -73,7 +72,7 @@ const Login = () => {
                             type="password"
                             placeholder='Mật khẩu'
                         />
-                        <button onClick={user_auth} type="submit" className='button'>{signState}</button>
+                        <button type="submit" className='button'>{signState}</button>
                         <div className="form-help">
                             <div className="remember">
                                 <input type="checkbox" />
@@ -88,7 +87,7 @@ const Login = () => {
                         ) : (
                             <p>Đã có tài khoản Melon? <span onClick={() => setSignState("Đăng nhập")}>Đăng nhập ngay</span></p>
                         )}
-                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>>>>>>>> main
+                        <p><Link to='/forgot'>Quên mật khẩu?</Link></p>
                     </div>
                 </div>
             </div>

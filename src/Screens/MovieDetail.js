@@ -168,17 +168,20 @@ const Detail = {
 
 function MovieDetail({ movie, onClose }) {
   const backdropUrl = `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`;
-  const { addFavorite, favorites } = useContext(FavoritesContext);
+  const { addFavorite, removeFavorite, favorites } = useContext(FavoritesContext);
   const [isFavorite, setIsFavorite] = useState(false);
 
   const checkIfFavorite = () => {
-    const favoriteMovie = favorites.find(fav => fav.id === movie.id);
-    return favoriteMovie !== undefined;
+    return favorites.some(fav => fav.id === movie.id);
   };
 
-  const handleAddFavorite = () => {
-    addFavorite(movie);
-    setIsFavorite(true);
+  const handleToggleFavorite = () => {
+    if (isFavorite) {
+      removeFavorite(movie.id);
+    } else {
+      addFavorite(movie);
+    }
+    setIsFavorite(!isFavorite);
   };
 
   React.useEffect(() => {
@@ -202,10 +205,9 @@ function MovieDetail({ movie, onClose }) {
               </Link>
               <ImageButton
                 className={`btn-like ${isFavorite ? 'liked' : ''}`}
-                onClick={handleAddFavorite}
+                onClick={handleToggleFavorite}
               >
                 <FaHeart /> {isFavorite ? 'Đã thích' : 'Yêu thích'}
-
               </ImageButton>
             </BtnGroup>
           </ImageContainer>
@@ -219,7 +221,6 @@ function MovieDetail({ movie, onClose }) {
             <p style={Detail}>{movie.overview}</p>
           </Content>
         </ModalContent>
-
       </ModalContainer>
     </Backdrop>
   );
