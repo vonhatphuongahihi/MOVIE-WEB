@@ -20,7 +20,7 @@ import { FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { RiGlobalLine } from "react-icons/ri";
 import { IoIosRadioButtonOn } from "react-icons/io";
-
+import { addCommentToMovie } from "../firebase";
 function SingleMovie() {
   // const [modalOpen, setModalOpen] = useState(false);
   const { addRecently } = useContext(RecentlyContext);
@@ -33,6 +33,11 @@ function SingleMovie() {
   };
 
   const { id } = useParams();
+  const [user, setUser] = useState({
+    uid: '6S5LyOFoqPZzEoDTgjQr8mg2pV52',  // Thông tin người dùng, có thể lấy từ Firebase Authentication hoặc từ context
+    avatarUrl: '',
+    name: 'phuong',
+  });
   const [play, setPlay] = useState(false);
   const [movie, setMovie] = useState(null);
   const [videos, setVideos] = useState(null);
@@ -74,7 +79,7 @@ function SingleMovie() {
       })
       .catch((err) => console.error("error:" + err));
   }, [id]); // Chỉ chạy lại khi id thay đổi
-
+  
   if (!movie) {
     return <div>Loading...</div>; // Hiển thị loading khi chưa có dữ liệu
   }
@@ -262,7 +267,7 @@ function SingleMovie() {
         </div>
       </div>
 
-      <MovieRates movie={movie} />
+      <MovieRates movie={movie} user={user} />
 
       {/* <div className="container mx-auto min-h-screen px-2 my-6">
         <MovieCasts />
