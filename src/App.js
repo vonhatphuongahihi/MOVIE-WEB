@@ -72,7 +72,7 @@ function App() {
           <Route path="/support" element={<Support />} />
           <Route path="/recently" element={<RecentlyWatch />} />
           <Route path="/phimyeuthich" element={<FavoriteMovies />} />
-          <Route path="/forgot" element={<ForgotPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
         </Routes>
       )}
