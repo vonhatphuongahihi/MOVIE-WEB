@@ -3,6 +3,7 @@ import { FaRegUserCircle, FaSearch, FaBars } from 'react-icons/fa';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { Link, NavLink } from 'react-router-dom';
 import { logout } from '../../firebase';
+import NotificationIcon from '../../Components/Notification/NotificationIcon';
 
 function Navbar() {
   const hover = "hover:text-subMain transition text-white";
@@ -57,7 +58,12 @@ function Navbar() {
             <NavLink to="/dangkyvip" className={getNavLinkClass}>
               <img src="/images/dang_ky_goi_vip.png" alt="dangkyvip" className="w-20 h-10 object-contain" />
             </NavLink>
-            <IoMdNotificationsOutline className="w-7 h-7 text-subMain cursor-pointer mr-2" />
+
+
+            {/* <IoMdNotificationsOutline className="w-7 h-7 text-subMain cursor-pointer mr-2" /> */}
+            <NotificationIcon />
+
+
             <NavLink to="/profile" className="mx-4">
               <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer" />
             </NavLink>
