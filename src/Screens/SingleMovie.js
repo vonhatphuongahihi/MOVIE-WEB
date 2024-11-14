@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
-
+import { FaPlay, FaRegCalendar } from "react-icons/fa";
+import { IoIosRadioButtonOn } from "react-icons/io";
+import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
+import { RiGlobalLine } from "react-icons/ri";
 import { Link, NavLink, useParams } from "react-router-dom";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../Components/Movie";
 import MovieCasts from "../Components/Single/MovieCasts";
-import MovieInfo from "../Components/Single/MovieInfo";
 import MovieRates from "../Components/Single/MovieRates";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
@@ -16,12 +18,9 @@ import Layout from "../Layout/Layout";
 import ShareMovieModal from "../Components/Modals/ShareModal";
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
 import Rating from "../Components/Stars";
-import { FaRegCalendar } from "react-icons/fa";
-import { IoTimeOutline } from "react-icons/io5";
-import { RiGlobalLine } from "react-icons/ri";
-import { IoIosRadioButtonOn } from "react-icons/io";
 import { addCommentToMovie } from "../firebase";
 import YouTube from 'react-youtube';
+
 function SingleMovie() {
   // const [modalOpen, setModalOpen] = useState(false);
   const { addRecently } = useContext(RecentlyContext);
@@ -91,6 +90,9 @@ function SingleMovie() {
     (video) => video.type === "Teaser" || video.type === "Trailer"
   );
 
+
+  // Lọc để lấy ra tên của đạo diễn
+  const director = movie.casts.crew.find((member) => member.job === "Director");
 
 
 //Lưu tiến trình xem 
@@ -230,15 +232,15 @@ const onPause = (event) => {
             <div className="flex justify-between">
             <p className="font-medium">Diễn Viên: </p>
             <p className="font-medium">
-            {movie.casts.cast[0].name} <br />
-            {movie.casts.cast[1].name}
+            {movie.casts.cast[0] ? movie.casts.cast[0].name : "Không có thông tin"} <br />
+            {movie.casts.cast[1] ? movie.casts.cast[1].name : ""}
             </p>
             </div>
 
             <div className="flex justify-between mt-4">
             <p className="font-medium">Đạo diễn: </p>
             <p className="font-medium ">
-              {movie.casts.cast[2].name}
+              {director ? director.name : "Không có thông tin"}
             </p>
             </div>
 
