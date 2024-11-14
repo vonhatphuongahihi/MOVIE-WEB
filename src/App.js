@@ -24,6 +24,16 @@ import Support from './Screens/Support';
 import WatchPage from './Screens/WatchPage';
 import SplashScreen from './Splash';
 
+import TVShow from './Screens/TVShow';
+import Movie1 from './Screens/Movie1';
+import { createGlobalStyle } from 'styled-components';
+
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: 'Roboto Condensed', sans-serif;
+  }
+`;
 function App() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -54,6 +64,7 @@ function App() {
 
   return (
     <>
+      <GlobalStyle />
       <ToastContainer theme="dark" />
       {showSplash && loading ? ( // Chỉ hiển thị Splash khi ở đường dẫn chính
         <SplashScreen onLoad={handleLoad} />
@@ -73,9 +84,11 @@ function App() {
           <Route path="/support" element={<Support />} />
           <Route path="/recently" element={<RecentlyWatch />} />
           <Route path="/phimyeuthich" element={<FavoriteMovies />} />
-          <Route path="/forgot" element={<ForgotPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/search" element={<SearchResults />} />
+          <Route path="/truyenhinh" element={<TVShow/>} />
+          <Route path="/phim" element={<Movie1/>} />
         </Routes>
       )}
     </>

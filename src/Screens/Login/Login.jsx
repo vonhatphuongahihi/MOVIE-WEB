@@ -67,7 +67,9 @@ const Login = () => {
                                 />
                                 <label>Ghi nhớ</label>
                             </div>
-                            <p>Quên mật khẩu?</p>
+                            <p onClick={() => navigate('/forgot-password')} className="forgot-password">
+                                Quên mật khẩu?
+                            </p>
                         </div>
                     </form>
                     <div className="form-switch">

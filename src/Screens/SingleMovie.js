@@ -6,29 +6,32 @@ import { IoIosRadioButtonOn } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
 import { RiGlobalLine } from "react-icons/ri";
-import { Link, useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../Components/Movie";
 import MovieCasts from "../Components/Single/MovieCasts";
 import MovieRates from "../Components/Single/MovieRates";
-import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
 import Layout from "../Layout/Layout";
+import ShareMovieModal from "../Components/Modals/ShareModal";
+import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
+import Rating from "../Components/Stars";
+import { addCommentToMovie } from "../firebase";
+import YouTube from 'react-youtube';
 
 function SingleMovie() {
   // const [modalOpen, setModalOpen] = useState(false);
   const { addRecently } = useContext(RecentlyContext);
-  const watchRef = useRef(null); // Tạo một ref
-
-  const scrollToWatch = () => {
-    if (watchRef.current) {
-      watchRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  
 
   const { id } = useParams();
+  const [user, setUser] = useState({
+    uid: '6S5LyOFoqPZzEoDTgjQr8mg2pV52',  // Thông tin người dùng, có thể lấy từ Firebase Authentication hoặc từ context
+    avatarUrl: '',
+    name: 'phuong',
+  });
   const [play, setPlay] = useState(false);
   const [movie, setMovie] = useState(null);
   const [videos, setVideos] = useState(null);
@@ -46,6 +49,14 @@ function SingleMovie() {
         "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmVhMmE0YjRkZDRmZGI2NjE4NzExZTI5MGQyOWFjOCIsIm5iZiI6MTcyODYzNjgzMS44MDAwMjIsInN1YiI6IjY3MDI5YmVkYjE0NjI4MmY3Yjg1OTJmNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7k-J48cvRsIGemMyu6hFgL1yxu8LHluFEho6R6MOnUM",
     },
   };
+
+// const watchRef = useRef(null); // Tạo một ref
+
+  // const scrollToWatch = () => {
+  //   if (watchRef.current) {
+  //     watchRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -70,7 +81,7 @@ function SingleMovie() {
       })
       .catch((err) => console.error("error:" + err));
   }, [id]); // Chỉ chạy lại khi id thay đổi
-
+  
   if (!movie) {
     return <div>Loading...</div>; // Hiển thị loading khi chưa có dữ liệu
   }
@@ -79,37 +90,63 @@ function SingleMovie() {
     (video) => video.type === "Teaser" || video.type === "Trailer"
   );
 
-  //  const teaser = movie.videos.results.find(video => video.type === "Teaser" || video.type === "Trailer");
-  //  if (!teaser) {
-  //   return <div>No teaser available</div>;
-  // }
-  // const movie = Movies.find((movie) => movie.name === id);
-  // const RelatedMovies = Movies.filter((m) => m.category === movie.category);
 
   // Lọc để lấy ra tên của đạo diễn
   const director = movie.casts.crew.find((member) => member.job === "Director");
+
+
+//Lưu tiến trình xem 
+const LOCAL_STORAGE_KEY = `movie-progress-${id}`;
+
+const saveProgress = (event) => {
+  const currentTime = event.target.getCurrentTime(); 
+  localStorage.setItem(LOCAL_STORAGE_KEY, currentTime); 
+};
+
+const loadProgress = () => {
+  const savedTime = localStorage.getItem(LOCAL_STORAGE_KEY);
+  return savedTime ? parseFloat(savedTime) : 0; 
+};
+
+const onPlay = (event) => {
+  const intervalId = setInterval(() => saveProgress(event), 1000); 
+  event.target.intervalId = intervalId;
+};
+
+const onReady = (event) => {
+  const savedTime = loadProgress();
+  event.target.seekTo(savedTime, true); 
+};
+
+const onPause = (event) => {
+  clearInterval(event.target.intervalId); 
+  saveProgress(event);
+};
   
   return (
     <Layout>
-      <div className="flex-btn flex-wrap  gap-2 bg-main rounded border border-gray-800 p-6">
-        <Link
-          to={`/`}
+      <div className="flex-btn flex-wrap  gap-2 bg-main rounded border border-gray-800 p-6 pt-20">
+        <NavLink
+          to="/"
           className="md:text-xl text-sm flex gap-5 items-center font-bold text-dryGray"
         >
           <BiArrowBack /> {movie?.title}
-        </Link>
+        </NavLink>
       </div>
 
       {/* <MovieInfo movie={movie} onWatchClick={scrollToWatch} /> */}
-      <div id="Watch" ref={watchRef} className="my-8">
+      <div id="Watch" className="my-8">
         <div className="container mx-auto bg-dry p-12 mb-12">
-          {play ? (
-            <iframe
-              width="100%"
-              height="620"
-              allowfullscreen
-              src={`https://www.youtube.com/embed/${teaser.key}`}
-            ></iframe>
+          {play ? (            
+            <YouTube
+              videoId={teaser.key}
+              opts={{ height: '620', width: '100%' }}
+              onReady={onReady}
+              onPlay={onPlay}
+              onPause={onPause}
+              onEnd={saveProgress}
+              
+            />
           ) : (
             <div className="w-full h-screen rounded-lg overflow-hidden relative">
               <div className="absolute top-0 left-0 bottom-0 right-0 bg-main bg-opacity-30 flex-colo">
@@ -261,7 +298,7 @@ function SingleMovie() {
         </div>
       </div>
 
-      <MovieRates movie={movie} />
+      <MovieRates movie={movie} user={user} />
 
       {/* <div className="container mx-auto min-h-screen px-2 my-6">
         <MovieCasts />
