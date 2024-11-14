@@ -110,4 +110,23 @@ const sendVerificationEmail = async (email) => {
     }
 };
 
-export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail};
+const getNotifications = async () => {
+    try {
+        const notificationsRef = collection(db, "notification");
+        const querySnapshot = await getDocs(notificationsRef);
+
+        const notifications = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+
+        return notifications;
+    } catch (error) {
+        console.error("Lỗi khi lấy thông báo:", error);
+        return [];
+    }
+};
+
+
+
+export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications};
