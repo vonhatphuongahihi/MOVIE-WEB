@@ -1,12 +1,12 @@
 import React from 'react'
 import Footer from './Footer/Footer'
-import Navbar from './Navbar/NavBar'
+import NavbarMain from './Navbar/NavBar_main'
 
-function Layout({children}) {
+function LayoutMain({children}) {
   return (
    <>
     <div className='min-h-screen flex flex-col bg-main text-white'>
-        <Navbar />
+        <NavbarMain />
         {children}
         <Footer />
     </div>
@@ -14,4 +14,4 @@ function Layout({children}) {
   )
 }
 
-export default Layout
+export default LayoutMain
