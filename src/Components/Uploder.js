@@ -2,7 +2,7 @@ import React from "react";
 import { useDropzone } from "react-dropzone";
 import { FiUploadCloud } from "react-icons/fi";
 
-function Uploader() {
+function Uploder() {
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
     maxSize: 100000,
@@ -28,4 +28,5 @@ function Uploader() {
     </div>
   );
 }
-export default Uploader;
+
+export default Uploder;

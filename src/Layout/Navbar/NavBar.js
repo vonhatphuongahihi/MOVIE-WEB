@@ -102,7 +102,7 @@ function Navbar() {
       {/* Secondary NavBar */}
       <div className="bg-secondary shadow-md fixed top-12 left-0 right-0  z-10 hidden lg:block">
         <div className="container mx-auto py-2 px-2 lg:flex gap-4 justify-center items-center">
-          <NavLink to="/phimbo" className={getNavLinkClass}>Phim Bộ</NavLink>
+          <NavLink to="/phimtrung" className={getNavLinkClass}>Phim Trung</NavLink>
           <NavLink to="/phimdienanh" className={getNavLinkClass}>Phim Điện Ảnh</NavLink>
           <NavLink to="/hoathinh" className={getNavLinkClass}>Hoạt Hình</NavLink>
           <NavLink to="/tvshow" className={getNavLinkClass}>TV Show</NavLink>

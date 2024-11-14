@@ -10,6 +10,7 @@ import ChangePassword from './Screens/ChangePassword';
 import ContactUs from './Screens/ContactUs';
 import ForgotPassword from './Screens/ForgotPassword';
 import HomeScreen from './Screens/HomeScreen';
+import PhimTrung from './Screens/PhimTrung';
 import Login from './Screens/Login/Login';
 import Signup from './Screens/Login/Signup';
 import MoviesPage from './Screens/Movies';
@@ -25,7 +26,16 @@ import RecentlyWatch from "./Screens/RecentlyWatch";
 import TVShow from './Screens/TVShow';
 import Movie1 from './Screens/Movie1';
 import { createGlobalStyle } from 'styled-components';
-
+import MovieFetcher from './MovieFetcher';
+import TvShowFetcher from './TvShowFetcher';
+import { Suspense } from 'react';
+import BigLoader from './Components/BigLoader';
+import Admin from './Screens/Dashboard/Admin/Admin';
+import MoviesList from './Screens/Dashboard/Admin/MovieList';
+import ShowsList from './Screens/Dashboard/Admin/ShowList';
+import UsersList from './Screens/Dashboard/Admin/UserList';
+import AddMovie from './Screens/Dashboard/Admin/AddMovie';
+import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
 const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Roboto Condensed', sans-serif;
@@ -62,6 +72,8 @@ function App() {
   return (
     <>
       <GlobalStyle />
+      <MovieFetcher />  
+      <TvShowFetcher />
       <ToastContainer theme="dark" />
       {showSplash && loading ? ( // Chỉ hiển thị Splash khi ở đường dẫn chính
         <SplashScreen onLoad={handleLoad} />
@@ -85,6 +97,14 @@ function App() {
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/truyenhinh" element={<TVShow/>} />
           <Route path="/phim" element={<Movie1/>} />
+          <Route path="/phimtrung" element={<PhimTrung />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/movieslist" element={<MoviesList />} />
+          <Route path="/admin/showslist" element={<ShowsList />} />
+          <Route path="/admin/userslist" element={<UsersList />} />
+          <Route path="/admin/addmovie" element={<AddMovie />} />
+          <Route path="/phimtrung/:movieId" element={<SingleMoviePhimTrung />} />
+
         </Routes>
       )}
     </>
