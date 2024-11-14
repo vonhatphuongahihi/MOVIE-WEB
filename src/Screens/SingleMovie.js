@@ -19,6 +19,9 @@ import ShareMovieModal from "../Components/Modals/ShareModal";
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
 import Rating from "../Components/Stars";
 import { addCommentToMovie } from "../firebase";
+import { db } from "../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore";
 import YouTube from 'react-youtube';
 
 function SingleMovie() {
@@ -27,11 +30,7 @@ function SingleMovie() {
   
 
   const { id } = useParams();
-  const [user, setUser] = useState({
-    uid: '6S5LyOFoqPZzEoDTgjQr8mg2pV52',  // Thông tin người dùng, có thể lấy từ Firebase Authentication hoặc từ context
-    avatarUrl: '',
-    name: 'phuong',
-  });
+  const [user, setUser] = useState(null);
   const [play, setPlay] = useState(false);
   const [movie, setMovie] = useState(null);
   const [videos, setVideos] = useState(null);
@@ -60,8 +59,18 @@ function SingleMovie() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    console.log(`Fetching movie with ID: ${id}`);
-
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        // Người dùng đã đăng nhập, lấy thông tin người dùng từ Firestore
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          setUser(userDoc.data());
+        }
+      } else {
+        setUser(null); // Nếu không có người dùng đăng nhập
+      }
+    });
     Promise.all([
       fetch(movieUrl, options),
       fetch(videoUrl, options),
@@ -80,6 +89,8 @@ function SingleMovie() {
         console.log(videoData);
       })
       .catch((err) => console.error("error:" + err));
+    return () => unsubscribe();
+
   }, [id]); // Chỉ chạy lại khi id thay đổi
   
   if (!movie) {
