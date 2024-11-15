@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, setDoc, addDoc, doc, getDoc, getDocs, where, query } from "firebase/firestore";
+import { getFirestore, setDoc, addDoc, doc, getDoc, getDocs, where, query, updateDoc, deleteDoc} from "firebase/firestore";
 import { toast } from "react-toastify";
 import { collection } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
@@ -139,6 +139,26 @@ const getNotifications = async () => {
     }
 };
 
+export const updateMovie = async (movieId, updatedData) => {
+    try {
+      const movieRef = doc(db, "movies", movieId);
+      await updateDoc(movieRef, updatedData);
+      console.log("Phim đã được cập nhật thành công!");
+    } catch (error) {
+      console.error("Lỗi khi cập nhật phim:", error);
+    }
+  };
+  
+  // Hàm xóa phim
+  export const deleteMovie = async (movieId) => {
+    try {
+      const movieRef = doc(db, "movies", movieId);
+      await deleteDoc(movieRef);
+      console.log("Phim đã được xóa thành công!");
+    } catch (error) {
+      console.error("Lỗi khi xóa phim:", error);
+    }
+  };
 
 
 export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications};
