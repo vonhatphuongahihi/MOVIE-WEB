@@ -5,7 +5,7 @@ import { Message, Select } from "../UsedInputs";
 import Rating from "../Stars";
 import { addCommentToMovie, getCommentsForMovie } from "../../firebase";
 
-function MovieRates({ movie, user }) {
+function MovieratesPhim({ movie, user }) {
   const Ratings = [
     { title: "Rất kém", value: 0 },
     { title: "Kém", value: 1 },
@@ -21,21 +21,34 @@ function MovieRates({ movie, user }) {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const movieComments = await getCommentsForMovie(movie.id);
+      const movieComments = await getCommentsForMovie(movie.movieId);
       setComments(movieComments);
     };
 
     fetchComments();
-  }, [movie.id]);
+  }, [movie.movieId]);
 
   const handleCommentSubmit = async () => {
+    if (!user || !user.uid) {
+      console.error("User không tồn tại hoặc thiếu thuộc tính 'uid'");
+      alert("Bạn cần đăng nhập để bình luận.");
+      return;
+    }
+  
     if (commentContent.trim()) {
       try {
-        await addCommentToMovie(movie.id, user.uid, commentContent, rating, user.name, user.avatarUrl);
+        await addCommentToMovie(
+          movie.movieId,
+          user.uid,
+          commentContent,
+          rating,
+          user.name,
+          user.avatarUrl
+        );
         setCommentContent("");
         setRating(0);
-        
-        const updatedComments = await getCommentsForMovie(movie.id);
+  
+        const updatedComments = await getCommentsForMovie(movie.movieId);
         setComments(updatedComments);
       } catch (error) {
         console.error("Error submitting comment:", error);
@@ -44,6 +57,7 @@ function MovieRates({ movie, user }) {
       alert("Vui lòng nhập nội dung bình luận.");
     }
   };
+  
 
   return (
     <div className="my-12">
@@ -111,4 +125,4 @@ function MovieRates({ movie, user }) {
   );
 }
 
-export default MovieRates;
+export default MovieratesPhim;

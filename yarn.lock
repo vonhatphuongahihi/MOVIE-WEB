@@ -2353,8 +2353,7 @@
     schema-utils "^4.2.0"
     source-map "^0.7.3"
 
-"@popperjs/core@^2.11.8":
-
+"@popperjs/core@^2.11.8", "@popperjs/core@^2.9.0":
   version "2.11.8"
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
@@ -9076,8 +9075,7 @@ prompts@^2.0.1, prompts@^2.4.2:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.2, prop-types@^15.8.1:
-
+prop-types@^15.6.2, prop-types@^15.8.1, prop-types@15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -9407,6 +9405,7 @@ react-toastify@^10.0.5:
   integrity sha512-mNKt2jBXJg4O7pSdbNUfDdTsK9FIdikfsIE/yUCxbAEXl4HMyJaivrVFcn3Elvt5xvCQYhUZm+hqTIu1UXM3Pw==
   dependencies:
     clsx "^2.1.0"
+
 react-transition-group@^4.4.5:
   version "4.4.5"
   resolved "https://registry.npmjs.org/react-transition-group/-/react-transition-group-4.4.5.tgz"
@@ -9427,7 +9426,6 @@ react-youtube@^10.1.0:
     youtube-player "5.5.2"
 
 react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.3.0 || ^17.0.0 || ^18.0.0", "react@^16.3.3 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0", "react@^16.9.0 || ^17.0.0 || ^18", "react@^17 || ^18", "react@^17.0.0 || ^18.0.0 || ^19.0.0", react@^18, react@^18.0, react@^18.0.0, react@^18.3.1, "react@>= 16", "react@>= 16.8 || 18.0.0", "react@>= 16.8.0", react@>=0.14.1, react@>=16.6.0, react@>=16.8, react@>=16.8.0, react@>=16.9.0, react@>=18:
-
   version "18.3.1"
   resolved "https://registry.npmjs.org/react/-/react-18.3.1.tgz"
   integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
-import { FaPlay, FaRegCalendar } from "react-icons/fa";
+import { FaRegCalendar } from "react-icons/fa";
 import { IoIosRadioButtonOn } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";

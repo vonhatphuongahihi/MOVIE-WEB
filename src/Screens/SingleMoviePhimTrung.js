@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../Components/Movie";
 import MovieCastsPhimTrung from "../Components/Single/MovieCastsPhimTrung";
 import MovieInfo from "../Components/Single/MovieInfo";
-import MovieRates from "../Components/Single/MovieRates";
+import MovieRatesPhim from "../Components/Single/MovieRatesPhim";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
 import Layout from "../Layout/Layout";
@@ -22,9 +22,12 @@ import { IoTimeOutline } from "react-icons/io5";
 import { RiGlobalLine } from "react-icons/ri";
 import { IoIosRadioButtonOn } from "react-icons/io";
 import { addCommentToMovie } from "../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 
 function SingleMoviePhimTrung() {
   const { movieId } = useParams();
+  const [user, setUser] = useState(null);
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [comments, setComments] = useState([]);
@@ -32,6 +35,25 @@ function SingleMoviePhimTrung() {
   const { addRecently } = useContext(RecentlyContext);
   const [play, setPlay] = useState(false);
 
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      console.log("User state changed:", currentUser);
+      if (currentUser) {
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          setUser({ uid: currentUser.uid, ...userDoc.data() });
+        }
+      } else {
+        setUser(null);
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  useEffect(() => {
+    console.log("Thông tin người dùng:", user); // Kiểm tra thông tin user
+  }, [user]);
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
@@ -66,6 +88,7 @@ function SingleMoviePhimTrung() {
     };
 
     fetchMovieData();
+
   }, [movieId]);
 
   if (!movie) {
@@ -173,7 +196,7 @@ function SingleMoviePhimTrung() {
 
       <MovieCastsPhimTrung movie={movie} />
 
-      <MovieRates movie={movie} comments={comments} />
+      <MovieRatesPhim movie={movie} comments={comments} />
 
       {/* Recommendations Section */}
       <div className="my-16">
