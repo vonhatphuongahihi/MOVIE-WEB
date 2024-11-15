@@ -10,7 +10,7 @@ export const RecentlyProvider = ({ children }) => {
       getRecently().then((data)=>{
         setRecently((data))
       });
-    },)
+    },[recently])
     
     const addRecently = (movie) => {
       setRecently((prev) => {
@@ -24,10 +24,12 @@ export const RecentlyProvider = ({ children }) => {
     };
 
     const removeAll = () => {
+      setRecently((prev)=>prev.filter((movie) => movie.id === ""))
       updateRecently(recently.filter((movie) => movie.id === ""))
     };
 
     const removeRecently = (id) => {
+      setRecently((prev)=>prev.filter((movie) => movie.id !== id))
       updateRecently(recently.filter((movie) => movie.id !== id))
     };
   
