@@ -6,7 +6,75 @@ function AboutUs() {
   return (
     <Layout_2>
       <div className="min-height-screen container mx-auto px-2 my-6">
-        
+        {/*Khuyen mai-làm trưng hoi, chứ hổng bấm vô được đâu :)))*/}
+        <div className="xl:pt-20 pt-10 px-4">
+          <h3 className="text-xl lg:text-3xl mb-4 font-semibold text-subMain">
+                KHUYẾN MÃI
+          </h3>  
+          <div className="grid grid-flow-row xl:grid-cols-4 gap-4 xl:gap-10 items-center ">
+            <div className="w-full bg-dry items-center rounded-lg p-5">
+            <img src="/images/KM1.png" alt="khuyen-mai-1"
+            className="w-full h-1/2 h-auto rounded-lg mb-5"
+            />
+              <div className="w-full text-lg text-text font-bold mb-5">
+                <p>Giảm 10% tối đa 20K cho khách hàng
+                  lần đầu thanh toán gói Melon bằng ZaloPay                  
+                </p>
+              </div>
+            <div className="bg-text h-px"></div>  {/*đường kẻ*/}
+            <div className="w-full text-base text-text mt-5">
+                <p>{new Date() > new Date('2024-11-20')?"Đã hết hạn":"Thời hạn: từ 15/11 đến 20/11"}                 
+                </p>
+              </div>
+            </div>
+            <div className="w-full bg-dry items-center rounded-lg p-5">
+            <img src="/images/KM2.png" alt="khuyen-mai-1"
+            className="w-full h-1/2 h-auto rounded-lg mb-5"
+            />
+              <div className="w-full text-lg text-text font-bold mb-5">
+                <p>Tri ân ngày Nhà Giáo Việt Nam (20/11) tặng ngay gói
+                  VIP 3 tháng chỉ 199K                  
+                </p>
+              </div>
+            <div className="bg-text h-px"></div>  {/*đường kẻ*/}
+            <div className="w-full text-base text-text mt-5">
+                <p>{new Date() > new Date('2024-12-01')?"Đã hết hạn":"Thời hạn: từ 15/11 đến 1/12"}                 
+                </p>
+              </div>
+            </div>
+            <div className="w-full bg-dry items-center rounded-lg p-5">
+            <img src="/images/KM3.png" alt="khuyen-mai-1"
+            className="w-full h-1/2 h-auto rounded-lg mb-5"
+            />
+              <div className="w-full text-lg text-text font-bold mb-5">
+                <p>HOT: Tri ân Phụ nữ Việt Nam (20/10) giảm 20%
+                  khi đăng ký gói 3 tháng tại Melon               
+                </p>
+              </div>
+            <div className="bg-text h-px"></div>  {/*đường kẻ*/}
+            <div className="w-full text-base text-text mt-5">
+                <p>{new Date() > new Date('2024-11-01')?"Đã hết hạn":"Thời hạn: từ 15/10 đến 1/11"}                 
+                </p>
+              </div>
+            </div>
+            <div className="w-full bg-dry items-center rounded-lg p-5">
+            <img src="/images/KM4.png" alt="khuyen-mai-1"
+            className="w-full h-1/2 h-auto rounded-lg mb-5"
+            />
+              <div className="w-full text-lg text-text font-bold mb-5">
+                <p>Vui trung thu: Giảm 20% gói 3 tháng cho các "bé thiếu nhi" xem phim thả ga!      
+                </p>
+              </div>
+            <div className="bg-text h-px"></div>  {/*đường kẻ*/}
+            <div className="w-full text-base text-text mt-5">
+                <p>{new Date() > new Date('2024-09-20')?"Đã hết hạn":"Thời hạn: từ 10/9 đến 20/9"}                
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/*Gioi thieu*/}
         <div className="xl:py-20 py-10 px-4">
           <div className="grid grid-flow-row xl:grid-cols-2 gap-4 xl:gap-16 items-center">
             <div>

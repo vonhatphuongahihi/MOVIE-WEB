@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, setDoc,addDoc, doc, getDocs, where, query} from "firebase/firestore";
+import { getFirestore, setDoc,addDoc, doc, getDocs, where, query, updateDoc, getDoc} from "firebase/firestore";
 
 import { toast } from "react-toastify";
 import { collection } from 'firebase/firestore';
@@ -127,6 +127,33 @@ const getNotifications = async () => {
     }
 };
 
+const updateRecently = async (movieList) => {
+    try {
+        const user = auth.currentUser; 
+        const uid = user.uid;
+        const userDocRef = doc(db, "users", uid);
+        await updateDoc(userDocRef, {"history": movieList});
+        console.log(movieList);
+    }catch (error) {
+        console.error("Không thêm được phim:", error);
+    }
+}
+
+const getRecently = async () => {
+    try{
+        const user = auth.currentUser; 
+        const uid = user.uid;
+        const userDoc = doc(db, "users", uid);
+        const userDocRef = await getDoc((userDoc))
+        const history = userDocRef.data().history;
+        return history;
+    }catch(error){
+        console.error("Không tìm được phim",error);
+        return [];
+    }
+}
 
 
-export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications};
+
+
+export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently};

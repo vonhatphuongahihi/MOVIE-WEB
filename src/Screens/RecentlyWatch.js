@@ -140,7 +140,7 @@ function RecentlyWatch() {
   }
   return (
     <Layout>
-      <h3 className="text-lg lg:text-2xl mb-4 mx-5 font-semibold text-subMain">
+      <h3 className="text-lg lg:text-2xl my-10 mx-5 font-semibold text-subMain">
         LỊCH SỬ XEM PHIM
       </h3>
 
@@ -169,7 +169,7 @@ function RecentlyWatch() {
                     <div class="mx-10">
                       <Title>{movie.title}</Title>
                       <Evaluation>
-                        <img class="size-5" src="/rate-star.png" />
+                        <img class="size-5" src="/rate-star.png" alt="star"/>
                         <p>{movie.vote_average}</p>
                       </Evaluation>
                       <Evaluation>
