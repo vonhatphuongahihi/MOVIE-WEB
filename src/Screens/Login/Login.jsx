@@ -16,17 +16,18 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const userCredential = await login(email, password);
-            const user = userCredential.user;
+            const userData = await login(email, password);
+            if (userData) {
+                const userRole = userData.role; 
 
-            if (!user.emailVerified) {
-                toast.error("Vui lòng kiểm tra email của bạn để xác thực tài khoản.");
-                setLoading(false);
-                return; 
+                if (userRole === "admin") {
+                    toast.success("Đăng nhập thành công với quyền admin.");
+                    navigate('/admin'); 
+                } else {
+                    toast.success("Đăng nhập thành công.");
+                    navigate('/'); 
+                }
             }
-
-            toast.success("Đăng nhập thành công.");
-            navigate('/');
         } catch (error) {
             toast.error(error.message);
         } finally {

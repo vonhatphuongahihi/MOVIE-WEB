@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
-
+import { FaRegCalendar } from "react-icons/fa";
+import { IoIosRadioButtonOn } from "react-icons/io";
+import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
+import { RiGlobalLine } from "react-icons/ri";
 import { Link, NavLink, useParams } from "react-router-dom";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../Components/Movie";
 import MovieCasts from "../Components/Single/MovieCasts";
-import MovieInfo from "../Components/Single/MovieInfo";
 import MovieRates from "../Components/Single/MovieRates";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
@@ -16,23 +18,19 @@ import Layout from "../Layout/Layout";
 import ShareMovieModal from "../Components/Modals/ShareModal";
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
 import Rating from "../Components/Stars";
-import { FaRegCalendar } from "react-icons/fa";
-import { IoTimeOutline } from "react-icons/io5";
-import { RiGlobalLine } from "react-icons/ri";
-import { IoIosRadioButtonOn } from "react-icons/io";
 import { addCommentToMovie } from "../firebase";
+import { db } from "../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDoc, doc } from "firebase/firestore";
 import YouTube from 'react-youtube';
+
 function SingleMovie() {
   // const [modalOpen, setModalOpen] = useState(false);
   const { addRecently } = useContext(RecentlyContext);
   
 
   const { id } = useParams();
-  const [user, setUser] = useState({
-    uid: '6S5LyOFoqPZzEoDTgjQr8mg2pV52',  // Thông tin người dùng, có thể lấy từ Firebase Authentication hoặc từ context
-    avatarUrl: '',
-    name: 'phuong',
-  });
+  const [user, setUser] = useState(null);
   const [play, setPlay] = useState(false);
   const [movie, setMovie] = useState(null);
   const [videos, setVideos] = useState(null);
@@ -61,8 +59,18 @@ function SingleMovie() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    console.log(`Fetching movie with ID: ${id}`);
-
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        // Người dùng đã đăng nhập, lấy thông tin người dùng từ Firestore
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          setUser(userDoc.data());
+        }
+      } else {
+        setUser(null); // Nếu không có người dùng đăng nhập
+      }
+    });
     Promise.all([
       fetch(movieUrl, options),
       fetch(videoUrl, options),
@@ -81,6 +89,8 @@ function SingleMovie() {
         console.log(videoData);
       })
       .catch((err) => console.error("error:" + err));
+    return () => unsubscribe();
+
   }, [id]); // Chỉ chạy lại khi id thay đổi
   
   if (!movie) {
@@ -91,6 +101,9 @@ function SingleMovie() {
     (video) => video.type === "Teaser" || video.type === "Trailer"
   );
 
+
+  // Lọc để lấy ra tên của đạo diễn
+  const director = movie.casts.crew.find((member) => member.job === "Director");
 
 
 //Lưu tiến trình xem 
@@ -230,15 +243,15 @@ const onPause = (event) => {
             <div className="flex justify-between">
             <p className="font-medium">Diễn Viên: </p>
             <p className="font-medium">
-            {movie.casts.cast[0].name} <br />
-            {movie.casts.cast[1].name}
+            {movie.casts.cast[0] ? movie.casts.cast[0].name : "Không có thông tin"} <br />
+            {movie.casts.cast[1] ? movie.casts.cast[1].name : ""}
             </p>
             </div>
 
             <div className="flex justify-between mt-4">
             <p className="font-medium">Đạo diễn: </p>
             <p className="font-medium ">
-              {movie.casts.cast[2].name}
+              {director ? director.name : "Không có thông tin"}
             </p>
             </div>
 

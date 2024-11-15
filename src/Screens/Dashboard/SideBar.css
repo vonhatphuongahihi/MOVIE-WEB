@@ -1,0 +1,119 @@
+/* Global styles */
+body {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  /* Header */
+  .header-container {
+    background-color: #1a202c; /* Dark background */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .header-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header-logo img {
+    width: 80px;
+    height: 24px;
+    object-fit: contain;
+  }
+  
+  .navbar {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+  
+  .navbar-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #cbd5e0;
+    transition: color 0.2s ease;
+  }
+  
+  .navbar-item:hover {
+    color: #38b2ac; /* Main hover color */
+  }
+  
+  .navbar-item.active {
+    border-bottom: 2px solid #38b2ac;
+    color: #38b2ac;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .search-input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 14px;
+    color: #2d3748;
+    padding-left: 8px;
+    width: 100%;
+  }
+  
+  .search-input::placeholder {
+    color: #a0aec0;
+  }
+  
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .mobile-menu-button {
+    display: flex;
+    align-items: center;
+  }
+  
+  .mobile-menu {
+    background-color: #2d3748;
+    padding: 16px;
+  }
+  
+  .mobile-menu .navbar-item {
+    margin: 10px 0;
+  }
+  .logout-button, .mobile-logout-button {
+    background-color: #ff4d4d;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout-button:hover, .mobile-logout-button:hover {
+    background-color: #ff3333;
+  }
+  .navbar {
+    display: flex;
+    gap: 30px; /* Tăng khoảng cách giữa các mục điều hướng */
+    list-style: none;
+  }
+  
