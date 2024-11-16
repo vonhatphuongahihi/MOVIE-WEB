@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { FiFilm, FiTrash, FiPlay, FiStopCircle } from "react-icons/fi";
 import Layout from "../Layout/Layout";
 import { RecentlyContext } from "../Context/RecentlyContext";
@@ -133,11 +133,14 @@ const SideButton = styled.button`
 `;
 
 function RecentlyWatch() {
-  const { recently, removeRecently, removeAll } = useContext(RecentlyContext);
+  const { recently, removeRecently, removeAll, loadRecently } = useContext(RecentlyContext);
   const navigate = useNavigate();
   const getLang = (movie) => {
     return movie.spoken_languages.map(spoken_languages => spoken_languages.english_name).join(', ');
   }
+  useEffect(()=>{
+    loadRecently();
+  },[])
   return (
     <Layout>
       <h3 className="text-lg lg:text-2xl my-10 mx-5 font-semibold text-subMain">

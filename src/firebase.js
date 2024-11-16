@@ -145,7 +145,7 @@ const updateRecently = async (movieList) => {
         const uid = user.uid;
         const userDocRef = doc(db, "users", uid);
         await updateDoc(userDocRef, {"history": movieList});
-        console.log(movieList);
+        console.log("Cập nhật danh sách history: ",movieList);
     }catch (error) {
         console.error("Không thêm được phim:", error);
     }
@@ -155,10 +155,12 @@ const getRecently = async () => {
     try{
         const user = auth.currentUser; 
         const uid = user.uid;
-        const userDoc = doc(db, "users", uid);
-        const userDocRef = await getDoc((userDoc))
-        const history = userDocRef.data().history;
-        return history;
+        
+            const userDoc = doc(db, "users", uid);
+            const userDocRef = await getDoc((userDoc))
+            const history = userDocRef.data().history;
+            console.log("Lấy history:",history)
+            return history;
     }catch(error){
         console.error("Không tìm được phim",error);
         return [];

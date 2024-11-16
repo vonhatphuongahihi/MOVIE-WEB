@@ -6,12 +6,12 @@ export const RecentlyContext = createContext();
 export const RecentlyProvider = ({ children }) => {  
     const [recently, setRecently] =  useState([]);
 
-    useEffect(()=>{ 
+    const loadRecently=()=>{
       getRecently().then((data)=>{
         setRecently((data))
       });
-    },[recently])
-    
+    }
+
     const addRecently = (movie) => {
       setRecently((prev) => {
         // Kiểm tra xem phim đã tồn tại trong danh sách yêu thích chưa để tránh trùng lặp
@@ -24,18 +24,21 @@ export const RecentlyProvider = ({ children }) => {
     };
 
     const removeAll = () => {
-      setRecently((prev)=>prev.filter((movie) => movie.id === ""))
-      updateRecently(recently.filter((movie) => movie.id === ""))
+      updateRecently(recently.filter((movie) => movie.id === ""))     
+      setTimeout(() => {  //đợi update xong
+        loadRecently(); 
+    }, 1000);
+      
     };
 
     const removeRecently = (id) => {
-      setRecently((prev)=>prev.filter((movie) => movie.id !== id))
       updateRecently(recently.filter((movie) => movie.id !== id))
+      loadRecently(); 
     };
   
   
     return (    
-      <RecentlyContext.Provider value={{ recently, addRecently, removeRecently, removeAll }}>
+      <RecentlyContext.Provider value={{ recently, addRecently, removeRecently, removeAll, loadRecently }}>
         {children}
       </RecentlyContext.Provider>
   
