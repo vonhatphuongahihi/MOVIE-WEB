@@ -1,6 +1,6 @@
 import Aos from 'aos';
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,7 +38,7 @@ import ShowsList from './Screens/Dashboard/Admin/ShowList';
 import UsersList from './Screens/Dashboard/Admin/UserList';
 import AddMovie from './Screens/Dashboard/Admin/AddMovie';
 import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
-
+import { RecentlyContext } from "./Context/RecentlyContext";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -49,12 +49,14 @@ function App() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation(); // Lấy đường dẫn hiện tại
-
+  const {loadRecently } = useContext(RecentlyContext);  //tải lịch sử xem khi vừa đăng nhập, cho để ké với ạ
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         console.log("Đã đăng nhập vào tài khoản")
         navigate('/');
+        loadRecently();
+
       } else {
         console.log("Đăng nhập vào tài khoản không thành công")
         navigate('/login');
