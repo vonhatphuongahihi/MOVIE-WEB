@@ -39,6 +39,7 @@ import UsersList from './Screens/Dashboard/Admin/UserList';
 import AddMovie from './Screens/Dashboard/Admin/AddMovie';
 import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
 import { RecentlyContext } from "./Context/RecentlyContext";
+import FAQScreen from './Screens/FAQScreen';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -111,6 +112,7 @@ function App() {
           <Route path="/admin/userslist" element={<UsersList />} />
           <Route path="/admin/addmovie" element={<AddMovie />} />
           <Route path="/phimtrung/:movieId" element={<SingleMoviePhimTrung />} />
+          <Route path="/faqs" element={<FAQScreen />} />
 
         </Routes>
       )}

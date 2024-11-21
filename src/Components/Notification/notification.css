@@ -26,12 +26,36 @@
 }
 
 /* cart-popper */
-.notification-popper {
+/* .notification-popper {
   max-width: 376px;
   padding: 20px 0;
   background-color: #000;
   
+} */
+
+.notification-popper {
+  position: absolute;
+  top: 40px; /* Khoảng cách từ icon thông báo */
+  left: 50%; /* Căn giữa theo chiều ngang */
+  transform: translateX(-50%); /* Dịch chuyển về giữa */
+  max-width: 376px;
+  width: 350px; /* Giới hạn chiều rộng popper */
+  padding: 20px 0;
+  background-color: #000;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tạo bóng cho popper */
+  z-index: 9999; /* Đảm bảo popper không bị che khuất */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
+
+/* Khi popper được mở ra */
+.notification-popper.show {
+  opacity: 1;
+  visibility: visible;
+}
+
 
 .notification-header {
   padding: 0 20px 15px;
