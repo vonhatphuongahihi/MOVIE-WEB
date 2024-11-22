@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, addDoc, doc, getDoc, getDocs, where, query, updateDoc, deleteDoc} from "firebase/firestore";
 import { toast } from "react-toastify";
-import { collection } from 'firebase/firestore';
+import { collection, arrayUnion } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 
 const firebaseConfig = {
@@ -81,7 +81,11 @@ const addCommentToMovie = async (movieId, userId, commentContent, rating, userNa
             userId,
             content: commentContent,
             userName,
+            rating,
             avatarUrl,
+            likes: 0, 
+            dislikes: 0, 
+            replies: [], 
             createdAt: new Date(),
         });
     
@@ -106,6 +110,34 @@ const getCommentsForMovie = async (movieId) => {
     } catch (error) {
         console.error("Error fetching comments:", error);
         return [];
+    }
+};
+
+const updateLikesDislikes = async (commentId, field, value) => {
+    try {
+        const commentRef = doc(db, "comments", commentId);
+
+        await updateDoc(commentRef, {
+            [field]: value, // Dynamically update 'likes' or 'dislikes'
+        });
+
+        console.log(`${field} updated successfully`);
+    } catch (error) {
+        console.error(`Error updating ${field}:`, error);
+    }
+};
+
+const addReplyToComment = async (commentId, reply) => {
+    try {
+        const commentRef = doc(db, "comments", commentId);
+
+        await updateDoc(commentRef, {
+            replies: arrayUnion(reply),
+        });
+
+        console.log("Reply added successfully");
+    } catch (error) {
+        console.error("Error adding reply:", error);
     }
 };
 
@@ -191,4 +223,4 @@ export const updateMovie = async (movieId, updatedData) => {
   };
 
 
-export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently};
+export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently, updateLikesDislikes, addReplyToComment};
