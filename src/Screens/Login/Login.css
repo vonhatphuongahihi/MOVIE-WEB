@@ -119,13 +119,38 @@
     width: 100px;
     height: 100px;
 }
-
+/*từ IphoneX trở lên*/
 @media (max-width: 500px){
-    .login{
-        padding: 15 5%
-    }
     .login-form{
+        padding: 30px;
+        margin-top: 15vh;
+    }
+    img.form-logo{
+        width: 120px;
+    }
+    img.login-logo{
+        width: 120px;
+    }
+}
+/*Iphone 5; Iphone SE*/
+@media (max-width: 320px){
+    .login-form{
+        margin-top: 8vh;
         padding: 20px;
-        margin-top: 30px;
+    }
+    img.form-logo{
+       width: 100px;
+    }
+    .login-form input {
+        height: 40px;
+        margin: 7px 0px;
+    }
+    .login-form button{
+        height: 40px;
+        padding: 5px;
+        margin-top: 10px;
+    }
+    img.login-logo{
+        width: 100px;
     }
 }

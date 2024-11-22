@@ -32,7 +32,7 @@ function Navbar() {
   return (
     <div>
       {/* Main NavBar */}
-      <div className="bg-main shadow-md fixed top-0 left-0 right-0 z-20 border-b border-gray-300 border-opacity-50">
+      <div className="bg-main shadow-md fixed top-0 left-0 right-0 z-20 border-b border-gray-300 border-opacity-50 text-nowrap text-center text-sm xl:text-base">
         <div className="container mx-auto py-0 px-2 md:px-4 lg:px-6 xl:px-8 flex items-center justify-between">
           {/* Left Side - Logo */}
           <div className="flex items-center space-x-4 lg:space-x-6">
@@ -48,7 +48,7 @@ function Navbar() {
           </div>
 
           {/* Search Form */}
-          <div className="hidden lg:flex col-span-3 items-center relative space-x-2 w-1/3">
+          <div className="flex col-span-3 items-center relative space-x-2 w-3/5 lg:w-1/3 ml-3">
             {/* SearchForm */}
             <div className="flex-grow">
               <SearchForm />
@@ -57,16 +57,16 @@ function Navbar() {
             {/* Nút lọc bên phải */}
             <button 
               onClick={toggleFilterPopup} 
-              className="lg:block flex-shrink-0"
+              className="block flex-shrink-0"
             >
               <IoFilter className="w-5 h-5 text-subMain cursor-pointer" />
             </button>
           </div>
 
           {/* Right Side Icons and Links */}
-          <div className="hidden lg:flex col-span-3 items-center justify-end space-x-6">
+          <div className="flex col-span-3 items-center justify-end space-x-6 mx-3">
             <NavLink to="/dangkyvip" className={getNavLinkClass}>
-              <img src="/images/dang_ky_goi_vip.png" alt="dangkyvip" className="w-20 h-10 object-contain" />
+              <img src="/images/dang_ky_goi_vip.png" alt="dangkyvip" className="hidden lg:flex w-20 h-10 object-contain" />
             </NavLink>
 
 
@@ -79,7 +79,7 @@ function Navbar() {
             </NavLink>
 
             {/* Dropdown for logout */}
-            <div className="relative">
+            <div className=" hidden lg:flex relative">
               <button onClick={toggleDropdown} className="text-white">
                 Đăng xuất
               </button>
@@ -123,8 +123,8 @@ function Navbar() {
       </div>
 
       {/* Secondary NavBar */}
-      <div className="bg-secondary shadow-md fixed top-12 left-0 right-0  z-10 hidden lg:block">
-        <div className="container mx-auto py-2 px-2 lg:flex gap-4 justify-center items-center">
+      <div className="bg-secondary shadow-md fixed top-8 md:top-12 left-0 right-0 z-10 block">
+        <div className="container mx-auto py-2 px-2 flex gap-4 justify-center items-center text-center text-wrap text-xs sm:text-sm lg:text-base">
           <NavLink to="/phimtrung" className={getNavLinkClass}>Phim Trung</NavLink>
           <NavLink to="/phimdienanh" className={getNavLinkClass}>Phim Điện Ảnh</NavLink>
           <NavLink to="/hoathinh" className={getNavLinkClass}>Hoạt Hình</NavLink>

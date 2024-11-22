@@ -143,7 +143,7 @@ function RecentlyWatch() {
   },[])
   return (
     <Layout>
-      <h3 className="text-lg lg:text-2xl my-10 mx-5 font-semibold text-subMain">
+      <h3 className="text-lg lg:text-2xl mt-24 mb-5 mx-5 font-semibold text-subMain ">
         LỊCH SỬ XEM PHIM
       </h3>
 

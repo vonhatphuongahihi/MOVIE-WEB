@@ -11,7 +11,7 @@ const Notification = ({ type, title, message, image }) => {
 
             <div className="w-2/3 ml-1">
             <h4 className='font-bold mb-1'>{title}</h4>
-            <p className='text-gray-400'>{message}</p>
+            <p className='text-gray-400 text-wrap'>{message}</p>
             
             </div>
         </div>
