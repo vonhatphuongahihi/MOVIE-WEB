@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { accordionGroups } from '../Data/SupportData';
 import '../Screens/Support.css';
 
+import { useLocation } from 'react-router-dom';
+
 function AccordionGroup() {
+  const location = useLocation();
+  const [initialLoad, setInitialLoad] = useState(true); // Để xử lý trạng thái khi tải lần đầu tiên
   // State quản lý trạng thái mở/đóng của từng accordion theo nhóm
   const [openStates, setOpenStates] = useState(
     accordionGroups.map((group) => group.accordions.map(() => false))
@@ -27,6 +31,35 @@ function AccordionGroup() {
     const newOpenState = !areAllAccordionsOpen;
     setOpenStates(accordionGroups.map((group) => group.accordions.map(() => newOpenState)));
   };
+
+  // Khi URL thay đổi (thông qua `location.hash`), mở đúng phần accordion
+  useEffect(() => {
+    if (initialLoad) {
+      setInitialLoad(false);
+      return;
+    }
+
+    const targetAccordionId = location.hash.replace('#', '');  // Lấy phần id từ URL
+    if (targetAccordionId) {
+      // Đóng tất cả các accordion trước khi mở cái mới
+      const newOpenStates = accordionGroups.map(group =>
+        group.accordions.map(() => false)
+      );
+      
+      // Tìm ra nhóm và accordion phù hợp với id từ URL
+      const groupIndex = accordionGroups.findIndex((group) =>
+        group.accordions.some((accordion) => accordion.id.toString() === targetAccordionId)
+      );
+
+      if (groupIndex !== -1) {
+        const accordionIndex = accordionGroups[groupIndex].accordions.findIndex(
+          (accordion) => accordion.id.toString() === targetAccordionId
+        );
+        newOpenStates[groupIndex][accordionIndex] = true;  // Mở accordion tương ứng
+        setOpenStates(newOpenStates);
+      }
+    }
+  }, [location.hash, openStates, initialLoad]);
 
   return (
     <div className='containerSupport'>
