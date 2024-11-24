@@ -124,7 +124,7 @@ function SearchForm() {
   
 
   return (
-    <div className="hidden lg:flex col-span-3 items-center w-full relative">
+    <div className="flex col-span-3 items-center w-full relative">
       <form
         onSubmit={handleSearchSubmit}
         className="w-full text-sm bg-white rounded flex items-center"

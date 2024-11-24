@@ -51,7 +51,7 @@ const NotificationIcon = () => {
         <IoMdNotificationsOutline className="w-7 h-7 text-subMain cursor-pointer mr-2" />
         {notifications.length > 0 && (
           <div className={cx("quantity")}>
-            <span className="text-white">{notifications.length}</span>
+            <span className="text-white text-xs lg:text-sm">{notifications.length}</span>
           </div>
         )}
       </button>

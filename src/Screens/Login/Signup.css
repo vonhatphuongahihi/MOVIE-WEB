@@ -23,8 +23,8 @@
     border-radius: 25px;
     padding: 45px;
     margin: auto;
-    max-height: 500px;
-    margin-top: 100px;
+    max-height: 600px;
+    margin-top: 60px;
     margin-right: 1%; 
     display: flex;
     flex-direction: column;
@@ -84,7 +84,7 @@
     gap: 8px;
     color: #b3b3b3;
     font-size: 14px;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .terms input {
@@ -123,22 +123,63 @@
     width: 80px;
     height: 80px;
 }
-
+/*từ IphoneX trở lên*/
 @media (max-width: 500px) {
-    .signup {
-        padding: 10px 2%;
-    }
-
     .signup-form {
-        padding: 20px;
-        margin-top: 20px;
+        padding: 20px 30px ;
+        margin-top: 7vh;
     }
-
     .signup-form h1 {
         font-size: 24px;
     }
-
-    .signup-logo {
+    img.signup-logo {
+        width: 120px; 
+    }
+    img.form-logo{
+        margin-bottom:20px;
+        width: 120px;
+    }
+    .terms{
+        font-size: 13px;
+        gap: 5px;
+        margin-top: 3px;
+    }
+}
+/*Iphone 5; Iphone SE*/
+@media (max-width: 320px){
+    .signup{
+        padding: 8px 8%;
+    }
+    .signup-form {
+        padding: 20px ;
+        margin-top: 7vh;
+    }
+    img.form-logo{
+        margin-bottom:5px;  
+        width: 100px;
+    }
+    img.signup-logo {
         width: 100px; 
+    }
+    .signup-form input {
+        height: 40px;
+        margin: 7px 0px;
+    }
+    .signup-form button{
+        height: 40px;
+        padding: 5px;
+        margin-top: 10px;
+    }
+    .terms{
+        font-size: 12px;
+        gap: 5px;
+        margin-top: 3px;
+    }
+    .terms input{
+        width: 15px;
+        height: 15px;
+    }
+    .form-switch{
+        margin-top: 12px;
     }
 }
