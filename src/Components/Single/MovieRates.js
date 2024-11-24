@@ -3,7 +3,8 @@ import Titles from "../Titles";
 import { BsBookmarkStarFill } from "react-icons/bs";
 import { Message, Select } from "../UsedInputs";
 import Rating from "../Stars";
-import { addCommentToMovie, getCommentsForMovie } from "../../firebase";
+import { addCommentToMovie, getCommentsForMovie, addReplyToComment, updateLikesDislikes } from "../../firebase";
+import { AiFillLike, AiFillDislike, AiOutlineComment } from "react-icons/ai";
 
 function MovieRates({ movie, user }) {
   const Ratings = [
@@ -18,12 +19,128 @@ function MovieRates({ movie, user }) {
   const [rating, setRating] = useState(0);
   const [commentContent, setCommentContent] = useState("");
   const [comments, setComments] = useState([]);
+//Like và dislike
+  const [likeState, setLikeState] = useState({});
+  const [commentState, setCommentState] = useState({});
+ 
+
+  const handleLike = async (id) => {
+    const currentState = likeState[id]; // Current state for this comment
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === id) {
+        if (currentState === "like") {
+          // User is removing their like
+          return { ...comment, likes: comment.likes - 1 };
+        } else if (currentState === "dislike") {
+          // User is switching from dislike to like
+          return {
+            ...comment,
+            likes: comment.likes + 1,
+            dislikes: comment.dislikes - 1,
+          };
+        } else {
+          // User is adding a like
+          return { ...comment, likes: comment.likes + 1 };
+        }
+      }
+      return comment;
+    });
+  
+    setComments(updatedComments);
+  
+    // Update the user's like/dislike state
+    setLikeState((prev) => ({
+      ...prev,
+      [id]: currentState === "like" ? null : "like",
+    }));
+  
+    // Update the database
+    const updatedComment = updatedComments.find((c) => c.id === id);
+    await updateLikesDislikes(id, "likes", updatedComment.likes);
+    await updateLikesDislikes(id, "dislikes", updatedComment.dislikes);
+  };
+  
+  const handleDislike = async (id) => {
+    const currentState = likeState[id]; // Current state for this comment
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === id) {
+        if (currentState === "dislike") {
+          // User is removing their dislike
+          return { ...comment, dislikes: comment.dislikes - 1 };
+        } else if (currentState === "like") {
+          // User is switching from like to dislike
+          return {
+            ...comment,
+            dislikes: comment.dislikes + 1,
+            likes: comment.likes - 1,
+          };
+        } else {
+          // User is adding a dislike
+          return { ...comment, dislikes: comment.dislikes + 1 };
+        }
+      }
+      return comment;
+    });
+  
+    setComments(updatedComments);
+  
+    // Update the user's like/dislike state
+    setLikeState((prev) => ({
+      ...prev,
+      [id]: currentState === "dislike" ? null : "dislike",
+    }));
+  
+    // Update the database
+    const updatedComment = updatedComments.find((c) => c.id === id);
+    await updateLikesDislikes(id, "likes", updatedComment.likes);
+    await updateLikesDislikes(id, "dislikes", updatedComment.dislikes);
+  };
+  
+
+  const handleReplySubmit = async (id, content) => {
+    if (!content.trim()) return;
+  
+    const newReply = {
+      userId: user.uid,
+      userName: user.name,
+      content,
+      avatarUrl: user.avatarUrl,
+      createdAt: new Date(),
+    };
+  
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === id) {
+        return {
+          ...comment,
+          replies: [...(comment.replies || []), newReply],
+        };
+      }
+      return comment;
+    });
+  
+    setComments(updatedComments);
+  
+    await addReplyToComment(id, newReply);
+  };
+
+
+  const toggleCommentBox = (id) => {
+    setCommentState((prev) => ({
+      ...prev,
+      [id]: !prev[id], // Toggle comment box visibility
+    }));
+  };
+
+  
+//End Comment
 
   useEffect(() => {
     const fetchComments = async () => {
       const movieComments = await getCommentsForMovie(movie.id);
       setComments(movieComments);
     };
+
+    
 
     fetchComments();
   }, [movie.id]);
@@ -92,18 +209,116 @@ function MovieRates({ movie, user }) {
               />
             </div>
           ) : (
-            comments.map((comment) => (
-              <div key={comment.id} className="flex gap-4 p-4 border-b border-gray-200">
-                <img
-                  src={comment.avatarUrl}
-                  className="w-12 h-12 rounded-full object-cover"
+            // comments.map((comment) => (
+            //   <div key={comment.id} className="flex gap-4 p-4 border-b border-gray-200">
+            //     <img
+            //       src={comment.avatarUrl}
+            //       className="w-12 h-12 rounded-full object-cover"
+            //     />
+            //     <div>
+            //       <h4 className="text-lg font-semibold">{comment.userName}</h4>
+            //       <div className="flex mt-4 text-lg gap-2 text-star pb-3">
+            //   <Rating value={comment.rating} />
+            // </div>
+            //       <p className="text-gray-600">{comment.content}</p>
+                  
+            
+            //     </div>
+            //   </div>
+            // ))
+
+
+<div className="grid grid-cols-1 gap-4">
+      {comments.map((comment) => (
+        <div
+          key={comment.id}
+          className="flex flex-col gap-4 p-4 border-b border-gray-200"
+        >
+          {/* Comment gốc */}
+          <div className="flex gap-8 items-start">
+            <img
+              src={comment.avatarUrl}
+              alt="Avatar"
+              className="w-12 h-12 rounded-full object-cover"
+            />
+            <div className="flex-1">
+              <h4 className="text-lg font-semibold pb-3">{comment.userName}</h4>
+              <p className="text-gray-600">{comment.content}</p>
+              <div className="flex gap-4 mt-2">
+                <AiFillLike
+                  onClick={() => handleLike(comment.id)}
+                  className={`cursor-pointer text-2xl ${
+                    likeState[comment.id] === "like"
+                      ? "text-blue-500"
+                      : "text-gray-500"
+                  }`}
                 />
-                <div>
-                  <h4 className="text-lg font-semibold">{comment.userName}</h4>
-                  <p className="text-gray-600">{comment.content}</p>
-                </div>
+                <AiFillDislike
+                  onClick={() => handleDislike(comment.id)}
+                  className={`cursor-pointer text-2xl ${
+                    likeState[comment.id] === "dislike"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }`}
+                />
+                <AiOutlineComment
+                  onClick={() => toggleCommentBox(comment.id)}
+                  className="cursor-pointer text-2xl text-gray-500 hover:text-blue-500"
+                />
               </div>
-            ))
+
+              {/* Khung nhập bình luận */}
+              {commentState[comment.id] && (
+                <div className="mt-2">
+                  <textarea
+                    placeholder="Thêm phản hồi"
+                    className="w-full border border-gray-300 p-2 rounded text-main"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleReplySubmit(comment.id, e.target.value);
+                        e.target.value = ""; // Reset nội dung textarea
+                      }
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+            {/* Hiển thị rating */}
+            <div className="flex flex-col justify-center items-center">
+            <div className="flex mt-4 text-lg gap-2 text-star ">
+              <Rating value={comment.rating} />
+            </div>
+            <div className="flex mt-2 text-gray-500 text-sm gap-4 items-center">
+  <span>{comment.likes || 0} like</span>
+  <span>{comment.dislikes || 0} dislike</span>
+  <span>{comment.replies?.length || 0} replies</span>
+</div>
+              </div>
+
+          </div>
+
+          {/* Hiển thị danh sách reply */}
+          {comment.replies?.map((reply, index) => (
+            <div
+              key={index}
+              className="flex gap-4 items-start ml-12 border-l pl-4 border-gray-300"
+            >
+              <img
+                src={reply.avatarUrl}
+                alt="Avatar"
+                className="w-8 h-8 rounded-full object-cover"
+              />
+              <div>
+                <h4 className="text-sm font-semibold pb-3">{reply.userName}</h4>
+                <p className="text-gray-600">{reply.content}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+
           )}
         </div>
       </div>

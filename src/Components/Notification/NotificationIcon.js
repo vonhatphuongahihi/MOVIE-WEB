@@ -9,6 +9,7 @@ import styles from "./notification.css";
 const cx = classNames.bind(styles);
 const NotificationIcon = () => {
   const [notifications, setNotifications] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -20,13 +21,15 @@ const NotificationIcon = () => {
     fetchNotifications();
   }, []);
 
+  // Hàm toggle mở/đóng thông báo
+  const toggleNotifications = () => {
+    setIsOpen(prev => !prev);
+  };
+
   return (
-    <div>
-    <TippyHeadless
-      interactive
-      placement="bottom"
-      render={() => (
-        <PopperWrapper className={cx("notification-popper")}>
+    <div className="relative">
+    {isOpen && (
+        <PopperWrapper className={cx("notification-popper", { show: isOpen })}>
           <div className={cx("notification-header")}>
             <span className="text-white">{`Thông báo (${notifications.length})`}</span>
           </div>
@@ -43,9 +46,8 @@ const NotificationIcon = () => {
           )}
         </PopperWrapper>
       )}
-      hideOnClick={false} // Giữ cho thông báo mở khi click bên ngoài
-    >
-      <button className={cx("notification-btn")}>
+     
+      <button className={cx("notification-btn")} onClick={toggleNotifications}>
         <IoMdNotificationsOutline className="w-7 h-7 text-subMain cursor-pointer mr-2" />
         {notifications.length > 0 && (
           <div className={cx("quantity")}>
@@ -53,7 +55,7 @@ const NotificationIcon = () => {
           </div>
         )}
       </button>
-    </TippyHeadless>
+
     </div>
   );
 };
