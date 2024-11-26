@@ -1,5 +1,4 @@
-
-import fetch from 'node-fetch';
+//import fetch from 'node-fetch';
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
