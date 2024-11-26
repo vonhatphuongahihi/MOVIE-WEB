@@ -21,7 +21,8 @@ module.exports = {
         text: '#C0C0C0',
         border: '#4B5563',
         dryGray: '#E0D5D5',
-        customGreen: '#B1FFA5'
+        customGreen: '#B1FFA5',
+        notif: '#333333'
     },
     },
   },
