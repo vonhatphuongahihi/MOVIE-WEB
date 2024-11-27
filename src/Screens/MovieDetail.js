@@ -116,13 +116,6 @@ const ImageButton = styled.button`
       background-color: #ffb3b3;
     }
 
-<<<<<<< HEAD
-    &.liked {
-      color: red;
-      svg {
-        color: red;
-      }
-=======
     @media (max-width: 480px) {
         padding: 7px 10px;
         font-size: 13px;
@@ -155,8 +148,6 @@ const ImageButton = styled.button`
                 color: red; 
             }
         }
->>>>>>> 7a647e53a54ab9671c2959a74d0b2e9891905ba3
-    }
   }
 `;
 
