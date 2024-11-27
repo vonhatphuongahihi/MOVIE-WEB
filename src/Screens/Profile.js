@@ -73,7 +73,7 @@ function Profile() {
 
   return (
     <Layout>
-      <div className="min-h-screen flex items-center justify-center bg-[#080a1a] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#080a1a] p-4 mt-20">
         <form
           className="bg-[#0b0f29] p-8 rounded shadow-md w-full max-w-lg"
           onSubmit={(e) => e.preventDefault()}

@@ -1,0 +1,185 @@
+.signup {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+            url('http://localhost:3000/images/background.png') no-repeat center center;
+    background-size: cover;
+    padding: 20px 8%;
+}
+.form-logo {
+    width: 170px;
+    margin-bottom: 35px;
+}
+.signup-logo{
+    position: absolute; 
+    top: 20px; 
+    left: 20px; 
+    width: 120px; 
+    z-index: 1000; 
+}
+.signup-form {
+    width: 100%;
+    max-width: 400px; 
+    background: #333333;
+    border-radius: 25px;
+    padding: 45px;
+    margin: auto;
+    max-height: 600px;
+    margin-top: 60px;
+    margin-right: 1%; 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+.signup-form h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-align: center; 
+}
+
+.signup-form button {
+    width: 100%;
+    height: 50px;
+    border: none;
+    background: #28BD11;
+    color: white;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.signup-form button:hover {
+    background: #24a30f;
+}
+
+.signup-form input {
+    width: 100%;
+    height: 50px;
+    background: #000000;
+    color: white;
+    margin: 10px 0;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 12px 15px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.signup-form input:focus {
+    border-color: #28BD11;
+}
+
+.signup-form input::placeholder {
+    color: #b3b3b3;
+}
+
+.terms {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #b3b3b3;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.terms input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.terms label a {
+    color: #5BCD27;
+}
+
+.form-switch {
+    margin-top: 20px;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.form-switch span {
+    color: #5BCD27;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.loading {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.loading img {
+    width: 80px;
+    height: 80px;
+}
+/*từ IphoneX trở lên*/
+@media (max-width: 500px) {
+    .signup-form {
+        padding: 20px 30px ;
+        margin-top: 7vh;
+    }
+    .signup-form h1 {
+        font-size: 24px;
+    }
+    img.signup-logo {
+        width: 120px; 
+    }
+    img.form-logo{
+        margin-bottom:20px;
+        width: 120px;
+    }
+    .terms{
+        font-size: 13px;
+        gap: 5px;
+        margin-top: 3px;
+    }
+}
+/*Iphone 5; Iphone SE*/
+@media (max-width: 320px){
+    .signup{
+        padding: 8px 8%;
+    }
+    .signup-form {
+        padding: 20px ;
+        margin-top: 7vh;
+    }
+    img.form-logo{
+        margin-bottom:5px;  
+        width: 100px;
+    }
+    img.signup-logo {
+        width: 100px; 
+    }
+    .signup-form input {
+        height: 40px;
+        margin: 7px 0px;
+    }
+    .signup-form button{
+        height: 40px;
+        padding: 5px;
+        margin-top: 10px;
+    }
+    .terms{
+        font-size: 12px;
+        gap: 5px;
+        margin-top: 3px;
+    }
+    .terms input{
+        width: 15px;
+        height: 15px;
+    }
+    .form-switch{
+        margin-top: 12px;
+    }
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import Uploader from "../Uploader";
+import Uploder from "../Uploder"
 import { Input } from "../UsedInputs";
 import MainModal from "./MainModal";
 

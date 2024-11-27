@@ -14,47 +14,41 @@ function Footer() {
           name: "Giới thiệu về Melon",
           link: "/about-us",
         },
-        {
-          name: "Liên hệ",
-          link: "/contact-us",
-        },
-        
       ],
     },
-    {
-      title: "Quy định",
-      links: [
-        {
-          name: "Hợp đồng điện tử",
-          link: "/support",
-        },
-        {
-          name: "Điều khoản và điều kiện",
-          link: "/support",
-        },
-        {
-          name: "Chính sách bảo vệ thông tin cá nhân",
-          link: "/support",
-        },
-        
-      ],
-    },
+   
     {
       title: "Thông tin",
       links: [
         {
-          name: "Thông báo",
-          link: "#",
+          name: "Hỗ trợ",
+          link: "/support",
         },
         {
           name: "FAQs",
-          link: "#",
+          link: "/faqs",
         },
         {
-          name: "Tải ứng dụng",
-          link: "#",
+          name: "Liên hệ",
+          link: "/contact-us",
         },
-        
+      ],
+    },
+    {
+      title: "Dịch vụ",
+      links: [
+        {
+          name: "Hợp đồng điện tử",
+          link: "/support#4",
+        },
+        {
+          name: "Điều khoản và điều kiện",
+          link: "/support#5",
+        },
+        {
+          name: "Chính sách bảo vệ thông tin cá nhân",
+          link: "/support#6",
+        },
       ],
     },
   ];
@@ -126,27 +120,40 @@ function Footer() {
           <div className="mr-40 mt-8">
             <p>Liên hệ với chúng tôi</p>
             <div className="flex flex-row gap-5">
-              <img
-                src="/images/Facebook.png"
-                alt="logo"
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-2/4 object-contain h-10 mt-3"
-              />
-              <img
-                src="/images/Tiktok.png"
-                alt="logo"
-                className="w-2/4 object-contain h-10 mt-3"
-              />
+              >
+                <img src="/images/Facebook.png" alt="logo" />
+              </a>
 
-              <img
-                src="/images/Instagram.png"
-                alt="logo"
+              <a
+                href="https://www.tiktok.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-2/4 object-contain h-10 mt-3"
-              />
-              <img
-                src="/images/Youtube.png"
-                alt="logo"
+              >
+                <img src="/images/Tiktok.png" alt="logo" />
+              </a>
+
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-2/4 object-contain h-10 mt-3"
-              />
+              >
+                <img src="/images/Instagram.png" alt="logo" />
+              </a>
+              <a
+                href="https://www.youtube.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-2/4 object-contain h-10 mt-3"
+              >
+                <img src="/images/Youtube.png" alt="logo" />
+              </a>
             </div>
           </div>
         </div>

@@ -1,15 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { db } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const Head = "text-xs text-left text-main font-semibold px-6 py-2 uppercase";
-const Text = "text-sm text-left leading-6 whitespace-nowrap px-5 py-3";
+const Head = "text-xs text-left text-main font-semibold px-6 py-2 uppercase text-white";
+const Text = "text-sm text-left leading-6 whitespace-nowrap px-5 py-3 text-white";
 
-// rows
+const fetchUsers = async () => {
+  const usersCollection = collection(db, "users");
+  const snapshot = await getDocs(usersCollection);
+  const usersList = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  return usersList;
+};
+
 const Rows = (data, i, users, OnEditFunction) => {
+  const rowStyle = data.role === "admin" ? { backgroundColor: "#28BD11" } : {}; 
   return (
-    <tr key={i}>
-      {/* users */}
+    <tr key={i} style={rowStyle}>
       {users ? (
         <>
           <td className={`${Text}`}>
@@ -21,10 +29,10 @@ const Rows = (data, i, users, OnEditFunction) => {
               />
             </div>
           </td>
-          <td className={`${Text}`}>{data._id ? data._id : "2R75T8"}</td>
-          <td className={`${Text}`}>{data.createAt ? data.createAt : "12, Jan 2023"}</td>
-          <td className={`${Text}`}>{data.fullName}</td>
+          <td className={`${Text}`}>{data.uid || "N/A"}</td>
+          <td className={`${Text}`}>{data.name}</td>
           <td className={`${Text}`}>{data.email}</td>
+          <td className={`${Text}`}>{data.birthdate}</td>
           <td className={`${Text} float-right flex-rows gap-2`}>
             <button className="bg-subMain text-white rounded flex-colo w-6 h-6">
               <MdDelete />
@@ -32,36 +40,33 @@ const Rows = (data, i, users, OnEditFunction) => {
           </td>
         </>
       ) : (
-        // Categories
-        <>
-          <td className={`${Text} font-bold`}>2R75T8</td>
-          <td className={`${Text}`}>{data.createAt ? data.createAt : "12, Jan 2023"}</td>
-          <td className={`${Text}`}>{data.title}</td>
-          <td className={`${Text} float-right flex-rows gap-2`}>
-            <button
-              onClick={() => OnEditFunction(data)}
-              className="border border-border bg-dry flex-rows gap-2 text-border rounded py-1 px-2"
-            >
-              Edit <FaEdit className="text-green-500" />
-            </button>
-            <button className="bg-subMain text-white rounded flex-colo w-6 h-6">
-              <MdDelete />
-            </button>
-          </td>
-        </>
+        <td className={`${Text} font-bold`}>N/A</td>
       )}
     </tr>
   );
 };
 
-// table
-function Table2({ data, users, OnEditFunction }) {
+function Table2({ users, OnEditFunction }) {
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const usersList = await fetchUsers();
+        setUserData(usersList); 
+      } catch (error) {
+      }
+    };
+  
+    getUsers();
+  }, []);
+
   return (
     <div className="overflow-x-scroll overflow-hidden relative w-full">
-      <table className="w-full table-auto border border-border divide-y divide-border">
+      <table className="w-full table-auto border border-border divide-y divide-border mt-5">
         <thead>
           <tr className="bg-dryGray">
-            {users ? (
+            {users && (
               <>
                 <th scope="col" className={`${Head}`}>
                   Image
@@ -70,36 +75,23 @@ function Table2({ data, users, OnEditFunction }) {
                   Id
                 </th>
                 <th scope="col" className={`${Head}`}>
-                  Date
-                </th>
-                <th scope="col" className={`${Head}`}>
                   Full Name
                 </th>
                 <th scope="col" className={`${Head}`}>
                   Email
                 </th>
-              </>
-            ) : (
-              <>
                 <th scope="col" className={`${Head}`}>
-                  Id
-                </th>
-                <th scope="col" className={`${Head}`}>
-                  Date
-                </th>
-                <th scope="col" className={`${Head}`}>
-                  Title
+                  Birthdate
                 </th>
               </>
             )}
-
             <th scope="col" className={`${Head} text-end`}>
               Actions
             </th>
           </tr>
         </thead>
         <tbody className="bg-main divide-y divide-gray-800">
-          {data.map((data, i) => Rows(data, i, users, OnEditFunction))}
+          {userData.map((data, i) => Rows(data, i, users, OnEditFunction))}
         </tbody>
       </table>
     </div>

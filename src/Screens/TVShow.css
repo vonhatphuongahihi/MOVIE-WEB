@@ -1,0 +1,146 @@
+.tvshow-card-list {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 10px;
+    justify-content: center;
+    margin-top: 60px;  
+    margin-left: 70px; 
+    margin-right: 70px; 
+    gap: 30px;
+  }
+  
+  .tvshow-card-list .tvshow-card {
+    position: relative;
+    flex: 1 0 20%; 
+    box-sizing: border-box; 
+  }
+  
+  .tvshow-card-list img {
+    width: 100%;
+    max-width: 80%; 
+    justify-self: center;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 300px;
+  }
+  
+  .tvshow-card-list .tvshow-card p {
+    position: absolute;
+    bottom: 10px;
+    left: 10%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 14px;
+    width: 80%;
+    text-align: center;
+  }
+  
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    gap: 15px;
+}
+
+.pagination button {
+    background-color: #28bd11;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #71ae66;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 16px;
+    font-weight: bold;
+}
+@media (max-width:1120px){
+  .tvshow-card-list img {
+    height: 250px;
+  }
+}
+@media (max-width:940px){   /*1 hàng 4 ảnh*/
+  .tvshow-card-list {
+    gap: 30px 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    justify-content: center;
+  }
+  .tvshow-card-list .tvshow-card {
+    flex: 1 0 180px;
+  }
+  .tvshow-card-list img {
+    height: 200px;
+  }  
+}
+/*1 hàng 2 ảnh - tablet*/
+@media (max-width:830px){ 
+  .tvshow-card-list {
+    gap: 30px 70px ;
+    margin-left: 80px;
+    margin-right: 80px;
+  }
+  .tvshow-card-list img{
+    max-width: 100%;
+    height: 250px;
+  }
+  .tvshow-card-list .tvshow-card p {
+    left: 0;
+    width: 100%;
+  }
+}
+@media (max-width:760px){ 
+  .tvshow-card-list {
+    gap: 30px 70px ;
+    margin-left: 80px;
+    margin-right: 80px;
+  }
+  .tvshow-card-list img{
+    max-width: 100%;
+    height: 230px;
+  }
+  .tvshow-card-list .tvshow-card p {
+    left: 0;
+    width: 100%;
+  }
+}
+@media (max-width:610px){ 
+  .tvshow-card-list {
+    gap: 30px 50px ;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+  .tvshow-card-list .tvshow-card {
+    flex: 1 0 150px;
+  }
+  .tvshow-card-list img{
+    height: 200px;
+  }
+}
+/*1 hàng 1 ảnh* - phone*/ 
+@media (max-width:450px){ 
+  .tvshow-card-list {
+    gap: 30px;
+    margin-left: 60px;
+    margin-right: 60px;
+  }
+  .tvshow-card-list img{
+    height: 300px;
+  }
+}

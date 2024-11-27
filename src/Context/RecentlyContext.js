@@ -1,40 +1,44 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { getRecently, updateRecently } from "../firebase"
 
 export const RecentlyContext = createContext();
 
 export const RecentlyProvider = ({ children }) => {  
-    const [recently, setRecently] = useState(() => {
-      const storedRecently = localStorage.getItem('recently');
-      return storedRecently ? JSON.parse(storedRecently) : [];
-    });
-  
-    useEffect(() => {
-      localStorage.setItem('recently', JSON.stringify(recently));
-    }, [recently]);
-    
-    const addRecently = (movie) => {
+    const [recently, setRecently] =  useState([]);
 
+    const loadRecently=()=>{
+      getRecently().then((data)=>{
+        setRecently((data))
+      });
+    }
+
+    const addRecently = (movie) => {
       setRecently((prev) => {
         // Kiểm tra xem phim đã tồn tại trong danh sách yêu thích chưa để tránh trùng lặp
-        if (!prev.find((rec) => rec.id === movie.id)) {
-          return [...prev, movie];
+        if (prev.find((rec) => rec.id === movie.id)) {
+          return prev;  //khong can cap nhat
         }
-        return prev;
-      });
-      
+        updateRecently([...prev, movie]);
+        return [...prev, movie]
+      });      
     };
 
     const removeAll = () => {
-      setRecently((prev) => {return prev = []} );
+      updateRecently(recently.filter((movie) => movie.id === ""))     
+      setTimeout(() => {  //đợi update xong
+        loadRecently(); 
+    }, 1000);
+      
     };
 
     const removeRecently = (id) => {
-      setRecently((prev) => prev.filter((movie) => movie.id !== id)); // Loại bỏ phim khỏi danh sách
+      updateRecently(recently.filter((movie) => movie.id !== id))
+      loadRecently(); 
     };
   
   
     return (    
-      <RecentlyContext.Provider value={{ recently, addRecently, removeRecently, removeAll }}>
+      <RecentlyContext.Provider value={{ recently, addRecently, removeRecently, removeAll, loadRecently }}>
         {children}
       </RecentlyContext.Provider>
   
