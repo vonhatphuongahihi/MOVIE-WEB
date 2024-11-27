@@ -149,7 +149,7 @@ const ImageButton = styled.button`
 
         &.liked { 
             color: red; 
-            background-color: #ffffff;
+            background-color: #ffb3b3;
 
             svg {
                 color: red; 

@@ -1,3 +1,4 @@
+//import fetch from 'node-fetch';
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
@@ -147,19 +148,22 @@ const onPause = (event) => {
 
       {/* <MovieInfo movie={movie} onWatchClick={scrollToWatch} /> */}
       <div id="Watch" className="my-8">
-        <div className="container mx-auto bg-dry p-12 mb-12">
-          {play ? (            
+        <div className="container mx-auto p-0">
+          {play ? ( 
+            <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+            <div className="absolute top-0 left-0 w-full h-full">           
             <YouTube
               videoId={teaser.key}
-              opts={{ height: '620', width: '100%' }}
+              opts={{ height: 'auto', width: '100%' }}
               onReady={onReady}
               onPlay={onPlay}
               onPause={onPause}
               onEnd={saveProgress}
-              
             />
+        </div>
+      </div>
           ) : (
-            <div className="w-full h-screen rounded-lg overflow-hidden relative">
+            <div className="w-full h-auto rounded-lg overflow-hidden relative">
               <div className="absolute top-0 left-0 bottom-0 right-0 bg-main bg-opacity-30 flex-colo">
                 <button
                   onClick={() => {
@@ -180,14 +184,14 @@ const onPause = (event) => {
           )}
         </div>
 
-        <div className="flex justify-between mx-20">
-          <div className="flex flex-col w-1/2 mb-15">
-            <h1 className="font-bold mb-10 text-3xl">{movie?.title} </h1>
+        <div className="flex flex-col lg:flex-row justify-between mx-4 lg:mx-20 gap-6">
+          <div className="flex flex-col w-full lg:w-1/2">
+            <h1 className="font-bold mb-10 text-2xl lg:text-3xl">{movie?.title} </h1>
             {/* <h1 className="font-medium mb-8 ">( Tên gốc: {movie.original_title} )</h1> */}
 
             <p className="mb-4">{movie.production_companies[0]?.name} ™</p>
             <div className="flex items-center gap-6">
-              <div class="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
+              <div class="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3">
                 <img class="size-6" src="/rate-star.png" />
                 <p className="font-bold text-xl ">{movie.vote_average} </p>
 
@@ -199,20 +203,20 @@ const onPause = (event) => {
             </div>
 
             {/* FlexItem */}
-            <div className="flex gap-5 mb-8">
-              <div className="flex-2 w-2/5 flex items-center gap-2">
+            <div className="flex flex-wrap lg:flex-nowrap gap-5 mb-8">
+              <div className="flex-1 flex items-center gap-2">
               <RiGlobalLine className="text-subMain w-4 h-4" />
                 <span className="text-sm font-medium">
                   {movie.production_countries[0]?.name}
                 </span>
               </div>
-              <div className="flex-2 w-1/5 flex items-center gap-2">
+              <div className="flex-1 flex items-center gap-2">
                 <FaRegCalendar className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
                   {movie.release_date.substring(0, 4)}
                 </span>
               </div>
-              <div className="flex-2 w-2/5 flex items-center gap-2">
+              <div className="flex-1 flex items-center gap-2">
                 <IoTimeOutline className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
                   {movie.runtime} phút
@@ -231,7 +235,7 @@ const onPause = (event) => {
             <p className="mb-10">{movie.overview}</p>
           </div>
 
-          <div className="flex flex-col  justify-center mt-10">
+          <div className="flex flex-col w-full lg:w-1/2 justify-start gap-4 mt-10 lg:mt-0">
             <div className="flex gap-20 mb-8 ">
               <div className="flex gap-3 items-center">
               <PiShareFat /> <p>Chia sẻ</p>
