@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { FiFilm, FiPlay } from "react-icons/fi"; 
 import { FaHeart } from "react-icons/fa";
 import Layout from "../Layout/Layout";
 import { FavoritesContext } from '../Context/FavoritesContext'; // Import context
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { getAuth } from "firebase/auth";
+import { updateFavoriteMovies, getFavoriteMovies } from "../firebase";
 
 const MovieContainer = styled.div`
   background: #0b0f2a;
@@ -98,7 +100,40 @@ const WatchButton = styled.button`
 `;
 
 function FavoriteMovies() {
-  const { favorites, removeFavorite } = useContext(FavoritesContext); // Get favorites list from context
+  const [favorites, setFavorites] = useState([]);
+  const { removeFavorite } = useContext(FavoritesContext);
+
+  // Lấy danh sách phim yêu thích khi component được tải
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        // Lấy danh sách phim yêu thích từ Firebase
+        const favoriteMovies = await getFavoriteMovies(user.uid);
+        setFavorites(favoriteMovies);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
+  // Hàm xóa phim khỏi danh sách yêu thích
+  const handleRemoveFavorite = async (movieId) => {
+    // Cập nhật giao diện trước
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter((movie) => movie.id !== movieId)
+    );
+
+    // Gọi hàm xóa trong context hoặc Firebase
+    try {
+      await removeFavorite(movieId);
+    } catch (error) {
+      console.error("Lỗi khi xóa phim yêu thích:", error);
+      alert("Không thể xóa phim. Vui lòng thử lại.");
+    }
+  };
 
   return (
     <Layout>
@@ -126,9 +161,12 @@ function FavoriteMovies() {
                   <Link to={`/movie/${movie?.id}`}>
                     <WatchButton aria-label={`Xem ngay ${movie.title}`}>
                       <FiPlay /> Xem Ngay
-                   </WatchButton>
+                    </WatchButton>
                   </Link>
-                  <RemoveButton onClick={() => removeFavorite(movie.id)} aria-label={`Xóa ${movie.title} khỏi danh sách yêu thích`}>
+                  <RemoveButton
+                    onClick={() => handleRemoveFavorite(movie.id)}
+                    aria-label={`Xóa ${movie.title} khỏi danh sách yêu thích`}
+                  >
                     <FaHeart />
                   </RemoveButton>
                 </ButtonContainer>

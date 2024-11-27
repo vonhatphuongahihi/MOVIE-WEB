@@ -1,65 +1,96 @@
-// src/Pages/Profile.jsx
 import React, { useState, useEffect } from "react";
 import { FaUserCircle, FaCamera } from "react-icons/fa";
 import Layout from "../Layout/Layout";
+import { getUserProfile, updateUserProfile } from "../firebase";
+import { getAuth } from "firebase/auth";
 
 function Profile() {
-  const [username, setUsername] = useState("");
+  const [name, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState(null);
+  const [birthdate, setBirthdate] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState("");
 
-  const handleAvatarChange = (e) => {
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        const userProfile = await getUserProfile(user.uid);
+        if (userProfile) {
+          setUsername(userProfile.name || "");
+          setEmail(userProfile.email || "");
+          setBirthdate(userProfile.birthdate || "");
+          setAvatarUrl(userProfile.avatarUrl || "");
+        } else {
+          console.log("No profile found");
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  const handleAvatarChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
-      setAvatar(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      const newAvatarUrl = URL.createObjectURL(file);
+      setAvatarUrl(newAvatarUrl);
+
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        await updateUserProfile(user.uid, { avatarUrl: newAvatarUrl });
+      } else {
+        console.log("No user is currently logged in.");
+      }
     }
   };
 
-  const handleDeleteAccount = () => {
-    // Implement account deletion logic here
-    alert("Account deletion functionality is not implemented yet.");
+  const handleUpdate = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      const updatedData = {
+        name,
+        birthdate,
+        avatarUrl,
+      };
+
+      const success = await updateUserProfile(user.uid, updatedData);
+    } 
   };
 
-  const handleUpdate = () => {
-    // Implement profile update logic here
-    alert("Profile update functionality is not implemented yet.");
-  };
-
-  // Cleanup URL object to avoid memory leaks
   useEffect(() => {
     return () => {
-      if (avatar) {
-        URL.revokeObjectURL(avatar);
+      if (avatarUrl) {
+        URL.revokeObjectURL(avatarUrl);
       }
     };
-  }, [avatar]);
+  }, [avatarUrl]);
 
   return (
     <Layout>
-      <div className="min-h-screen flex items-center justify-center bg-[#080a1a] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#080a1a] p-4 mt-20">
         <form
           className="bg-[#0b0f29] p-8 rounded shadow-md w-full max-w-lg"
           onSubmit={(e) => e.preventDefault()}
         >
-          <h2 className="text-3xl font-semibold mb-6 text-center text-subMain">
-            HỒ SƠ
-          </h2>
+          <h2 className="text-3xl font-semibold mb-6 text-center text-subMain">HỒ SƠ</h2>
 
-          {/* Ảnh đại diện */}
           <div className="flex flex-col items-center mb-6 text-base">
-            {avatar ? (
+            {avatarUrl ? (
               <img
-                src={avatar}
+                src={avatarUrl}
                 alt="Avatar"
                 className="w-24 h-24 rounded-full object-cover mb-2"
               />
             ) : (
               <FaUserCircle className="w-24 h-24 text-subMain mb-2" />
             )}
-            <label
-              htmlFor="avatar"
-              className="cursor-pointer text-white hover:underline text-base flex items-center"
-            >
+            <label htmlFor="avatar" className="cursor-pointer text-white hover:underline text-base flex items-center">
               <FaCamera className="mr-2" />
               Thay đổi ảnh đại diện
             </label>
@@ -72,73 +103,59 @@ function Profile() {
             />
           </div>
 
-          {/* Tên người dùng */}
           <div className="mb-4">
-            <label
-              className="block text-subMain mb-2 text-lg"
-              htmlFor="username"
-            >
+            <label className="block text-subMain mb-2 text-lg" htmlFor="name">
               Tên người dùng
             </label>
             <input
               type="text"
-              id="username"
-              value={username}
+              id="name"
+              value={name}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base border-gray-300"
+              className="w-full px-3 py-2 rounded bg-white text-black text-base border-gray-300"
               placeholder="Nhập tên của bạn"
             />
           </div>
 
-          {/* Email */}
           <div className="mb-4">
-            <label
-              className="block text-subMain mb-2 text-lg"
-              htmlFor="email"
-            >
+            <label className="block text-subMain mb-2 text-lg" htmlFor="email">
               Email
             </label>
             <input
               type="email"
               id="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base border-gray-300"
-              placeholder="Nhập email của bạn"
+              className="w-full px-3 py-2 rounded bg-gray-200 text-black text-base border-gray-300"
+              disabled
             />
           </div>
 
-          {/* Mật khẩu */}
           <div className="mb-6">
-            <label
-              className="block text-subMain mb-2 text-lg"
-              htmlFor="password"
-            >
-              Mật khẩu
+            <label className="block text-subMain mb-2 text-lg" htmlFor="birthdate">
+              Ngày sinh
             </label>
             <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 rounded focus:outline-none focus:ring focus:border-blue-300 bg-white text-black text-base border-gray-300"
-              placeholder="Nhập mật khẩu mới"
+              type="text"
+              id="birthdate"
+              value={birthdate}
+              onChange={(e) => setBirthdate(e.target.value)}
+              className="w-full px-3 py-2 rounded bg-white text-black text-base border-gray-300"
+              placeholder="Nhập ngày sinh mới"
             />
           </div>
 
-          {/* Nút để thực hiện hành động */}
           <div className="flex justify-between">
             <button
               type="button"
-              onClick={handleDeleteAccount}
-              className="bg-black text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none text-base"
+              onClick={() => alert("Chức năng xoá tài khoản chưa được triển khai.")}
+              className="bg-black text-white px-4 py-2 rounded hover:bg-red-600 text-base"
             >
               XOÁ TÀI KHOẢN
             </button>
             <button
               type="button"
               onClick={handleUpdate}
-              className="bg-[#23bf0e] text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none text-base"
+              className="bg-[#23bf0e] text-white px-4 py-2 rounded hover:bg-blue-600 text-base"
             >
               CẬP NHẬT
             </button>
