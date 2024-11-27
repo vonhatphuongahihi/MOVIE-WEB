@@ -32,7 +32,11 @@ const NotificationIcon = () => {
         <PopperWrapper className={cx("notification-popper", { show: isOpen })}>
           <div className={cx("notification-header")}>
             <span className="text-white">{`Thông báo (${notifications.length})`}</span>
+            <span className="text-white text-xs lg:text-sm">{`Đánh dấu tất cả là đã đọc`}</span>
           </div>
+          
+            
+      
           {notifications.length > 0 ? (
             <div className={cx("notification-items")}>
               {notifications.map((item) => (

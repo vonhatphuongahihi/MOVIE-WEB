@@ -40,6 +40,7 @@ import AddMovie from './Screens/Dashboard/Admin/AddMovie';
 import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
 import { RecentlyContext } from "./Context/RecentlyContext";
 import FAQScreen from './Screens/FAQScreen';
+import RestReminderPopup from "./Screens/Popup/RestReminderPopup";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -116,6 +117,7 @@ function App() {
 
         </Routes>
       )}
+      <RestReminderPopup />
     </>
   );
 }

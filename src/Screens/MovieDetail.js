@@ -103,24 +103,24 @@ const ImageButton = styled.button`
     background-color: #28BD11;
     color: #ffffff;
 
-    &:hover {
-      background-color: #23a30f;
-    }
-  }
+    
+    &.btn-like {
+        background-color: #fff;
+        color: #000;
 
-  &.btn-like {
-    background-color: #fff;
-    color: #000;
+        &:hover {
+        background-color: #ffb3b3;
+        color: #000;
+        }
 
-    &:hover {
-      background-color: #ffb3b3;
-    }
+        &.liked { 
+            color: red; 
+            background-color: #ffb3b3;
 
-    &.liked {
-      color: red;
-      svg {
-        color: red;
-      }
+            svg {
+                color: red; 
+            }
+        }
     }
   }
 `;
