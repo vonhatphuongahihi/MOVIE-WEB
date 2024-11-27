@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import './titleCards.css';
 import { db } from '../../../firebase'; 
 
-const TitleCards = ({ title, category, genres, country, onMovieClick }) => {
+const TitleCardShows = ({ title, category, genres, country, onShowClick}) => {
   const [firebaseData, setFirebaseData] = useState([]);
   const cardsRef = useRef();
 
@@ -16,14 +16,14 @@ const TitleCards = ({ title, category, genres, country, onMovieClick }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const moviesRef = collection(db, "movies");
+        const showsRef = collection(db, "tvShows");
         let q;
         if (genres?.length) {
-          q = query(moviesRef, where("genres", "array-contains-any", genres));
+          q = query(showsRef, where("genres", "array-contains-any", genres));
         } else if (category) {
-          q = query(moviesRef, where("category", "==", category));
+          q = query(showsRef, where("category", "==", category));
         } else if (country) {
-          q = query(moviesRef, where("country", "==", country));
+          q = query(showsRef, where("country", "==", country));
         } else {
           console.warn("Cần truyền vào ít nhất category, genres hoặc country để lấy dữ liệu.");
           return;
@@ -34,7 +34,7 @@ const TitleCards = ({ title, category, genres, country, onMovieClick }) => {
         const movies = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setFirebaseData(movies);
       } catch (error) {
-        console.error("Error fetching movies from Firebase:", error);
+        console.error("Error fetching shows from Firebase:", error);
       }
     };
 
@@ -56,16 +56,16 @@ const TitleCards = ({ title, category, genres, country, onMovieClick }) => {
       <h2>{title}</h2>
       <div className="card-list" ref={cardsRef}>
         {firebaseData.map((card, index) => (
-          <div key={index} className="card" onClick={() => onMovieClick(card)}>
+          <div key={index} className="card" onClick={() => onShowClick(card)}>
             <img 
-              src={card.type === 'tmdb' ? `https://image.tmdb.org/t/p/w1280${card.backdrop_path}` : card.backdrop_path || 'default-image-path.jpg'} 
-              alt={card.title} 
+                src={`https://image.tmdb.org/t/p/w1280${card.backdrop_path}`} 
+                alt={card.name} 
             />
-            <p>{card.title}</p>
+            <p>{card.name}</p>
           </div>
         ))}
       </div>
     </div>
   );
 }
-export default TitleCards;
+export default TitleCardShows;

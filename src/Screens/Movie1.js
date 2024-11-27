@@ -76,7 +76,6 @@ const Movie1 = ({ title }) => {
   return (
     <Layout>
       <div className="movie-title-cards">
-        <h2>{title || "Chương Trình Phổ Biến"}</h2>
         {loading ? (
           <div className="loading">
             <img src="./images/spin.gif" alt="Loading" />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase"; 
-import { collection, getDocs } from "firebase/firestore"; 
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore"; 
 import { FaCloudDownloadAlt, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -9,15 +9,27 @@ import { GoEye } from "react-icons/go";
 const Head = "text-xs text-left text-main font-semibold px-6 py-2 uppercase text-white";
 const Text = "text-sm text-left leading-6 whitespace-nowrap px-5 py-3 text-white";
 
+// Fetch TV shows from Firebase
 const fetchShows = async () => {
   const showsCollection = collection(db, "tvShows"); 
-  const showsnapshot = await getDocs(showsCollection);
-  const showsList = showsnapshot.docs.map((doc) => doc.data());
+  const showsSnapshot = await getDocs(showsCollection);
+  const showsList = showsSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   return showsList;
 };
 
-// rows
-const Rows = (show, i, admin) => {
+// Delete TV show from Firebase
+const deleteShow = async (showId, setShows) => {
+  try {
+    const showDocRef = doc(db, "tvShows", showId);
+    await deleteDoc(showDocRef);
+    setShows((prevShows) => prevShows.filter(show => show.id !== showId)); 
+  } catch (error) {
+    console.error("Error deleting show: ", error);
+  }
+};
+
+// Rows for TV show table
+const Rows = (show, i, admin, setShows) => {
   return (
     <tr key={i}>
       <td className={`${Text}`}>
@@ -55,7 +67,10 @@ const Rows = (show, i, admin) => {
             <button className="border border-border bg-dry flex-rows gap-2 text-border rounded py-1 px-2">
               Edit <FaEdit className="text-green-500" />
             </button>
-            <button className="bg-subMain text-white rounded flex-colo w-6 h-6">
+            <button
+              onClick={() => deleteShow(show.id, setShows)}
+              className="bg-subMain text-white rounded flex-colo w-6 h-6"
+            >
               <MdDelete />
             </button>
           </>
@@ -80,6 +95,7 @@ const Rows = (show, i, admin) => {
 function Table3({ admin }) {
   const [shows, setShows] = useState([]);
 
+  // Fetch shows from Firestore when component mounts
   useEffect(() => {
     const getShows = async () => {
       const showsList = await fetchShows();
@@ -94,48 +110,24 @@ function Table3({ admin }) {
       <table className="w-full table-auto border border-border divide-y divide-border">
         <thead>
           <tr className="bg-dryGray">
-            <th scope="col" className={Head}>
-              Poster
-            </th>
-            <th scope="col" className={Head}>
-              Backdrop
-            </th>
-            <th scope="col" className={Head}>
-              Name
-            </th>
-            <th scope="col" className={Head}>
-              Category
-            </th>
-            <th scope="col" className={Head}>
-              Country
-            </th>
-            <th scope="col" className={Head}>
-              Genres
-            </th>
-            <th scope="col" className={Head}>
-              First Air Date
-            </th>
-            <th scope="col" className={Head}>
-              Runtime
-            </th>
-            <th scope="col" className={Head}>
-              Vote Average
-            </th>
-            <th scope="col" className={Head}>
-              Vote Count
-            </th>
-            <th scope="col" className={Head}>
-              Seasons
-            </th>
-            <th scope="col" className={`${Head} text-end`}>
-              Actions
-            </th>
+            <th scope="col" className={Head}>Poster</th>
+            <th scope="col" className={Head}>Backdrop</th>
+            <th scope="col" className={Head}>Name</th>
+            <th scope="col" className={Head}>Category</th>
+            <th scope="col" className={Head}>Country</th>
+            <th scope="col" className={Head}>Genres</th>
+            <th scope="col" className={Head}>First Air Date</th>
+            <th scope="col" className={Head}>Runtime</th>
+            <th scope="col" className={Head}>Vote Average</th>
+            <th scope="col" className={Head}>Vote Count</th>
+            <th scope="col" className={Head}>Seasons</th>
+            <th scope="col" className={`${Head} text-end`}>Actions</th>
           </tr>
         </thead>
         <tbody className="bg-main divide-y divide-gray-800">
           {shows.map((show, i) => (
             <React.Fragment key={i}>
-              {Rows(show, i, admin)}
+              {Rows(show, i, admin, setShows)}
             </React.Fragment>
           ))}
         </tbody>

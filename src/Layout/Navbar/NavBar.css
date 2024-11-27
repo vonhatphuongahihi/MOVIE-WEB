@@ -1,0 +1,26 @@
+.active-link::after {
+    content: '';
+    position: absolute;
+    top: 100%; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 10px; 
+    background: url('./active.svg') no-repeat center;
+    background-size: contain;
+    filter: blur(4px);
+    opacity: 1;
+  }
+  .text-sm {
+    font-size: 0.9rem; 
+  }
+  
+  .text-base {
+    font-size: 0.875rem; 
+  }
+  
+  .text-wrap {
+    font-size: 0.9rem; 
+  }
+  
+  
