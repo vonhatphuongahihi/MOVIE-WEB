@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
 import { FaPlay } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
-import { GetMovieInfo } from '../Components/Home/GetMovieInfo';
+import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFirebase';
 import TitleCards from '../Components/Home/TitleCards/TitleCards';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
@@ -13,6 +11,14 @@ import ChatbotPopup from './Popup/Chatbot_popup';
 import { useNavigate } from 'react-router-dom';
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";    // CSS cho hiệu ứng fade
+import "swiper/css/autoplay";  
 
 
 const ChatbotIconWrapper = styled.div`
@@ -102,14 +108,17 @@ function HomeScreen() {
 
   useEffect(() => {
     const fetchBannerMovies = async () => {
-      const ids = [278, 129, 372058];
-      const moviePromises = ids.map(id => GetMovieInfo(id));
+      const ids = ['X1xOnuDlQx6PEdp5JA03', 'KTmHn9tDKw8kavGruvsM', 'HP0cVHuzY2aDnblcaBcX', 'D2IkmJBeXwH4khYvOIB6', 'jwTJreOnddAiiZiO8t1L', 'pIZ8EwEwp5FXRRaZDQvi'];
+      const moviePromises = ids.map((movieId) => GetMovieInfoFromFirebase(movieId));
       const moviesData = await Promise.all(moviePromises);
-      setBannerMovies(moviesData);
+    
+      const validMovies = moviesData.filter((movie) => movie !== null && movie !== undefined);
+      setBannerMovies(validMovies);
     };
-
+    
     fetchBannerMovies();
   }, []);
+    
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -120,7 +129,7 @@ function HomeScreen() {
   };
 
   const handleMovieClick = async (movie) => {
-    const pmovie = await GetMovieInfo(movie.id);
+    const pmovie = await GetMovieInfoFromFirebase(movie.movieId);
     setSelectedMovie(pmovie);
   };
 
@@ -128,8 +137,8 @@ function HomeScreen() {
     setSelectedMovie(null);
   };
 
-  const handleWatchNowClick = (id) => {
-    navigate(`/movie/${id}`);
+  const handleWatchNowClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
   };
 
   const bannerCaptionStyle = {
@@ -146,48 +155,54 @@ function HomeScreen() {
   return (
     <Layout>
       <div className="home">
-        <Swiper
-          spaceBetween={0}
-          slidesPerView={1}
-          loop
-          autoplay={{ delay: 5000 }}
-          onSwiper={(swiper) => { swiperRef.current = swiper; }}
-        >
-          {bannerMovies.map((movie) => (
-            <SwiperSlide key={movie.id}>
-              <div className="banner">
-                <video
-                  src="/videos/movies/mo_dom_dom.mp4"
-                  alt={`Banner Video ${movie.id}`}
-                  autoPlay
-                  loop
-                  muted
+      <Swiper
+        spaceBetween={0}
+        slidesPerView={1}
+        loop={true}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
+        modules={[Autoplay, Navigation, Pagination]} 
+        onSwiper={(swiper) => { swiperRef.current = swiper; }}
+      >
+        {bannerMovies
+          .filter((movie) => movie !== null && movie !== undefined)
+          .map((movie) => (
+            <SwiperSlide key={movie.movieId}>
+              <div className="banner" style={{ height: '100vh', position: 'relative' }}>
+                <img
+                  src={movie.backdrop_path || "/default-banner.jpg"}
+                  alt={movie.title}
                   style={{
                     width: '100%',
-                    height: '100vh',
+                    height: '100%',
                     objectFit: 'cover',
-                    maskImage: 'linear-gradient(to right, transparent, black 75%)',
-                    WebkitMaskImage: 'linear-gradient(to right, transparent, black 75%)',
+                    transition: 'opacity 0.5s ease-in-out',
                   }}
                 />
                 <div className="banner-caption" style={bannerCaptionStyle}>
-                  <h1 className="text-white" style={{
-                    fontSize: '2rem',
-                    fontWeight: 'bold',
-                    marginBottom: '20px',
-                    textAlign: 'left',
-                    color: '#28BD11',
-                  }}>
-                    {movie.title || "Không có tiêu đề"}
-                  </h1>
-                  <p className="text-white" style={{ maxWidth: '700px', fontSize: '15px', marginBottom: '60px' }}>
+                  <p
+                    className="text-white"
+                    style={{
+                      maxWidth: '700px',
+                      fontSize: '15px',
+                      marginTop: '90px',
+                      marginBottom: '15px',
+                    }}
+                  >
                     {movie.overview || "Không có mô tả cho phim này."}
                   </p>
-                  <div style={{ display: 'flex', gap: '10px', marginBottom: '120px' }}>
-                    <BannerButton className="btn-watch" onClick={() => handleWatchNowClick(movie.id)}>
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
+                    <BannerButton
+                      className="btn-watch"
+                      onClick={() => handleWatchNowClick(movie.id)}
+                    >
                       <FaPlay /> Xem ngay
                     </BannerButton>
-                    <BannerButton className="btn-detail" onClick={() => handleMovieClick(movie)}>
+                    <BannerButton
+                      className="btn-detail"
+                      onClick={() => handleMovieClick(movie)}
+                    >
                       <IoInformationCircleOutline /> Thông tin phim
                     </BannerButton>
                   </div>
@@ -195,7 +210,7 @@ function HomeScreen() {
               </div>
             </SwiperSlide>
           ))}
-        </Swiper>
+      </Swiper>
 
         <SwiperControls>
           <button onClick={() => swiperRef.current?.slidePrev()}><GrPrevious />
@@ -204,10 +219,23 @@ function HomeScreen() {
           </button>
         </SwiperControls>
 
-        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '60px', marginBottom: '100px' }}>
+        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
+          <TitleCards title={"THỊNH HÀNH"} category={"popular"} onMovieClick={handleMovieClick} />
           <TitleCards title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"MỚI NHẤT"} category={"now_playing"} onMovieClick={handleMovieClick} />
           <TitleCards title={"SẮP PHÁT SÓNG"} category={"upcoming"} onMovieClick={handleMovieClick} />
-          <TitleCards title={"ĐANG CHIẾU"} category={"now_playing"} onMovieClick={handleMovieClick} />
+        </div>
+        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
+          <TitleCards title={"PHIM TÌNH CẢM"} genres={["Tình cảm"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM KINH DỊ"} genres={["Kinh dị"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM THANH XUÂN VƯỜN TRƯỜNG"} genres={["Thanh xuân vườn trường"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM TRINH THÁM"} genres={["Trinh thám"]} onMovieClick={handleMovieClick} />
+        </div>
+        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
+          <TitleCards title={"PHIM TRUNG"} country={"Trung Quốc"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM VIỆT"} country={"Việt Nam"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM HÀN"} country={"Hàn Quốc"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM THÁI"} country={"Thái Lan"} onMovieClick={handleMovieClick} />
         </div>
       </div>
 

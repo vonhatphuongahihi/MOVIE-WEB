@@ -211,6 +211,7 @@ function PhimTrung() {
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '60px', marginBottom: '100px' }}>
           <TitleCards1 title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"PHIM HAY MỖI NGÀY"} category={"popular"} onMovieClick={handleMovieClick} />
           <TitleCards1 title={"SẮP PHÁT SÓNG"} category={"upcoming"} onMovieClick={handleMovieClick} />
           <TitleCards1 title={"ĐANG CHIẾU"} category={"now_playing"} onMovieClick={handleMovieClick} />
         </div>
