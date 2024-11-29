@@ -60,7 +60,7 @@ function FilterPopup({ onClose }) {
 
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-x-8 gap-y-5 ">
           <div>
-            <label className="block text-sm font-medium text-black text-opacity-60">Thời lượng (đối với phim)</label>
+            <label className="block text-sm font-medium text-black text-opacity-60 text-left">Thời lượng (đối với phim)</label>
             <select
               name="duration"
               value={duration}
@@ -76,7 +76,7 @@ function FilterPopup({ onClose }) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-black text-opacity-60">Ngôn ngữ</label>
+            <label className="block text-sm font-medium text-black text-opacity-60 text-left">Ngôn ngữ</label>
             <select
               name="language"
               value={language}
@@ -85,14 +85,14 @@ function FilterPopup({ onClose }) {
               style={{ backgroundColor: "#d6fbd0" }}
             >
               {languageOptions.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option key={option.label}>
                   {option.label}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-black text-opacity-60">Ngày phát hành (từ ngày)</label>
+            <label className="block text-sm font-medium text-black text-opacity-60 text-left">Ngày phát hành (từ ngày)</label>
             <input
               type="date"
               name="releaseDateFrom"
@@ -103,7 +103,7 @@ function FilterPopup({ onClose }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-black text-opacity-60">Ngày phát hành (đến ngày)</label>
+            <label className="block text-sm font-medium text-black text-opacity-60 text-left">Ngày phát hành (đến ngày)</label>
             <input
               type="date"
               name="releaseDateTo"
@@ -118,7 +118,7 @@ function FilterPopup({ onClose }) {
           {dateError && <p className="col-span-2 text-red-500 text-md">{dateError}</p>}
 
           <div>
-            <label className="block text-sm font-medium text-black text-opacity-60">Thể loại</label>
+            <label className="block text-sm font-medium text-black text-opacity-60 text-left">Thể loại</label>
             <select
               name="genre"
               value={genre}
@@ -127,7 +127,7 @@ function FilterPopup({ onClose }) {
               style={{ backgroundColor: "#d6fbd0" }}
             >
               {genreOptions.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option key={option.label}>
                   {option.label}
                 </option>
               ))}
