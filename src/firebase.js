@@ -222,5 +222,64 @@ export const updateMovie = async (movieId, updatedData) => {
     }
   };
 
-
-export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently, updateLikesDislikes, addReplyToComment};
+  const getUserProfile = async (uid) => {
+    try {
+      const userRef = doc(db, "users", uid);
+      const userSnap = await getDoc(userRef);
+  
+      if (userSnap.exists()) {
+        const { email, name, birthdate, avatarUrl } = userSnap.data();
+        return { email, name, birthdate, avatarUrl };
+      } else {
+        console.log("Không tìm thấy người dùng");
+        return null;
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy hồ sơ người dùng:", error);
+      return null;
+    }
+  };
+  
+  const updateUserProfile = async (uid, updatedData) => {
+    try {
+      const userRef = doc(db, "users", uid);
+      await updateDoc(userRef, updatedData);
+      toast.success("Hồ sơ cập nhật thành công");
+      return true;
+    } catch (error) {
+      console.error("Hồ sơ cập nhật thất bại:", error);
+      toast.error("Hồ sơ cập nhật thất bại");
+      return false;
+    }
+  };
+  
+  const updateFavoriteMovies = async (uid, fav) => {
+      try {
+        const userRef = doc(db, "users", uid);
+        await updateDoc(userRef, { fav });
+        toast.success("Danh sách phim yêu thích được cập nhật thành công!");
+        return true;
+      } catch (error) {
+        console.error("Lỗi khi cập nhật danh sách phim yêu thích:", error);
+        return false;
+      }
+    };
+  
+    const getFavoriteMovies = async (uid) => {
+      try {
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+    
+        if (userSnap.exists()) {
+          const { fav } = userSnap.data();  // Lấy trường "fav"
+          return fav || [];  // Trả về mảng phim yêu thích hoặc mảng rỗng nếu không có
+        } else {
+          console.log("Không tìm thấy người dùng");
+          return [];
+        }
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách phim yêu thích:", error);
+        return [];
+      }
+    };
+export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently, updateLikesDislikes, addReplyToComment, updateFavoriteMovies, getFavoriteMovies, updateUserProfile, getUserProfile };

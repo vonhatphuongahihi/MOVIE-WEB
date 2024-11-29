@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import Header from "../SideBar";
 import { db } from "../../../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc } from "firebase/firestore";
 
 function AddMovie() {
   const [newCast, setNewCast] = useState({ name: "", character: "", profile_path: null });
@@ -22,7 +22,7 @@ function AddMovie() {
     poster: null,
     video: null
   });
-
+  const [videoLink, setVideoLink] = useState('');
   // Function to upload files to Cloudinary
   const uploadToCloudinary = async (file, type) => {
     try {
@@ -68,10 +68,26 @@ function AddMovie() {
     }
   };
 
-  const handleAddCast = () => {
-    setCasts([...casts, newCast]);
-    setNewCast({ name: "", character: "", profile_path: null });
+  const handleAddCast = async () => {
+    if (newCast.profile_path) {
+      try {
+        // Upload cast profile image to Cloudinary
+        const profileImageUrl = await uploadToCloudinary(newCast.profile_path, "image");
+  
+        // Add new cast with uploaded image URL
+        setCasts([...casts, { ...newCast, profile_path: profileImageUrl }]);
+  
+        // Reset the newCast state
+        setNewCast({ name: "", character: "", profile_path: null });
+      } catch (error) {
+        console.error("Error uploading cast image:", error);
+        alert("Failed to upload cast image.");
+      }
+    } else {
+      alert("Please upload a profile image for the cast.");
+    }
   };
+  
 
   const handleCastInputChange = (event) => {
     const { name, value } = event.target;
@@ -83,16 +99,13 @@ function AddMovie() {
   const handleCastImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewCast((prev) => ({
-          ...prev,
-          profile_path: reader.result,
-        }));
-      };
-      reader.readAsDataURL(file);
+      setNewCast((prev) => ({
+        ...prev,
+        profile_path: file, // Store the file for Cloudinary upload
+      }));
     }
   };
+  
   const handleDeleteCast = (index) => {
     setCasts(casts.filter((_, i) => i !== index));
   };
@@ -119,13 +132,15 @@ function AddMovie() {
         country: movieCountry,
         backdrop_path,
         poster_path,
-        video: videoUrl,
+        video: videoLink,
         cast: casts,
       };
 
       // Save the movie data to Firestore
       const movieRef = collection(db, 'movies');
-      await addDoc(movieRef, newMovieData);
+      const docRef = await addDoc(movieRef, newMovieData);
+
+      await updateDoc(docRef, { movieId: docRef.id });
 
       alert('Movie published successfully!');
     } catch (error) {
@@ -283,7 +298,16 @@ function AddMovie() {
             className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm"
           />
         </div>
-
+        <div className="flex flex-col gap-2 w-full">
+          <label className="text-border font-semibold text-sm">Video Link</label>
+          <input
+            type="text"
+            placeholder="Paste your video link here"
+            value={videoLink}
+            onChange={(e) => setVideoLink(e.target.value)}
+            className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
+          />
+        </div>
         {/* Movie Description */}
         <div>
           <label className="block text-sm font-semibold text-border">Movie Description</label>

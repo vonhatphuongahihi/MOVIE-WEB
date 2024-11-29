@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 
 import { FaCloudDownloadAlt, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -14,61 +14,98 @@ const Text = "text-sm text-left leading-6 whitespace-nowrap px-5 py-3 text-white
 const fetchMovies = async () => {
   const moviesCollection = collection(db, "movies");
   const movieSnapshot = await getDocs(moviesCollection);
-  const movieList = movieSnapshot.docs.map((doc) => doc.data());
+  const movieList = movieSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   return movieList;
 };
 
+// Xóa phim từ Firebase
+const deleteMovie = async (movieId, setMovies) => {
+  try {
+    // Tìm tài liệu phim trong Firestore
+    const movieDocRef = doc(db, "movies", movieId);
+    await deleteDoc(movieDocRef); // Xóa tài liệu
+
+    // Cập nhật lại danh sách phim sau khi xóa
+    setMovies((prevMovies) => prevMovies.filter(movie => movie.id !== movieId));
+  } catch (error) {
+    console.error("Error deleting movie: ", error);
+  }
+};
+
 // rows
-const Rows = (movie, i, admin) => {
+// rows
+const Rows = (movie, i, admin, setMovies) => {
+  // Kiểm tra loại phim (tmdb hoặc upload)
+  const isTmdb = movie.type === "tmdb";
+
   return (
     <tr key={i}>
+      {/* Poster */}
       <td className={`${Text}`}>
         <div className="w-12 p-1 bg-dry border border-border h-12 rounded overflow-hidden">
           <img
             className="h-full w-full object-cover"
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            // Nếu là TMDB, lấy poster từ URL TMDB, nếu là upload, lấy trực tiếp từ Firestore
+            src={isTmdb ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : movie.poster_path}
             alt={movie?.title}
           />
         </div>
       </td>
+
+      {/* Backdrop */}
       <td className={`${Text}`}>
         <div className="w-12 p-1 bg-dry border border-border h-12 rounded overflow-hidden">
           <img
             className="h-full w-full object-cover"
-            src={`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`}
+            // Nếu là TMDB, lấy backdrop từ URL TMDB, nếu là upload, lấy trực tiếp từ Firestore
+            src={isTmdb ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : movie.backdrop_path}
             alt={movie?.title}
           />
         </div>
       </td>
+
+      {/* Title */}
       <td className={`${Text} truncate`}>{movie.title}</td>
+      
+      {/* Category */}
       <td className={`${Text}`}>{movie.category}</td>
-      <td className={`${Text}`}>{movie.country?.[0] || "Unknown"}</td>
+      
+      {/* Country */}
+      <td className={`${Text}`}>{movie.country}</td>
+
+      {/* Genres */}
       <td className={`${Text}`}>
         {Array.isArray(movie.genres) && movie.genres.length > 0 
           ? movie.genres.join(", ") 
           : "No genres available"}
       </td>      
+
+      {/* Release Date */}
       <td className={`${Text}`}>{movie.release_date}</td>
+
+      {/* Runtime */}
       <td className={`${Text}`}>{movie.runtime} mins</td>
+
+      {/* Vote Average */}
       <td className={`${Text}`}>{movie.vote_average}</td>
+
+      {/* Vote Count */}
       <td className={`${Text}`}>{movie.vote_count}</td>
-      {/* Hiển thị tên diễn viên */}
+
+      {/* Cast */}
       <td className={`${Text}`}>{movie.cast?.slice(0, 3).map(actor => actor.name).join(", ") || "No cast available"}</td>
-      {/* Hiển thị link video nếu có */}
-      <td className={`${Text}`}>
-        {movie.video ? (
-          <a href={movie.video} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
-            Trailer
-          </a>
-        ) : "No trailer available"}
-      </td>
+
+      {/* Actions */}
       <td className={`${Text} float-right flex-rows gap-2`}>
         {admin ? (
           <>
             <button className="border border-border bg-dry flex-rows gap-2 text-border rounded py-1 px-2">
               Edit <FaEdit className="text-green-500" />
             </button>
-            <button className="bg-subMain text-white rounded flex-colo w-6 h-6">
+            <button
+              onClick={() => deleteMovie(movie.id, setMovies)} // Gọi hàm xóa khi nhấn nút
+              className="bg-subMain text-white rounded flex-colo w-6 h-6"
+            >
               <MdDelete />
             </button>
           </>
@@ -89,6 +126,7 @@ const Rows = (movie, i, admin) => {
     </tr>
   );
 };
+
 
 // table
 function Table1({ admin }) {
@@ -120,14 +158,13 @@ function Table1({ admin }) {
             <th scope="col" className={Head}>Vote Average</th>
             <th scope="col" className={Head}>Vote Count</th>
             <th scope="col" className={Head}>Cast</th>
-            <th scope="col" className={Head}>Trailer</th>
             <th scope="col" className={`${Head} text-end`}>Actions</th>
           </tr>
         </thead>
         <tbody className="bg-main divide-y divide-gray-800">
           {movies.map((movie, i) => (
             <React.Fragment key={i}>
-              {Rows(movie, i, admin)}
+              {Rows(movie, i, admin, setMovies)}
             </React.Fragment>
           ))}
         </tbody>

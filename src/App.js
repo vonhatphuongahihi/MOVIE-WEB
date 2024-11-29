@@ -34,12 +34,15 @@ import MoviesList from './Screens/Dashboard/Admin/MovieList';
 import ShowsList from './Screens/Dashboard/Admin/ShowList';
 import UsersList from './Screens/Dashboard/Admin/UserList';
 import FAQScreen from './Screens/FAQScreen';
+
 import Movie1 from './Screens/Movie1';
 import Payment from './Screens/Payment';
 import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
 import TVShow from './Screens/TVShow';
 import VipRegistration from './Screens/VipRegistration';
 import TvShowFetcher from './TvShowFetcher';
+
+import RestReminderPopup from "./Screens/Popup/RestReminderPopup";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -118,6 +121,7 @@ function App() {
 
         </Routes>
       )}
+      <RestReminderPopup />
     </>
   );
 }

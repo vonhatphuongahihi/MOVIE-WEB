@@ -127,36 +127,36 @@ function SearchForm() {
     <div className="flex col-span-3 items-center w-full relative">
       <form
         onSubmit={handleSearchSubmit}
-        className="w-full text-sm bg-white rounded flex items-center"
+        className="w-full text-sm bg-white rounded-lg flex items-center"
       >
+      <button
+        type="submit"
+        className="w-12 flex justify-center items-center h-8 rounded-lg text-subMain"
+      >
+        <FaSearch />
+      </button>
+      <input
+        type="text"
+        placeholder="Tìm kiếm"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={() => setShowDropdown(true)}
+        className="font-medium placeholder:text-border text-sm w-full h-8 bg-transparent border-none pr-2 text-black placeholder:text-subMain"
+      />
+      {query && (
         <button
-          type="submit"
-          className="w-12 flex justify-center items-center h-8 rounded text-subMain"
+          type="button"
+          onClick={() => {
+            setQuery("");
+            setShowDropdown(true);
+          }}
+          className="text-xl mr-3.5 text-black"
         >
-          <FaSearch />
+          <RiCloseLine />
         </button>
-        <input
-          type="text"
-          placeholder="Tìm kiếm"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setShowDropdown(true)}
-          className="font-medium placeholder:text-border text-sm w-full h-8 bg-transparent border-none pr-2 text-black"
-        />
-        {/* Nút xóa nội dung tìm kiếm */}
-        {query && (
-          <button
-            type="button"
-            onClick={() => {
-              setQuery("");
-              setShowDropdown(true);
-            }}
-            className="text-xl mr-3.5 text-black"
-          >
-            <RiCloseLine />
-          </button>
-        )}
-      </form>
+      )}
+    </form>
+
 
       {showDropdown && (
         <div
