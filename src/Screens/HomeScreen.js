@@ -1,19 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaPlay } from "react-icons/fa";
+import { GrNext, GrPrevious } from "react-icons/gr";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { GetMovieInfo } from '../Components/Home/GetMovieInfo';
 import TitleCards from '../Components/Home/TitleCards/TitleCards';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
-import { useNavigate } from 'react-router-dom';
-import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
-
+import VipPopup from './Popup/VipLimitPopup';
 
 const ChatbotIconWrapper = styled.div`
   position: fixed;
@@ -95,6 +94,7 @@ function HomeScreen() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
+  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
   const navigate = useNavigate();
 
   // Tạo một tham chiếu đến Swiper
@@ -130,6 +130,10 @@ function HomeScreen() {
 
   const handleWatchNowClick = (id) => {
     navigate(`/movie/${id}`);
+  };
+
+  const closeVIP = () => {
+    setVipPopupOpen(false);
   };
 
   const bannerCaptionStyle = {
@@ -219,6 +223,8 @@ function HomeScreen() {
       {isPopupOpen && <ChatbotPopup closePopup={closePopup} isOpen={isPopupOpen} />}
 
       {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
+
+      {isVipPopupOpen && <VipPopup onClose={closeVIP}/>}
     </Layout>
   );
 }

@@ -17,12 +17,16 @@
     "@testing-library/user-event": "^13.5.0",
     "@tippyjs/react": "^4.2.6",
     "aos": "^2.3.4",
-    "axios": "^1.7.7",
+    "axios": "^1.7.8",
+    "body-parser": "^1.20.3",
     "classnames": "^2.5.1",
     "cloudinary-react": "^1.8.1",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
     "express-validator": "^7.2.0",
     "firebase": "^10.13.2",
+    "firebase-admin": "^13.0.1",
     "jsonwebtoken": "^9.0.2",
     "rc-drawer": "^7.2.0",
     "react": "^18.3.1",
@@ -66,5 +70,10 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.11"
-  }
+  },
+  "description": "",
+  "main": "momo_server.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

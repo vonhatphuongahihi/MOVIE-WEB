@@ -165,7 +165,7 @@ function SearchForm() {
         >
           {/* Lịch sử tìm kiếm */}
           <h4
-            className="text-sm font-semibold mt-2 ml-3.5"
+            className="text-left text-sm font-semibold mt-2 ml-3.5"
             style={{ color: "rgba(0,0,0,0.5)" }}
           >
             Tìm kiếm gần đây
@@ -191,7 +191,7 @@ function SearchForm() {
 
           {/* Xu hướng */}
           <h4
-            className="text-sm font-semibold mt-2 ml-3.5"
+            className="text-left text-sm font-semibold mt-2 ml-3.5"
             style={{ color: "rgba(0,0,0,0.5)" }}
           >
             Xu hướng gần đây

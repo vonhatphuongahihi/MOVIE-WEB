@@ -1,6 +1,6 @@
 import Aos from 'aos';
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,11 +11,11 @@ import ContactUs from './Screens/ContactUs';
 import FavoriteMovies from "./Screens/FavoriteMovies";
 import ForgotPassword from './Screens/ForgotPassword';
 import HomeScreen from './Screens/HomeScreen';
-import PhimTrung from './Screens/PhimTrung';
 import Login from './Screens/Login/Login';
 import Signup from './Screens/Login/Signup';
 import MoviesPage from './Screens/Movies';
 import NotFound from './Screens/NotFound';
+import PhimTrung from './Screens/PhimTrung';
 import Profile from './Screens/Profile';
 import RecentlyWatch from "./Screens/RecentlyWatch";
 import Register from './Screens/Register';
@@ -25,21 +25,21 @@ import Support from './Screens/Support';
 import WatchPage from './Screens/WatchPage';
 import SplashScreen from './Splash';
 
-import TVShow from './Screens/TVShow';
-import Movie1 from './Screens/Movie1';
 import { createGlobalStyle } from 'styled-components';
+import { RecentlyContext } from "./Context/RecentlyContext";
 import MovieFetcher from './MovieFetcher';
-import TvShowFetcher from './TvShowFetcher';
-import { Suspense } from 'react';
-import BigLoader from './Components/BigLoader';
+import AddMovie from './Screens/Dashboard/Admin/AddMovie';
 import Admin from './Screens/Dashboard/Admin/Admin';
 import MoviesList from './Screens/Dashboard/Admin/MovieList';
 import ShowsList from './Screens/Dashboard/Admin/ShowList';
 import UsersList from './Screens/Dashboard/Admin/UserList';
-import AddMovie from './Screens/Dashboard/Admin/AddMovie';
-import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
-import { RecentlyContext } from "./Context/RecentlyContext";
 import FAQScreen from './Screens/FAQScreen';
+import Movie1 from './Screens/Movie1';
+import Payment from './Screens/Payment';
+import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
+import TVShow from './Screens/TVShow';
+import VipRegistration from './Screens/VipRegistration';
+import TvShowFetcher from './TvShowFetcher';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -113,6 +113,8 @@ function App() {
           <Route path="/admin/addmovie" element={<AddMovie />} />
           <Route path="/phimtrung/:movieId" element={<SingleMoviePhimTrung />} />
           <Route path="/faqs" element={<FAQScreen />} />
+          <Route path="/dangkyvip" element={< VipRegistration/>} />
+          <Route path="/payment" element={< Payment/>} />
 
         </Routes>
       )}
