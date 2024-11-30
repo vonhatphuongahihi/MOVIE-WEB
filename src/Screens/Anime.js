@@ -97,7 +97,7 @@ const SwiperControls = styled.div`
   }
 `;
 
-function HomeScreen() {
+function Anime() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -267,4 +267,4 @@ function HomeScreen() {
   );
 }
 
-export default HomeScreen;
+export default Anime;

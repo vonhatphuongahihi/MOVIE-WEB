@@ -6,7 +6,7 @@ import { IoInformationCircleOutline } from "react-icons/io5";
 import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFirebase';
 import TitleCardsShow from '../Components/Home/TitleCards/TitleCardsShow';
 import Layout from '../Layout/Layout';
-import MovieDetail from './MovieDetail';
+import ShowDetail from './ShowDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
 import { useNavigate } from 'react-router-dom';
 import { GrPrevious } from "react-icons/gr";
@@ -17,7 +17,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/effect-fade";   
+import "swiper/css/effect-fade";    // CSS cho hiệu ứng fade
 import "swiper/css/autoplay";  
 
 
@@ -99,26 +99,26 @@ const SwiperControls = styled.div`
 
 function TVShow() {
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [selectedShow, setSelectedShow] = useState(null);
-  const [bannerShows, setBannerShows] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [bannerMovies, setBannerMovies] = useState([]);
+  
   const navigate = useNavigate();
 
   // Tạo một tham chiếu đến Swiper
   const swiperRef = useRef(null);
 
   useEffect(() => {
-    const fetchBannerShows = async () => {
+    const fetchBannerMovies = async () => {
       const ids = ['252373', '81329'];
-      const showPromises = ids.map((id) => GetShowsInfoFromFirebase(id));
-      const showsData = await Promise.all(showPromises);
-    
-      const validShows = showsData.filter((shows) => shows !== null && shows !== undefined);
-      setBannerShows(validShows);
+      const moviePromises = ids.map((movieId) => GetShowsInfoFromFirebase(movieId));
+      const moviesData = await Promise.all(moviePromises);
+      const validMovies = moviesData.filter((movie) => movie !== null && movie !== undefined);
+      setBannerMovies(validMovies);
     };
     
-    fetchBannerShows();
+    fetchBannerMovies();
   }, []);
-    
+  
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -128,19 +128,33 @@ function TVShow() {
     setPopupOpen(false);
   };
 
-  const handleShowClick = async (shows) => {
-    const pshows = await GetShowsInfoFromFirebase(shows.id);
-    setSelectedShow(pshows);
+  
+
+  const closeMoviePopup = () => {
+    setSelectedMovie(null);
   };
 
-  const closeShowPopup = () => {
-    setSelectedShow(null);
+  const handleMovieClick = async (movie) => {
+    if (!movie || !movie.id) { // Sử dụng 'id' thay vì 'movieId'
+      console.error("Movie or movieId is undefined", movie);
+      return;
+    }
+    const pmovie = await GetShowsInfoFromFirebase(movie.id); // Cập nhật ở đây
+    if (pmovie) {
+      setSelectedMovie(pmovie);
+    } else {
+      console.error("Could not fetch movie details", movie.id);
+    }
   };
 
-  const handleWatchNowClick = (id) => {
-    navigate(`/truyenhinh/${id}`);
+  const handleWatchNowClick = (movieId) => {
+    if (movieId) {
+      console.log("Navigating to:", movieId);
+      navigate(`/truyenhinh/${movieId}`); // Cập nhật ở đây
+    } else {
+      console.error("Movie ID is undefined");
+    }
   };
-
   const bannerCaptionStyle = {
     position: 'absolute',
     width: '100%',
@@ -165,14 +179,14 @@ function TVShow() {
         modules={[Autoplay, Navigation, Pagination]} 
         onSwiper={(swiper) => { swiperRef.current = swiper; }}
       >
-        {bannerShows
-          .filter((shows) => shows !== null && shows !== undefined)
-          .map((shows) => (
-            <SwiperSlide key={shows.id}>
+        {bannerMovies
+          .filter((movie) => movie !== null && movie !== undefined)
+          .map((movie) => (
+            <SwiperSlide key={movie.movieId}>
               <div className="banner" style={{ height: '100vh', position: 'relative' }}>
                 <img
-                  src={`https://image.tmdb.org/t/p/w1280${shows.backdrop_path}` || "/default-banner.jpg"}
-                  alt={shows.title}
+                  src={movie.backdrop_path || "/default-banner.jpg"}
+                  alt={movie.title}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -190,18 +204,17 @@ function TVShow() {
                       marginBottom: '15px',
                     }}
                   >
-                    {shows.overview || "Không có mô tả cho phim này."}
+                    {movie.overview || "Không có mô tả cho phim này."}
                   </p>
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
                     <BannerButton
-                      className="btn-watch"
-                      onClick={() => handleWatchNowClick(shows.id)}
-                    >
+                      className="btn-watch"onClick={() => handleWatchNowClick(movie.movieId)} // Dùng movie.movieId nếu nó là ID đúng
+                      >
                       <FaPlay /> Xem ngay
                     </BannerButton>
                     <BannerButton
                       className="btn-detail"
-                      onClick={() => handleShowClick(shows)}
+                      onClick={() => handleMovieClick(movie)}
                     >
                       <IoInformationCircleOutline /> Thông tin phim
                     </BannerButton>
@@ -220,11 +233,10 @@ function TVShow() {
         </SwiperControls>
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCardsShow title={"THỊNH HÀNH"} category={"popular"} onMovieClick={handleShowClick} />
-          <TitleCardsShow title={"SHOW HOT MỖI NGÀY"} category={"top_rated"} onMovieClick={handleShowClick} />
-          <TitleCardsShow title={"MỚI NHẤT"} category={"on_the_air"} onMovieClick={handleShowClick} />
-          <TitleCardsShow title={"SẮP PHÁT SÓNG"} category={"airing_today"} onMovieClick={handleShowClick} />
-          <TitleCardsShow title={"PHIM TRUNG"} country={["US"]} onMovieClick={handleShowClick} />
+          <TitleCardsShow title={"THỊNH HÀNH"} category={"popular"} onMovieClick={handleMovieClick} />
+          <TitleCardsShow title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
+          <TitleCardsShow title={"MỚI NHẤT"} category={"on_the_air"} onMovieClick={handleMovieClick} />
+          <TitleCardsShow title={"SẮP PHÁT SÓNG"} category={"airing_today"} onMovieClick={handleMovieClick} />
         </div>
       </div>
 
@@ -235,7 +247,7 @@ function TVShow() {
       )}
       {isPopupOpen && <ChatbotPopup closePopup={closePopup} isOpen={isPopupOpen} />}
 
-      {selectedShow && <MovieDetail movie={selectedShow} onClose={closeShowPopup} />}
+      {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
     </Layout>
   );
 }

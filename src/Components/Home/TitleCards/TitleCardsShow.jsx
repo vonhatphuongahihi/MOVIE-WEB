@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import './titleCards.css';
 import { db } from '../../../firebase'; 
 
-const TitleCardShows = ({ title, category, genres, country, onShowClick}) => {
+const TitleCardShows = ({ title, category, genres, country, onMovieClick}) => {
   const [firebaseData, setFirebaseData] = useState([]);
   const cardsRef = useRef();
 
@@ -56,7 +56,7 @@ const TitleCardShows = ({ title, category, genres, country, onShowClick}) => {
       <h2>{title}</h2>
       <div className="card-list" ref={cardsRef}>
         {firebaseData.map((card, index) => (
-          <div key={index} className="card" onClick={() => onShowClick(card)}>
+          <div key={index} className="card" onClick={() => onMovieClick(card)}>
             <img 
                 src={`https://image.tmdb.org/t/p/w1280${card.backdrop_path}`} 
                 alt={card.name} 

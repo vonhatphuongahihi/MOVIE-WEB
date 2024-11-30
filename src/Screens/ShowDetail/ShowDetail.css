@@ -1,0 +1,192 @@
+/* ShowsDetail.css */
+
+/* Backdrop style */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  /* Modal container for show details */
+  .modal-container {
+    width: 75%;
+    max-width: 800px;
+    background: #151515;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    position: relative;
+    top: 30px;
+    bottom: 30px;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+  }
+  
+  @media (max-width: 768px) {
+    .modal-container {
+      top: 50px;
+      bottom: 50px;
+      height: calc(100vh - 100px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .modal-container {
+      top: 0;
+      bottom: 0;
+      height: 100vh;
+      width: 100vw;
+    }
+  }
+  
+  /* Modal content with overflow */
+  .modal-content {
+    height: 100%;
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .modal-content::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Close button */
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(33, 33, 33, 0.7);
+    border-radius: 50%;
+    font-size: 35px;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  .close-button:hover {
+    background-color: rgba(33, 33, 33, 0.5);
+  }
+  
+  /* Image container */
+  .image-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Image style */
+  .image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  /* Button group for actions */
+  .btn-group {
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* Buttons inside the button group */
+  .image-button {
+    padding: 12px 27px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .image-button.watch {
+    background-color: #28BD11;
+    color: #fff;
+  }
+  
+  .image-button.watch:hover {
+    background-color: #23a30f;
+  }
+  
+  .image-button.like {
+    background-color: #fff;
+    color: #000;
+  }
+  
+  .image-button.like:hover {
+    background-color: #ffb3b3;
+  }
+  
+  @media (max-width: 480px) {
+    .image-button.like {
+      padding: 7px 10px;
+      font-size: 13px;
+    }
+  }
+  
+  /* Active like button style */
+  .image-button.like.liked {
+    color: red;
+    background-color: #ffb3b3;
+  }
+  
+  .image-button.like.liked svg {
+    color: red;
+  }
+  
+  /* Content section */
+  .content {
+    margin: 20px 25px 15px 25px;
+  }
+  
+  /* Title and evaluation section */
+  .title-info {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .evaluation {
+    font-size: 1rem;
+    color: #ccc;
+  }
+  
+  .evaluation-item {
+    margin: 5px 0;
+  }
+  
+  .evaluation-item:last-child {
+    margin-bottom: 15px;
+  }
+  
+  /* Details section */
+  .main-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .content-left {
+    width: 70%;
+  }
+  
+  .content-right {
+    width: 28%;
+  }
+  
+  /* Language and genre styling */
+  .language,
+  .genre {
+    margin: 5px 0;
+  }
+  
+  .language span,
+  .genre span {
+    color: #fff;
+  }
+  
