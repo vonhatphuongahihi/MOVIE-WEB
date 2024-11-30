@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, setDoc, addDoc, doc, getDoc, getDocs, where, query, updateDoc, deleteDoc} from "firebase/firestore";
 import { toast } from "react-toastify";
 import { collection, arrayUnion } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth,deleteUser, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBfLbTyuqhQ4iBvP1zdbq0bfxA_IOZ8oDQ",
@@ -252,6 +252,34 @@ export const updateMovie = async (movieId, updatedData) => {
       return false;
     }
   };
+
+
+
+  const deleteUserProfile = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (!user) {
+      console.log("Không có người dùng đăng nhập");
+      return false;
+    }
+  
+    try {
+      // Xóa hồ sơ người dùng trong Firestore
+      const userRef = doc(db, "users", user.uid); 
+      await deleteDoc(userRef); 
+  
+      // Xóa tài khoản người dùng từ Firebase Authentication
+      await deleteUser(user); 
+  
+      toast.success("Tài khoản đã được xóa thành công!");
+      return true; // Trả về true nếu thành công
+    } catch (error) {
+      console.error("Lỗi khi xóa tài khoản:", error);
+      return false; 
+    }
+  };
+
   
   const updateFavoriteMovies = async (uid, fav) => {
       try {
@@ -282,4 +310,4 @@ export const updateMovie = async (movieId, updatedData) => {
         return [];
       }
     };
-export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently, updateLikesDislikes, addReplyToComment, updateFavoriteMovies, getFavoriteMovies, updateUserProfile, getUserProfile };
+export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently, updateLikesDislikes, addReplyToComment, updateFavoriteMovies, getFavoriteMovies, updateUserProfile, getUserProfile, deleteUserProfile };

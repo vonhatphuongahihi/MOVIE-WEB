@@ -3,6 +3,7 @@ import { FaUserCircle, FaCamera } from "react-icons/fa";
 import Layout from "../Layout/Layout";
 import { getUserProfile, updateUserProfile } from "../firebase";
 import { getAuth } from "firebase/auth";
+import DeleteAccountPopup from "./Popup/DeleteAccountPopup";
 
 function Profile() {
   const [name, setUsername] = useState("");
@@ -70,6 +71,12 @@ function Profile() {
       }
     };
   }, [avatarUrl]);
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
 
   return (
     <Layout>
@@ -147,11 +154,13 @@ function Profile() {
           <div className="flex justify-between">
             <button
               type="button"
-              onClick={() => alert("Chức năng xoá tài khoản chưa được triển khai.")}
+              onClick={togglePopup}
               className="bg-black text-white px-4 py-2 rounded hover:bg-red-600 text-base"
             >
               XOÁ TÀI KHOẢN
             </button>
+             {/* Hiển thị Popup khi isPopupOpen là true */}
+      {isPopupOpen && <DeleteAccountPopup onClose={() => setIsPopupOpen(false)} />}
             <button
               type="button"
               onClick={handleUpdate}
