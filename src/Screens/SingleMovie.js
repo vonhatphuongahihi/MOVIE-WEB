@@ -20,13 +20,6 @@ import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
 import Layout from "../Layout/Layout";
 // import { addCommentToMovie } from "../firebase";
-
-import Layout from "../Layout/Layout";
-import YouTube from 'react-youtube';
-import Rating from "../Components/Stars";
-import { FaPlay } from "react-icons/fa";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDoc, doc, getDocs, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
 function SingleMovie() {

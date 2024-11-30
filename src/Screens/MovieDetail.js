@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FavoritesContext } from '../Context/FavoritesContext';
 import { UserContext } from '../Context/UserContext';
+import { auth } from '../firebase';
 import './MovieDetail/MovieDetail.css';
 import VipPopup from './Popup/VipLimitPopup';
-import { db, auth } from '../firebase';
-import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 
 const Backdrop = styled.div`
