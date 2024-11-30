@@ -1,19 +1,26 @@
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
-import { FaRegCalendar } from "react-icons/fa";
+import { FaPlay, FaRegCalendar } from "react-icons/fa";
 import { IoIosRadioButtonOn } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
 import { RiGlobalLine } from "react-icons/ri";
 import { NavLink, useParams } from "react-router-dom";
+import YouTube from 'react-youtube';
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../Components/Movie";
 import MovieCasts from "../Components/Single/MovieCasts";
 import MovieRates from "../Components/Single/MovieRates";
+import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
+import Layout from "../Layout/Layout";
+// import { addCommentToMovie } from "../firebase";
+
 import Layout from "../Layout/Layout";
 import YouTube from 'react-youtube';
 import Rating from "../Components/Stars";

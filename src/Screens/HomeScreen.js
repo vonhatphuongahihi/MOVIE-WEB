@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaPlay } from "react-icons/fa";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { GetMovieInfo } from '../Components/Home/GetMovieInfo';
 import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFirebase';
 
 import TitleCards from '../Components/Home/TitleCards/TitleCards';
@@ -15,14 +15,15 @@ import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
 
+import { useContext } from 'react';
+import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 
 import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/effect-fade"; // CSS cho hiệu ứng fade
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/effect-fade";    // CSS cho hiệu ứng fade
-import "swiper/css/autoplay";  
 
 const ChatbotIconWrapper = styled.div`
   position: fixed;
@@ -105,8 +106,9 @@ function HomeScreen() {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
 
-  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
-  const navigate = useNavigate();
+  const [popupContent, setPopupContent] = useState({
+    action: ""
+  });
 
   // Tạo một tham chiếu đến Swiper
   const swiperRef = useRef(null);
@@ -151,17 +153,26 @@ function HomeScreen() {
     setSelectedMovie(null);
   };
 
-  const handleWatchNowClick = (movieId) => {
-    if (movieId) {
-      console.log("Navigating to:", movieId);
-      navigate(`/movie/${movieId}`);
+  // Xử lý phim VIP
+  const { isUserVip } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
+
+  const handleWatchNowClick = (movieId, isItemVip) => {
+    if (isItemVip === true && isUserVip === false) {
+      openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
-      console.error("Movie ID is undefined"); // Thông báo nếu ID chưa được xác định
+      navigate(`/movie/${movieId}`);
     }
   };
-  
 
-  const closeVIP = () => {
+  const openVipPopup = (action) => {
+    setPopupContent({ action });
+    setVipPopupOpen(true);
+
+  };
+  
+  const closeVipPopup = () => {
     setVipPopupOpen(false);
   };
 
@@ -219,8 +230,8 @@ function HomeScreen() {
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
                     <BannerButton
                       className="btn-watch"
-                      onClick={() => handleWatchNowClick(movie.movieId)} // Dùng movie.movieId nếu nó là ID đúng
-                      >
+                      onClick={() => handleWatchNowClick(movie.movieId, movie.vip)}
+                    >
                       <FaPlay /> Xem ngay
                     </BannerButton>
                     <BannerButton
@@ -272,7 +283,7 @@ function HomeScreen() {
 
       {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
-      {isVipPopupOpen && <VipPopup onClose={closeVIP}/>}
+      {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
     </Layout>
   );
 }

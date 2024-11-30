@@ -121,7 +121,7 @@ function Payment() {
 
                         <div className="flex justify-between items-center font-bold text-lg mb-4">
                         <span>Thành tiền</span>
-                        <span className="text-subMain text-xl">{amount.toLocaleString()} VND</span>
+                        <span className="text-subMain text-2xl">{amount.toLocaleString()} VND</span>
                         </div>
 
                         <p className="text-sm text-gray-600 mb-4 text-justify">

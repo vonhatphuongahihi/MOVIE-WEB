@@ -1,16 +1,16 @@
+import 'aos';
+import 'aos/dist/aos.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'aos';
-import 'aos/dist/aos.css';
-import { BrowserRouter } from 'react-router-dom';
+import App from './App';
 import { FavoritesProvider } from './Context/FavoritesContext';
 import { RecentlyProvider } from './Context/RecentlyContext';
-import axios from 'axios';
+import { UserProvider } from './Context/UserContext';
+import './index.css';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,7 +19,9 @@ root.render(
     <BrowserRouter>
     <FavoritesProvider>
     <RecentlyProvider>
-        <App />
+    <UserProvider>
+      <App />
+    </UserProvider> 
     </RecentlyProvider>
     </FavoritesProvider> 
     </BrowserRouter>
