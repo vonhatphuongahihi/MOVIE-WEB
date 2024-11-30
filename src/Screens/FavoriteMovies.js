@@ -150,29 +150,34 @@ function FavoriteMovies() {
           </div>
         ) : (
           <div className="flex flex-wrap justify-center">
-            {favorites.map((movie, index) => (
-              <MovieContainer key={index}>
-                <ImageContainer>
-                  <Image src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`} alt={movie.title} />
-                </ImageContainer>
-                <Title>{movie.title}</Title>
+  {favorites.map((movie, index) => {
+    console.log('Movie object:', movie); // Log từng movie
+    return (
+      <MovieContainer key={index}>
+        <ImageContainer>
+          {(() => {
+            const backdropUrl = movie.backdrop_path
+              ? (movie.type === "tmdb" && !movie.backdrop_path.includes("http")
+                  ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+                  : movie.backdrop_path)
+              : null;
+            
+            console.log('Backdrop URL:', backdropUrl); // Log backdrop URL
+            return (
+              <Image
+                src={backdropUrl}
+                alt={movie.title}
+                onError={(e) => e.target.src = '/path/to/default-image.jpg'}
+              />
+            );
+          })()}
+        </ImageContainer>
+        <Title>{movie.title}</Title>
+      </MovieContainer>
+    );
+  })}
+</div>
 
-                <ButtonContainer>
-                  <Link to={`/movie/${movie?.id}`}>
-                    <WatchButton aria-label={`Xem ngay ${movie.title}`}>
-                      <FiPlay /> Xem Ngay
-                    </WatchButton>
-                  </Link>
-                  <RemoveButton
-                    onClick={() => handleRemoveFavorite(movie.id)}
-                    aria-label={`Xóa ${movie.title} khỏi danh sách yêu thích`}
-                  >
-                    <FaHeart />
-                  </RemoveButton>
-                </ButtonContainer>
-              </MovieContainer>
-            ))}
-          </div>
         )}
       </div>
     </Layout>

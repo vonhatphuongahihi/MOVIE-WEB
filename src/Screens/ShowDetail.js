@@ -157,7 +157,7 @@ const Content = styled.div`
   margin: 20px 25px 15px 25px;
 `;
 
-function MovieDetail({ movie, onClose, type = "tmdb" }) {
+function ShowDetail({ movie, onClose, type = "tmdb" }) {
   const user = auth.currentUser; // Lấy thông tin người dùng đã đăng nhập
   const userId = user ? user.uid : null; // Lấy userId nếu người dùng đã đăng nhập
   // Kiểm tra xem userId có hợp lệ không
@@ -172,7 +172,7 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
   }, [favorites, movie.movieId, userId]);
   // Xử lý nội dung dự phòng cho overview
   if (!movie.overview) {
-    movie.overview = "Khám phá thế giới điện ảnh với những câu chuyện đa dạng và hấp dẫn...";
+    movie.overview = "Khám phá thế giới truyền hình với những câu chuyện đa dạng và hấp dẫn...";
   }
 
   const backdropUrl = movie.backdrop_path
@@ -226,12 +226,12 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalContent>
           <ImageContainer>
-            {backdropUrl && <Image src={backdropUrl} alt={movie.title} />}
+            {backdropUrl && <Image src={backdropUrl} alt={movie.name} />}
             <CloseButton onClick={onClose}>
               <RiCloseLine />
             </CloseButton>
             <BtnGroup>
-              <Link to={`/movie/${movie.movieId}`}>
+              <Link to={`/truyenhinh/${movie.movieId}`}>
                 <ImageButton className="btn-watch">
                   <FaPlay /> Xem ngay
                 </ImageButton>
@@ -247,17 +247,17 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
 
           <Content>
             <div>
-              <div className="title_info">{movie.title}</div>
+              <div className="title_info">{movie.name}</div>
               <div className="evaluation">
                 <p className="evaluationItem">{movie.vote_count} lượt đánh giá</p>
                 <p className="evaluationItem">Điểm đánh giá: {movie.vote_average}</p>
                 <div className="evaluationItem">
                   <FaRegCalendar />
-                  <span>{movie.release_date}</span>
+                  <span>{movie.first_air_date}</span>
                 </div>
                 <div className="evaluationItemLast">
                   <IoTimeOutline />
-                  <span>{movie.runtime} phút</span>
+                  <span>{movie.episode_run_time} phút</span>
                 </div>
               </div>
               <div className="main_content">
@@ -277,4 +277,4 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
   );
 }
 
-export default MovieDetail;
+export default ShowDetail;

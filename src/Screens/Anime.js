@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { FaPlay } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
-import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFirebase';
-import TitleCardsShow from '../Components/Home/TitleCards/TitleCardsShow';
+import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFirebase';
+import TitleCards from '../Components/Home/TitleCards/TitleCards';
 import Layout from '../Layout/Layout';
-import ShowDetail from './ShowDetail';
+import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
 import { useNavigate } from 'react-router-dom';
 import { GrPrevious } from "react-icons/gr";
@@ -97,7 +97,7 @@ const SwiperControls = styled.div`
   }
 `;
 
-function TVShow() {
+function Anime() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -109,9 +109,10 @@ function TVShow() {
 
   useEffect(() => {
     const fetchBannerMovies = async () => {
-      const ids = ['252373', '81329'];
-      const moviePromises = ids.map((movieId) => GetShowsInfoFromFirebase(movieId));
+      const ids = ['X1xOnuDlQx6PEdp5JA03', 'KTmHn9tDKw8kavGruvsM', 'HP0cVHuzY2aDnblcaBcX', 'D2IkmJBeXwH4khYvOIB6', 'jwTJreOnddAiiZiO8t1L', 'pIZ8EwEwp5FXRRaZDQvi'];
+      const moviePromises = ids.map((movieId) => GetMovieInfoFromFirebase(movieId));
       const moviesData = await Promise.all(moviePromises);
+    
       const validMovies = moviesData.filter((movie) => movie !== null && movie !== undefined);
       setBannerMovies(validMovies);
     };
@@ -128,33 +129,34 @@ function TVShow() {
     setPopupOpen(false);
   };
 
+  const handleMovieClick = async (movie) => {
+    if (!movie || !movie.movieId) {
+      console.error("Movie or movieId is undefined", movie);
+      return;
+    }
+    const pmovie = await GetMovieInfoFromFirebase(movie.movieId);
+    if (pmovie) {
+      setSelectedMovie(pmovie);
+    } else {
+      console.error("Could not fetch movie details", movie.movieId);
+    }
+  };
   
 
   const closeMoviePopup = () => {
     setSelectedMovie(null);
   };
 
-  const handleMovieClick = async (movie) => {
-    if (!movie || !movie.id) { // Sử dụng 'id' thay vì 'movieId'
-      console.error("Movie or movieId is undefined", movie);
-      return;
-    }
-    const pmovie = await GetShowsInfoFromFirebase(movie.id); // Cập nhật ở đây
-    if (pmovie) {
-      setSelectedMovie(pmovie);
-    } else {
-      console.error("Could not fetch movie details", movie.id);
-    }
-  };
-
   const handleWatchNowClick = (movieId) => {
     if (movieId) {
       console.log("Navigating to:", movieId);
-      navigate(`/truyenhinh/${movieId}`); // Cập nhật ở đây
+      navigate(`/movie/${movieId}`);
     } else {
-      console.error("Movie ID is undefined");
+      console.error("Movie ID is undefined"); // Thông báo nếu ID chưa được xác định
     }
   };
+  
+
   const bannerCaptionStyle = {
     position: 'absolute',
     width: '100%',
@@ -208,7 +210,8 @@ function TVShow() {
                   </p>
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
                     <BannerButton
-                      className="btn-watch"onClick={() => handleWatchNowClick(movie.movieId)} // Dùng movie.movieId nếu nó là ID đúng
+                      className="btn-watch"
+                      onClick={() => handleWatchNowClick(movie.movieId)} // Dùng movie.movieId nếu nó là ID đúng
                       >
                       <FaPlay /> Xem ngay
                     </BannerButton>
@@ -233,10 +236,22 @@ function TVShow() {
         </SwiperControls>
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCardsShow title={"THỊNH HÀNH"} category={"popular"} onMovieClick={handleMovieClick} />
-          <TitleCardsShow title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
-          <TitleCardsShow title={"MỚI NHẤT"} category={"on_the_air"} onMovieClick={handleMovieClick} />
-          <TitleCardsShow title={"SẮP PHÁT SÓNG"} category={"airing_today"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"THỊNH HÀNH"} category={"popular"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"MỚI NHẤT"} category={"now_playing"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"SẮP PHÁT SÓNG"} category={"upcoming"} onMovieClick={handleMovieClick} />
+        </div>
+        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
+          <TitleCards title={"PHIM TÌNH CẢM"} genres={["Tình cảm"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM KINH DỊ"} genres={["Kinh dị"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM THANH XUÂN VƯỜN TRƯỜNG"} genres={["Thanh xuân vườn trường"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM TRINH THÁM"} genres={["Trinh thám"]} onMovieClick={handleMovieClick} />
+        </div>
+        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
+          <TitleCards title={"PHIM TRUNG"} country={"Trung Quốc"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM VIỆT"} country={"Việt Nam"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM HÀN"} country={"Hàn Quốc"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM THÁI"} country={"Thái Lan"} onMovieClick={handleMovieClick} />
         </div>
       </div>
 
@@ -247,9 +262,9 @@ function TVShow() {
       )}
       {isPopupOpen && <ChatbotPopup closePopup={closePopup} isOpen={isPopupOpen} />}
 
-      {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
+      {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
     </Layout>
   );
 }
 
-export default TVShow;
+export default Anime;
