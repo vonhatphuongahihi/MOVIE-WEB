@@ -1,25 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { FaPlay } from "react-icons/fa";
+import { GrNext, GrPrevious } from "react-icons/gr";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { GetMovieInfo } from '../Components/Home/GetMovieInfo';
 import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFirebase';
+
 import TitleCards from '../Components/Home/TitleCards/TitleCards';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
-import { useNavigate } from 'react-router-dom';
-import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
+
+import VipPopup from './Popup/VipLimitPopup';
 import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";    // CSS cho hiệu ứng fade
 import "swiper/css/autoplay";  
-
 
 const ChatbotIconWrapper = styled.div`
   position: fixed;
@@ -101,7 +104,8 @@ function Anime() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
-  
+
+  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
   const navigate = useNavigate();
 
   // Tạo một tham chiếu đến Swiper
@@ -110,6 +114,7 @@ function Anime() {
   useEffect(() => {
     const fetchBannerMovies = async () => {
       const ids = ['X1xOnuDlQx6PEdp5JA03', 'KTmHn9tDKw8kavGruvsM', 'HP0cVHuzY2aDnblcaBcX', 'D2IkmJBeXwH4khYvOIB6', 'jwTJreOnddAiiZiO8t1L', 'pIZ8EwEwp5FXRRaZDQvi'];
+      // Thay bằng id của mấy cái phim anime thịnh hành popular
       const moviePromises = ids.map((movieId) => GetMovieInfoFromFirebase(movieId));
       const moviesData = await Promise.all(moviePromises);
     
@@ -156,6 +161,10 @@ function Anime() {
     }
   };
   
+
+  const closeVIP = () => {
+    setVipPopupOpen(false);
+  };
 
   const bannerCaptionStyle = {
     position: 'absolute',
@@ -236,22 +245,13 @@ function Anime() {
         </SwiperControls>
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCards title={"THỊNH HÀNH"} category={"popular"} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
-          <TitleCards title={"MỚI NHẤT"} category={"now_playing"} onMovieClick={handleMovieClick} />
-          <TitleCards title={"SẮP PHÁT SÓNG"} category={"upcoming"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"THỊNH HÀNH"} category={"popular"} genres={["Anime"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"MỚI NHẤT"} category={"now_playing"} genres={["Anime"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"ANIME BẤT HỦ"} category={"top_rated"} genres={["Anime"]} onMovieClick={handleMovieClick} />
         </div>
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCards title={"PHIM TÌNH CẢM"} genres={["Tình cảm"]} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM KINH DỊ"} genres={["Kinh dị"]} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM THANH XUÂN VƯỜN TRƯỜNG"} genres={["Thanh xuân vườn trường"]} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM TRINH THÁM"} genres={["Trinh thám"]} onMovieClick={handleMovieClick} />
-        </div>
-        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCards title={"PHIM TRUNG"} country={"Trung Quốc"} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM VIỆT"} country={"Việt Nam"} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM HÀN"} country={"Hàn Quốc"} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM THÁI"} country={"Thái Lan"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"THẾ GIỚI PHÉP THUẬT"} genres={["Anime", "Phép thuật"]}  onMovieClick={handleMovieClick} />
+          <TitleCards title={"SIÊU ANH HÙNG"} genres={["Anime", "Anh hùng"]} onMovieClick={handleMovieClick} />
         </div>
       </div>
 
@@ -263,6 +263,8 @@ function Anime() {
       {isPopupOpen && <ChatbotPopup closePopup={closePopup} isOpen={isPopupOpen} />}
 
       {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
+
+      {isVipPopupOpen && <VipPopup onClose={closeVIP}/>}
     </Layout>
   );
 }
