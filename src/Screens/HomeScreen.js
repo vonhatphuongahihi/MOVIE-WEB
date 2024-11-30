@@ -105,6 +105,7 @@ function HomeScreen() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
+
   const [popupContent, setPopupContent] = useState({
     action: ""
   });
@@ -124,7 +125,7 @@ function HomeScreen() {
     
     fetchBannerMovies();
   }, []);
-    
+  
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -135,9 +136,18 @@ function HomeScreen() {
   };
 
   const handleMovieClick = async (movie) => {
+    if (!movie || !movie.movieId) {
+      console.error("Movie or movieId is undefined", movie);
+      return;
+    }
     const pmovie = await GetMovieInfoFromFirebase(movie.movieId);
-    setSelectedMovie(pmovie);
+    if (pmovie) {
+      setSelectedMovie(pmovie);
+    } else {
+      console.error("Could not fetch movie details", movie.movieId);
+    }
   };
+  
 
   const closeMoviePopup = () => {
     setSelectedMovie(null);
@@ -159,8 +169,9 @@ function HomeScreen() {
   const openVipPopup = (action) => {
     setPopupContent({ action });
     setVipPopupOpen(true);
-  };
 
+  };
+  
   const closeVipPopup = () => {
     setVipPopupOpen(false);
   };

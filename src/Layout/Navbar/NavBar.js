@@ -6,19 +6,21 @@ import { Link, NavLink } from 'react-router-dom';
 import FilterPopup from '../../Components/FilterPopup';
 import SearchForm from '../../Components/SearchForm';
 import { logout } from '../../firebase';
+import NotificationIcon from '../../Components/Notification/NotificationIcon';
 
 import './NavBar.css'
 
 function Navbar() {
-  const hover = "hover:text-subMain transition text-white";
+  const hover = "hover:text-subMain transition text-subMain";
   const activeClassName = "relative text-subMain border-b-2 border-green-500";
-
+  
+  const getNavLinkClass = ({ isActive }) => {
+    return isActive ? `${activeClassName} text-subMain` : hover;
+  };
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isFilterPopupOpen, setFilterPopupOpen] = useState(false);
   
-  const getNavLinkClass = ({ isActive }) => (isActive ? activeClassName : hover);
-
   const toggleDropdown = () => {
     setShowDropdown((prev) => !prev);
   };
@@ -47,10 +49,10 @@ function Navbar() {
   return (
     <div>
       {/* Main NavBar */}
-      <div className="bg-main shadow-md fixed top-0 left-0 right-0 z-20 border-b pb-1 border-gray-300 border-opacity-30 text-nowrap text-center text-sm xl:text-base">
+      <div className="bg-main shadow-md fixed top-0 left-0 right-0 z-20 border-b pb-1 border-gray-300 border-opacity-30 text-nowrap text-center text-sm xl:text-base text-subMain">
         <div className="container mx-auto py-2 px-4 flex items-center justify-between">
           {/* Left Side - Logo */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 text-subMain">
             <Link to="/" className="mr-2">
               <img src="/images/logo.png" alt="logo" className="w-20 h-6 object-contain" />
             </Link>
@@ -60,7 +62,7 @@ function Navbar() {
                 Trang chủ
               </NavLink>
               <NavLink to="/truyenhinh" className={getNavLinkClass}>
-                <img src="/images/tv_icon.svg" alt="TV Show Icon" className="w-5 h-5 inline-block mr-2 mb-1" />
+                <img src="/images/tv_icon.svg" alt="TV Show Icon" className="w-5  h-5 inline-block mr-2 mb-1 text-subMain" />
                 Truyền hình
               </NavLink>
               <NavLink to="/phim" className={getNavLinkClass}>
@@ -83,7 +85,7 @@ function Navbar() {
             <NavLink to="/dangkyvip" className={getNavLinkClass}>
               <img src="/images/dang_ky_goi_vip.png" alt="VIP" className="hidden lg:block w-20 h-10 object-contain" />
             </NavLink>
-            <IoMdNotificationsOutline className="w-7 h-7 text-subMain cursor-pointer" />
+            <NotificationIcon />
             <div className="relative dropdown-container">
               <button onClick={toggleDropdown} className="mx-4">
                 <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer" />
@@ -135,7 +137,7 @@ function Navbar() {
             </div>
           </div>
         </div>
-
+          
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden bg-main py-4">
@@ -147,6 +149,16 @@ function Navbar() {
             </div>
           </div>
         )}
+        {/* Secondary NavBar */}
+      <div className="bg-main shadow-md fixed top-8 md:top-12 left-0 right-0 z-10 block">
+        <div className="container mx-auto py-2 px-2 flex gap-4 justify-center items-center text-center text-wrap text-xs sm:text-sm lg:text-base">
+          <NavLink to="/phimtrung" className={getNavLinkClass}>Phim Trung</NavLink>
+          <NavLink to="/phimdienanh" className={getNavLinkClass}>Phim Điện Ảnh</NavLink>
+          <NavLink to="/anime" className={getNavLinkClass}>Anime</NavLink>
+          <NavLink to="/2n1d" className={getNavLinkClass}>2N1D</NavLink>
+          <NavLink to="/anhtraisayhi" className={getNavLinkClass}>Anh Trai Say Hi</NavLink>
+        </div>
+      </div>
 
         {/* Filter Popup */}
         {isFilterPopupOpen && (

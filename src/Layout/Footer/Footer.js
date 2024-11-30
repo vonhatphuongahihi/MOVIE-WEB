@@ -53,7 +53,7 @@ function Footer() {
     },
   ];
   return (
-    <div className="bg-dry py-4 bprder=t-2 border-black">
+    <div className="bg-main py-4 border=t-2 border-black">
       <div className="container mx-auto px-2">
         <div className="grid grid-cols-2 md:grid-cols-7 xl:grid-cols-12 gap-5 sm:gap-9 lg:gap-11 xl:gap-7 py-10 justify-between">
           <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-3 mx-10">
@@ -82,15 +82,16 @@ function Footer() {
               key={index}
               className="col-span-1 md:col-span-2 lg:col-span-3 pb-3.5 sm:pb-0"
             >
-              <h3 className="text-md lg:leading-7 font-medium mb-4 sm:mb-5 lg:mb-6 pb-0.5">
-                {link.title}
+              <h3 className="text-md lg:leading-7 font-medium mb-4 sm:mb-5 lg:mb-6 pb-0.5 text-subMain">
+  {link.title}
               </h3>
+
               <ul className="text-sm flex flex-col space-y-3">
                 {link.links.map((text, index) => (
                   <li key={index} className="flex items-baseline">
                     <Link
                       to={text.link}
-                      className="text-border inline-block w-full hover:text-subMain"
+                      className="text-border inline-block w-full hover:text-white"
                     >
                       {text.name}
                     </Link>
@@ -117,7 +118,7 @@ function Footer() {
               Đầu Tư Thành Phố Hồ Chí Minh cấp ngày 19/05/2017
             </span>
           </p>
-          <div className="mr-40 mt-8">
+          <div className="mr-40 mt-8 text-subMain">
             <p>Liên hệ với chúng tôi</p>
             <div className="flex flex-row gap-5">
               <a

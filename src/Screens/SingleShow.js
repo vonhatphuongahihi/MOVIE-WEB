@@ -1,26 +1,19 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
-import { FaPlay, FaRegCalendar } from "react-icons/fa";
+import { FaRegCalendar } from "react-icons/fa";
 import { IoIosRadioButtonOn } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
 import { RiGlobalLine } from "react-icons/ri";
 import { NavLink, useParams } from "react-router-dom";
-import YouTube from 'react-youtube';
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../Components/Movie";
 import MovieCasts from "../Components/Single/MovieCasts";
 import MovieRates from "../Components/Single/MovieRates";
-import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
-import Layout from "../Layout/Layout";
-// import { addCommentToMovie } from "../firebase";
-
 import Layout from "../Layout/Layout";
 import YouTube from 'react-youtube';
 import Rating from "../Components/Stars";
@@ -29,9 +22,9 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDoc, doc, getDocs, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
-function SingleMovie() {
-  const { id } = useParams();
-  const { addRecently } = useContext(RecentlyContext);
+function SingleShow() {
+  const { id } = useParams(); // Changed showId to id
+  const { addRecently } = useContext(RecentlyContext); // Add to RecentlyContext
   const [user, setUser] = useState(null);
   const [play, setPlay] = useState(false);
   const [movie, setMovie] = useState(null);
@@ -59,30 +52,30 @@ function SingleMovie() {
 
   const fetchMovieData = async () => {
     try {
-      const movieDoc = await getDoc(doc(db, "movies", id));
+      const movieDoc = await getDoc(doc(db, "tvShows", id)); // Fetch movie by id
 
       if (movieDoc.exists()) {
         const movieData = movieDoc.data();
         setMovie(movieData);
-        setIsApiMovie(false); // Phim do người dùng tải lên
-        console.log("Movie from Firestore:", movieData);
-      } else {
-        const movieUrl = `https://api.themoviedb.org/3/movie/${id}?append_to_response=casts&language=vi-VN`;
+        setIsApiMovie(false); // Movie uploaded by user
+        console.log("TV Show from Firestore:", movieData);
+    } else {
+        const movieUrl = `https://api.themoviedb.org/3/tv/${id}?append_to_response=casts&language=vi-VN`;
         const response = await fetch(movieUrl, {
           method: "GET",
           headers: {
             accept: "application/json",
-            Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmVhMmE0YjRkZDRmZGI2NjE4NzExZTI5MGQyOWFjOCIsIm5iZiI6MTcyODYzNjgzMS44MDAwMjIsInN1YiI6IjY3MDI5YmVkYjE0NjI4MmY3Yjg1OTJmNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7k-J48cvRsIGemMyu6hFgL1yxu8LHluFEho6R6MOnUM", // Thay bằng API key của bạn
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmVhMmE0YjRkZDRmZGI2NjE4NzExZTI5MGQyOWFjOCIsIm5iZiI6MTcyODYzNjgzMS44MDAwMjIsInN1YiI6IjY3MDI5YmVkYjE0NjI4MmY3Yjg1OTJmNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7k-J48cvRsIGemMyu6hFgL1yxu8LHluFEho6R6MOnUM", // Use your own API key
           },
         });
         const apiData = await response.json();
         setMovie(apiData);
-        setIsApiMovie(true); // Phim từ TMDB API
-        console.log("Movie from TMDB:", apiData);
+        setIsApiMovie(true); // Movie from TMDB API
+        console.log("TV Show from TMDB:", apiData);
       }
 
       // Fetch recommendations
-      const recommendationsSnapshot = await getDocs(collection(db, "movies"));
+      const recommendationsSnapshot = await getDocs(collection(db, "tvShows"));
       const recommendationsData = [];
       recommendationsSnapshot.forEach((doc) => {
         if (doc.id !== id) {
@@ -102,7 +95,7 @@ function SingleMovie() {
 
   const handlePlay = () => {
     setPlay(true);
-    addRecently(movie); // Thêm vào danh sách đã xem
+    addRecently(movie); // Add to recently watched list
   };
 
   const teaser = isApiMovie && movie.videos && movie.videos.results
@@ -113,7 +106,7 @@ function SingleMovie() {
     <Layout>
       <div className="flex-btn flex-wrap gap-2 bg-main rounded border border-gray-800 p-6">
         <NavLink to="/" className="md:text-xl text-sm flex gap-5 items-center font-bold text-dryGray">
-          <BiArrowBack /> {movie?.title}
+          <BiArrowBack /> {movie?.name}
         </NavLink>
       </div>
 
@@ -125,14 +118,12 @@ function SingleMovie() {
                 videoId={teaser?.key}
                 opts={{ height: '620', width: '100%' }}
                 onReady={(event) => {
-                  // Seek to the saved progress if present
                   const savedTime = localStorage.getItem(`movie-progress-${id}`);
                   if (savedTime) {
                     event.target.seekTo(Number(savedTime), true);
                   }
                 }}
                 onPlay={(event) => {
-                  // Save the video progress every second
                   const intervalId = setInterval(() => {
                     const currentTime = event.target.getCurrentTime();
                     localStorage.setItem(`movie-progress-${id}`, currentTime);
@@ -148,7 +139,7 @@ function SingleMovie() {
                 width="100%"
                 height="620"
                 allowFullScreen
-                src={movie.video} // URL video cho phim do người dùng tải lên
+                src={movie.video} // URL video for user-uploaded movie
                 autoPlay
               />
             )
@@ -165,8 +156,8 @@ function SingleMovie() {
               <img
                 src={isApiMovie 
                   ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` 
-                  : movie.backdropUrl} // URL nền cho phim do người dùng tải lên
-                alt={movie?.title}
+                  : movie.backdropUrl} // Backdrop URL for user-uploaded movie
+                alt={movie?.name}
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
@@ -175,7 +166,7 @@ function SingleMovie() {
 
         <div className="flex justify-between mx-20">
           <div className="flex flex-col w-1/2 mb-15">
-            <h1 className="font-bold mb-10 text-3xl">{movie?.title}</h1>
+            <h1 className="font-bold mb-10 text-3xl">{movie?.name}</h1>
             <div className="flex items-center gap-6">
               <div className="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
                 <img className="size-6" src="/rate-star.png" alt="Star Rating" />
@@ -198,94 +189,57 @@ function SingleMovie() {
               <div className="flex-2 w-1/5 flex items-center gap-2">
                 <FaRegCalendar className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
-                  {isApiMovie ? movie.release_date.substring(0, 4) : movie.releaseYear || "N/A"}
+                  {isApiMovie ? movie.first_air_date.substring(0, 4) : movie.first_air_date || "N/A"}
                 </span>
               </div>
               <div className="flex-2 w-2/5 flex items-center gap-2">
                 <IoTimeOutline className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
-                  {isApiMovie ? movie.runtime : movie.duration || "N/A"} phút
+                  {isApiMovie ? movie.episode_run_time : movie.duration || "N/A"} phút
                 </span>
               </div>
             </div>
 
-            <hr className="border-t-1 border-gray-300 mb-8" />
-
-            <div className="mb-4 flex">
-            <IoIosRadioButtonOn />
-            <span className="text-sm font-medium ">
-              {isApiMovie ? movie.genres.map(genre => genre.name).join(', ') : movie.genres.join(', ')}
-            </span>
+            <hr className="border-dry mb-8" />
+            <div className="flex flex-wrap gap-4">
+              <div className="flex gap-2 items-center">
+                <BsCollectionFill className="w-4 h-4 text-subMain" />
+                <span className="font-medium text-sm">Thể loại:</span>
+                <span className="text-gray-500 text-sm">{movie?.genres?.map((genre) => genre.name).join(", ")}</span>
+              </div>
+              <div className="flex gap-2 items-center">
+                <IoIosRadioButtonOn className="w-4 h-4 text-subMain" />
+                <span className="font-medium text-sm">Trạng thái:</span>
+                <span className="text-gray-500 text-sm">{movie?.status}</span>
+              </div>
             </div>
-
-            <p className="mb-10">{movie?.overview}</p>
+            <div className="flex flex-wrap gap-4 mb-6 mt-6">
+              <MovieCasts casts={movie?.casts} />
+            </div>
           </div>
 
-          <div className="flex flex-col justify-center mt-10">
-            <div className="flex gap-20 mb-8">
-              <div className="flex gap-3 items-center">
-                <PiShareFat /> <p>Chia sẻ</p>
-              </div>
-              <div className="flex gap-3 items-center">
-                <PiHeart /> <p>Yêu thích</p>
-              </div>
-            </div>
-
-            <div className="flex justify-between">
-              <p className="font-medium">Diễn Viên:</p>
-              <p className="font-medium">
-                {isApiMovie 
-                  ? movie.casts.cast.slice(0, 2).map(actor => actor.name).join(', ') || "Không có thông tin"
-                  : movie.cast ? movie.cast.slice(0, 2).map(actor => actor.name).join(', ') || "Không có thông tin" 
-                  : "Không có thông tin"}
-              </p>
-            </div>
-
-
-            <div className="flex justify-between mt-4">
-              <p className="font-medium">Lượt xem:</p>
-              <p className="font-medium ">
-                {isApiMovie ? `${movie.popularity} views` : `${movie.views} views`}
-              </p>
-            </div>
+          {/* Recommendations */}
+          <div className="flex flex-col w-1/2">
+            <Titles title="Khuyến nghị">
+              <Swiper
+                slidesPerView={1}
+                spaceBetween={50}
+                loop={true}
+                autoplay={{ delay: 5000 }}
+                modules={[Autoplay]}
+              >
+                {recommendations.map((item) => (
+                  <SwiperSlide key={item.movieId}>
+                    <Movie movie={item} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </Titles>
           </div>
         </div>
       </div>
-
-      <MovieCasts movie={movie} />
-
-      <div className="my-16">
-        <Titles title="Nội dung liên quan" Icon={BsCollectionFill} />
-        <div className="flex overflow-x-auto mt-6 sm:mt-10 gap-6">
-          <Swiper
-            autoplay={{
-              delay: 1000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            speed={1000}
-            modules={[Autoplay]}
-            spaceBetween={10}
-            breakpoints={{
-              0: { slidesPerView: 1 },
-              400: { slidesPerView: 2 },
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
-              1280: { slidesPerView: 5, spaceBetween: 30 },
-            }}
-          >
-            {recommendations.map((recommendedMovie, index) => (
-              <SwiperSlide key={recommendedMovie.movieId || index}>
-                <Movie movie={recommendedMovie} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </div>
-
-      <MovieRates movie={movie} user={user} />
     </Layout>
   );
 }
 
-export default SingleMovie;
+export default SingleShow;

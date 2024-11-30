@@ -5,7 +5,6 @@ export async function GetShowsInfoFromFirebase(id) {
   try {
     const tvShowsRef = collection(db, "tvShows");
     const tvShowIdStr = String(id).trim();
-
     const q = query(tvShowsRef, where("id", "==", tvShowIdStr)); 
     const querySnapshot = await getDocs(q);
 

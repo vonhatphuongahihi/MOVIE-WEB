@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { FaHeart, FaPlay, FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from 'react-icons/io5';
 import { RiCloseLine } from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FavoritesContext } from '../Context/FavoritesContext';
-import { UserContext } from '../Context/UserContext';
 import './MovieDetail/MovieDetail.css';
-import VipPopup from './Popup/VipLimitPopup';
 import { db, auth } from '../firebase';
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-
 
 const Backdrop = styled.div`
   position: fixed;
@@ -109,17 +106,16 @@ const ImageButton = styled.button`
     color: #ffffff;
 
     &:hover {
-      background-color: #24a70f;
+      background-color: #23a30f;
     }
   }
-    
+
   &.btn-like {
     background-color: #fff;
     color: #000;
-    
+
     &:hover {
       background-color: #ffb3b3;
-      color: #000;
     }
 
     @media (max-width: 480px) {
@@ -127,15 +123,33 @@ const ImageButton = styled.button`
         font-size: 13px;
     }
 
-    &.liked { 
-      color: red; 
-      background-color: #fff;
+    &.btn-watch {
+        background-color: #28BD11;
+        color: #ffffff;
 
-      &:hover {
-        background-color: #ffb3b3;
-        color: red;
-      }
+        &:hover {
+        background-color: #23a30f;
+        color: #fff;
+        }
     }
+
+    &.btn-like {
+        background-color: #fff;
+        color: #000;
+
+        &:hover {
+        background-color: #ffb3b3;
+        color: #000;
+        }
+
+        &.liked { 
+            color: red; 
+            background-color: #ffb3b3;
+
+            svg {
+                color: red; 
+            }
+        }
   }
 `;
 
@@ -143,16 +157,7 @@ const Content = styled.div`
   margin: 20px 25px 15px 25px;
 `;
 
-function MovieDetail({ movie, onClose, type = "tmdb" }) {
-
-  const { isUserVip } = useContext(UserContext); // Lấy trạng thái VIP từ Context
-  const navigate = useNavigate();
-  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
-  const [popupContent, setPopupContent] = useState({
-    action: ""
-  });
-
-
+function ShowDetail({ movie, onClose, type = "tmdb" }) {
   const user = auth.currentUser; // Lấy thông tin người dùng đã đăng nhập
   const userId = user ? user.uid : null; // Lấy userId nếu người dùng đã đăng nhập
   // Kiểm tra xem userId có hợp lệ không
@@ -165,10 +170,9 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
       setIsFavorite(checkIfFavorite());
     }
   }, [favorites, movie.movieId, userId]);
-
   // Xử lý nội dung dự phòng cho overview
   if (!movie.overview) {
-    movie.overview = "Khám phá thế giới điện ảnh với những câu chuyện đa dạng và hấp dẫn...";
+    movie.overview = "Khám phá thế giới truyền hình với những câu chuyện đa dạng và hấp dẫn...";
   }
 
   const backdropUrl = movie.backdrop_path
@@ -176,17 +180,25 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
       ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
       : movie.backdrop_path)
   : null;
-
-  const handleToggleFavorite = (isItemVip) => {
-    if (isItemVip === true && isUserVip === false) {
-      openVipPopup("Bạn cần đăng ký gói VIP để yêu thích nội dung này.");
-    } else {
+  const handleToggleFavorite = async () => {
+    const userDoc = doc(db, 'users', userId); // Đường dẫn tới tài liệu người dùng trong Firestore
+    try {
       if (isFavorite) {
-        removeFavorite(movie.movieId);
+        // Xóa khỏi danh sách yêu thích
+        await updateDoc(userDoc, {
+          favorites: arrayRemove(movie.movieId)
+        });
+        removeFavorite(movie.movieId); // Cập nhật danh sách yêu thích trong state
       } else {
-        addFavorite(movie);
+        // Thêm vào danh sách yêu thích
+        await updateDoc(userDoc, {
+          favorites: arrayUnion(movie.movieId)
+        });
+        addFavorite(movie); // Cập nhật danh sách yêu thích trong state
       }
-      setIsFavorite(!isFavorite);
+      setIsFavorite(!isFavorite); // Đổi trạng thái yêu thích
+    } catch (error) {
+      console.error("Lỗi khi cập nhật danh sách yêu thích: ", error);
     }
   };
 
@@ -198,23 +210,6 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
     return <p>Loading...</p>;
   }
 
-  const handleWatchNowClick = (movieId, isItemVip) => {
-    if (isItemVip === true && isUserVip === false) {
-      openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
-    } else {
-      navigate(`/movie/${movieId}`);
-    }
-  };
-
-  const openVipPopup = (action) => {
-    setPopupContent({ action });
-    setVipPopupOpen(true);
-  };
-
-  const closeVipPopup = () => {
-    setVipPopupOpen(false);
-  };
-
   // Xử lý ngôn ngữ và thể loại
   const languages = movie.language || 'Không rõ';
   const genreNames = movie.genres || []; 
@@ -224,25 +219,26 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
     return favorites.some(fav => fav.movieId === movie.movieId);
   };
 
+ 
+
   return (
     <Backdrop onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalContent>
           <ImageContainer>
-            {backdropUrl && <Image src={backdropUrl} alt={movie.title} />}
+            {backdropUrl && <Image src={backdropUrl} alt={movie.name} />}
             <CloseButton onClick={onClose}>
               <RiCloseLine />
             </CloseButton>
             <BtnGroup>
-              <ImageButton 
-                className="btn-watch"
-                onClick={() => handleWatchNowClick(movie.movieId, movie.vip)}
-              >
-                <FaPlay /> Xem ngay
-              </ImageButton>
+              <Link to={`/truyenhinh/${movie.movieId}`}>
+                <ImageButton className="btn-watch">
+                  <FaPlay /> Xem ngay
+                </ImageButton>
+              </Link>
               <ImageButton
                 className={`btn-like ${isFavorite ? 'liked' : ''}`}
-                onClick={() => handleToggleFavorite(movie.vip)}
+                onClick={handleToggleFavorite}
               >
                 <FaHeart /> {isFavorite ? 'Đã thích' : 'Yêu thích'}
               </ImageButton>
@@ -251,17 +247,17 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
 
           <Content>
             <div>
-              <div className="title_info">{movie.title}</div>
+              <div className="title_info">{movie.name}</div>
               <div className="evaluation">
                 <p className="evaluationItem">{movie.vote_count} lượt đánh giá</p>
                 <p className="evaluationItem">Điểm đánh giá: {movie.vote_average}</p>
                 <div className="evaluationItem">
-                  <FaRegCalendar className='text-subMain'/>
-                  <span>{movie.release_date}</span>
+                  <FaRegCalendar />
+                  <span>{movie.first_air_date}</span>
                 </div>
                 <div className="evaluationItemLast">
-                  <IoTimeOutline className='text-subMain text-xl'/>
-                  <span>{movie.runtime} phút</span>
+                  <IoTimeOutline />
+                  <span>{movie.episode_run_time} phút</span>
                 </div>
               </div>
               <div className="main_content">
@@ -277,9 +273,8 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
           </Content>
         </ModalContent>
       </ModalContainer>
-      {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
     </Backdrop>
   );
 }
 
-export default MovieDetail;
+export default ShowDetail;

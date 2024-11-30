@@ -11,11 +11,13 @@ import ContactUs from './Screens/ContactUs';
 import FavoriteMovies from "./Screens/FavoriteMovies";
 import ForgotPassword from './Screens/ForgotPassword';
 import HomeScreen from './Screens/HomeScreen';
+import PhimDienAnh from './Screens/PhimDienAnh';
+import Anime from './Screens/Anime';
+import PhimTrung from './Screens/PhimTrung';
 import Login from './Screens/Login/Login';
 import Signup from './Screens/Login/Signup';
 import MoviesPage from './Screens/Movies';
 import NotFound from './Screens/NotFound';
-import PhimTrung from './Screens/PhimTrung';
 import Profile from './Screens/Profile';
 import RecentlyWatch from "./Screens/RecentlyWatch";
 import Register from './Screens/Register';
@@ -28,11 +30,12 @@ import SplashScreen from './Splash';
 import { createGlobalStyle } from 'styled-components';
 import { RecentlyContext } from "./Context/RecentlyContext";
 import MovieFetcher from './MovieFetcher';
-import AddMovie from './Screens/Dashboard/Admin/AddMovie';
 import Admin from './Screens/Dashboard/Admin/Admin';
 import MoviesList from './Screens/Dashboard/Admin/MovieList';
 import ShowsList from './Screens/Dashboard/Admin/ShowList';
 import UsersList from './Screens/Dashboard/Admin/UserList';
+import AddMovie from './Screens/Dashboard/Admin/AddMovie';
+import SingleShow from './Screens/SingleShow';
 import FAQScreen from './Screens/FAQScreen';
 
 import Movie1 from './Screens/Movie1';
@@ -43,6 +46,7 @@ import VipRegistration from './Screens/VipRegistration';
 import TvShowFetcher from './TvShowFetcher';
 
 import RestReminderPopup from "./Screens/Popup/RestReminderPopup";
+
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -107,6 +111,7 @@ function App() {
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/truyenhinh" element={<TVShow/>} />
+          <Route path="/phimdienanh" element={<PhimDienAnh />} />
           <Route path="/phim" element={<Movie1/>} />
           <Route path="/phimtrung" element={<PhimTrung />} />
           <Route path="/admin" element={<Admin />} />
@@ -116,6 +121,9 @@ function App() {
           <Route path="/admin/addmovie" element={<AddMovie />} />
           <Route path="/phimtrung/:movieId" element={<SingleMoviePhimTrung />} />
           <Route path="/faqs" element={<FAQScreen />} />
+          <Route path="/truyenhinh/:id" element={<SingleShow />} />
+          <Route path="/phimdienanh/:id" element={<SingleMovie />} />
+          <Route path="/anime" element={<Anime />} />
           <Route path="/dangkyvip" element={< VipRegistration/>} />
           <Route path="/payment" element={< Payment/>} />
 
