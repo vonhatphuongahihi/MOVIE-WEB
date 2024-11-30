@@ -1,6 +1,6 @@
 import Aos from 'aos';
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,22 +27,24 @@ import Support from './Screens/Support';
 import WatchPage from './Screens/WatchPage';
 import SplashScreen from './Splash';
 
-import TVShow from './Screens/TVShow';
-import Movie1 from './Screens/Movie1';
 import { createGlobalStyle } from 'styled-components';
+import { RecentlyContext } from "./Context/RecentlyContext";
 import MovieFetcher from './MovieFetcher';
-import TvShowFetcher from './TvShowFetcher';
-import { Suspense } from 'react';
-import BigLoader from './Components/BigLoader';
 import Admin from './Screens/Dashboard/Admin/Admin';
 import MoviesList from './Screens/Dashboard/Admin/MovieList';
 import ShowsList from './Screens/Dashboard/Admin/ShowList';
 import UsersList from './Screens/Dashboard/Admin/UserList';
 import AddMovie from './Screens/Dashboard/Admin/AddMovie';
-import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
 import SingleShow from './Screens/SingleShow';
-import { RecentlyContext } from "./Context/RecentlyContext";
 import FAQScreen from './Screens/FAQScreen';
+
+import Movie1 from './Screens/Movie1';
+import Payment from './Screens/Payment';
+import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
+import TVShow from './Screens/TVShow';
+import VipRegistration from './Screens/VipRegistration';
+import TvShowFetcher from './TvShowFetcher';
+
 import RestReminderPopup from "./Screens/Popup/RestReminderPopup";
 
 
@@ -122,7 +124,8 @@ function App() {
           <Route path="/truyenhinh/:id" element={<SingleShow />} />
           <Route path="/phimdienanh/:id" element={<SingleMovie />} />
           <Route path="/anime" element={<Anime />} />
-
+          <Route path="/dangkyvip" element={< VipRegistration/>} />
+          <Route path="/payment" element={< Payment/>} />
 
         </Routes>
       )}
