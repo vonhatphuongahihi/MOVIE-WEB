@@ -2,10 +2,17 @@ import React from "react";
 import { RiCloseLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
-const VipPopup = ({ onClose }) => {
+const VipPopup = ({ onClose, action }) => {
+  
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="relative bg-[#151515FF] border border-white p-6 rounded-lg shadow-lg max-w-sm">
+    <div 
+      className="fixed inset-0 flex items-center justify-center z-50"
+      style={{ zIndex: 2000 }} onClick={onClose}
+    >
+      <div 
+        className="relative bg-[#151515FF] border border-white p-6 rounded-lg shadow-lg max-w-sm"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button 
           className="absolute top-3 right-3 bg-[#404040] rounded-full text-3xl cursor-pointer hover:bg-[#333333]"
           onClick={onClose}
@@ -14,7 +21,7 @@ const VipPopup = ({ onClose }) => {
         </button>
         <h2 className="text-xl font-semibold mb-4">Phim VIP</h2>
         <p className="mb-8">
-          Bạn cần đăng ký gói VIP để xem nội dung này.
+          {action}
         </p>
         <div className="flex justify-end">
           <Link to={`/dangkyvip`}>

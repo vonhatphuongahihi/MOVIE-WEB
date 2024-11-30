@@ -1,11 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaHeart, FaPlay, FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from 'react-icons/io5';
 import { RiCloseLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FavoritesContext } from '../Context/FavoritesContext';
+import { UserContext } from '../Context/UserContext';
 import './MovieDetail/MovieDetail.css';
+import VipPopup from './Popup/VipLimitPopup';
 
 const Backdrop = styled.div`
   position: fixed;
@@ -103,24 +105,28 @@ const ImageButton = styled.button`
     background-color: #28BD11;
     color: #ffffff;
 
+    &:hover {
+      background-color: #24a70f;
+    }
+  }
     
-    &.btn-like {
-        background-color: #fff;
-        color: #000;
+  &.btn-like {
+    background-color: #fff;
+    color: #000;
 
-        &:hover {
+    &:hover {
+      background-color: #ffb3b3;
+      color: #000;
+    }
+
+    &.liked { 
+      color: red; 
+      background-color: #fff;
+
+      &:hover {
         background-color: #ffb3b3;
-        color: #000;
-        }
-
-        &.liked { 
-            color: red; 
-            background-color: #ffb3b3;
-
-            svg {
-                color: red; 
-            }
-        }
+        color: red;
+      }
     }
   }
 `;
@@ -130,6 +136,13 @@ const Content = styled.div`
 `;
 
 function MovieDetail({ movie, onClose, type = "tmdb" }) {
+  const { isUserVip } = useContext(UserContext); // Lấy trạng thái VIP từ Context
+  const navigate = useNavigate();
+  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
+  const [popupContent, setPopupContent] = useState({
+    action: ""
+  });
+
   // Xử lý nội dung dự phòng cho overview
   if (!movie.overview) {
     movie.overview = "Khám phá thế giới điện ảnh với những câu chuyện đa dạng và hấp dẫn...";
@@ -153,13 +166,17 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
     return favorites.some(fav => fav.movieId === movie.movieId);
   };
 
-  const handleToggleFavorite = () => {
-    if (isFavorite) {
-      removeFavorite(movie.movieId);
+  const handleToggleFavorite = (isItemVip) => {
+    if (isItemVip === true && isUserVip === false) {
+      openVipPopup("Bạn cần đăng ký gói VIP để yêu thích nội dung này.");
     } else {
-      addFavorite(movie);
+      if (isFavorite) {
+        removeFavorite(movie.movieId);
+      } else {
+        addFavorite(movie);
+      }
+      setIsFavorite(!isFavorite);
     }
-    setIsFavorite(!isFavorite);
   };
 
   useEffect(() => {
@@ -169,6 +186,23 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
   if (!movie) {
     return <p>Loading...</p>;
   }
+
+  const handleWatchNowClick = (movieId, isItemVip) => {
+    if (isItemVip === true && isUserVip === false) {
+      openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
+    } else {
+      navigate(`/movie/${movieId}`);
+    }
+  };
+
+  const openVipPopup = (action) => {
+    setPopupContent({ action });
+    setVipPopupOpen(true);
+  };
+
+  const closeVipPopup = () => {
+    setVipPopupOpen(false);
+  };
 
   return (
     <Backdrop onClick={onClose}>
@@ -180,14 +214,15 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
               <RiCloseLine />
             </CloseButton>
             <BtnGroup>
-              <Link to={`/movie/${movie.movieId}`}>
-                <ImageButton className="btn-watch">
-                  <FaPlay /> Xem ngay
-                </ImageButton>
-              </Link>
+              <ImageButton 
+                className="btn-watch"
+                onClick={() => handleWatchNowClick(movie.movieId, movie.vip)}
+              >
+                <FaPlay /> Xem ngay
+              </ImageButton>
               <ImageButton
                 className={`btn-like ${isFavorite ? 'liked' : ''}`}
-                onClick={handleToggleFavorite}
+                onClick={() => handleToggleFavorite(movie.vip)}
               >
                 <FaHeart /> {isFavorite ? 'Đã thích' : 'Yêu thích'}
               </ImageButton>
@@ -201,11 +236,11 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
                 <p className="evaluationItem">{movie.vote_count} lượt đánh giá</p>
                 <p className="evaluationItem">Điểm đánh giá: {movie.vote_average}</p>
                 <div className="evaluationItem">
-                  <FaRegCalendar />
+                  <FaRegCalendar className='text-subMain'/>
                   <span>{movie.release_date}</span>
                 </div>
                 <div className="evaluationItemLast">
-                  <IoTimeOutline />
+                  <IoTimeOutline className='text-subMain text-xl'/>
                   <span>{movie.runtime} phút</span>
                 </div>
               </div>
@@ -222,6 +257,7 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
           </Content>
         </ModalContent>
       </ModalContainer>
+      {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
     </Backdrop>
   );
 }
