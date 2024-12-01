@@ -4,7 +4,7 @@ import { FaPlay } from "react-icons/fa";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFirebase';
-import TitleCards from '../Components/Home/TitleCards/TitleCards';
+import TitleCards1 from '../Components/Home/TitleCards/TitleCards1';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
@@ -237,13 +237,13 @@ function PhimDienAnh() {
         </SwiperControls>
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCards title={"THỊNH HÀNH"} category={"popular"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
-          <TitleCards title={"MỚI NHẤT"} category={"now_playing"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"THỊNH HÀNH"} category={"popular"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"MỚI NHẤT"} category={"now_playing"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
         </div>
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCards title={"PHIM ĐIỆN ẢNH VIỆT NAM"} country={"Việt Nam"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM ĐIỆN ẢNH TRUNG QUỐC"} country={"Trung Quốc"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
-          <TitleCards title={"PHIM ĐIỆN ẢNH HOLLYWOOD"} country={"Mỹ"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"PHIM ĐIỆN ẢNH VIỆT NAM"} country={"Việt Nam"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"PHIM ĐIỆN ẢNH TRUNG QUỐC"} country={"Trung Quốc"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"PHIM ĐIỆN ẢNH HOLLYWOOD"} country={"Mỹ"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
         </div>
       </div>
 

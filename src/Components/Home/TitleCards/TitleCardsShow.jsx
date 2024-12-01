@@ -16,40 +16,37 @@ const TitleCardShows = ({ title, category, genres, country, onMovieClick}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const showsRef = collection(db, "tvShows");
-        let q;
-        if (genres?.length) {
-          q = query(showsRef, where("genres", "array-contains-any", genres));
-        } else if (category) {
-          q = query(showsRef, where("category", "==", category));
-        } else if (country) {
-          q = query(showsRef, where("country", "==", country));
-        } else {
-          console.warn("Cần truyền vào ít nhất category, genres hoặc country để lấy dữ liệu.");
-          return;
-        }
+        const moviesRef = collection(db, "movies");
   
-
-        const querySnapshot = await getDocs(q);
-        const movies = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setFirebaseData(movies);
+        // Truy vấn riêng lẻ
+        const genresQuery = genres?.length 
+          ? query(moviesRef, where("genres", "array-contains-any", genres)) 
+          : null;
+        const categoryQuery = category 
+          ? query(moviesRef, where("category", "==", category)) 
+          : null;
+  
+        const [genresSnapshot, categorySnapshot] = await Promise.all([
+          genresQuery ? getDocs(genresQuery) : Promise.resolve({ docs: [] }),
+          categoryQuery ? getDocs(categoryQuery) : Promise.resolve({ docs: [] }),
+        ]);
+  
+        const genresMovies = genresSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const categoryMovies = categorySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+        // Hợp nhất và lọc dữ liệu
+        const mergedMovies = genresMovies.filter(movie => 
+          categoryMovies.some(catMovie => catMovie.id === movie.id)
+        );
+  
+        setFirebaseData(mergedMovies);
       } catch (error) {
-        console.error("Error fetching shows from Firebase:", error);
+        console.error("Error fetching movies from Firebase:", error);
       }
     };
-
+  
     fetchData();
-
-    if (cardsRef.current) {
-      cardsRef.current.addEventListener('wheel', handleWheel);
-    }
-
-    return () => {
-      if (cardsRef.current) {
-        cardsRef.current.removeEventListener('wheel', handleWheel);
-      }
-    };
-  }, [category]);
+  }, [category, genres, country]);
 
   return (
     <div className='title-cards'>
@@ -59,9 +56,9 @@ const TitleCardShows = ({ title, category, genres, country, onMovieClick}) => {
           <div key={index} className="card" onClick={() => onMovieClick(card)}>
             <img 
                 src={`https://image.tmdb.org/t/p/w1280${card.backdrop_path}`} 
-                alt={card.name} 
+                alt={card.title} 
             />
-            <p>{card.name}</p>
+            <p>{card.title}</p>
           </div>
         ))}
       </div>
