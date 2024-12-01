@@ -54,7 +54,7 @@ function Navbar() {
           {/* Left Side - Logo */}
           <div className="flex items-center space-x-4 text-subMain">
             <Link to="/" className="mr-2">
-              <img src="/images/logo.png" alt="logo" className="w-20 h-6 object-contain" />
+              <img src="/images/logo.png" alt="logo" className="w-15 h-5 object-contain" />
             </Link>
             <div className="hidden lg:flex space-x-6">
               <NavLink to="/" className={getNavLinkClass}>

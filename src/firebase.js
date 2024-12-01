@@ -257,13 +257,33 @@ export const updateMovie = async (movieId, updatedData) => {
       try {
         const userRef = doc(db, "users", uid);
         await updateDoc(userRef, { fav });
-        toast.success("Danh sách phim yêu thích được cập nhật thành công!");
         return true;
       } catch (error) {
         console.error("Lỗi khi cập nhật danh sách phim yêu thích:", error);
         return false;
       }
     };
+
+    const removeFavoriteMovie = async (uid, movieId) => {
+        try {
+            const userRef = doc(db, "users", uid);
+            const userSnap = await getDoc(userRef);
+    
+            if (userSnap.exists()) {
+                const currentFav = userSnap.data().fav || [];
+                const updatedFav = currentFav.filter(movie => movie !== movieId);
+                await updateDoc(userRef, { fav: updatedFav });
+                return true;
+            } else {
+                console.log("User not found.");
+                return false;
+            }
+        } catch (error) {
+            console.error("Error removing favorite movie:", error);
+            return false;
+        }
+    };
+    
   
     const getFavoriteMovies = async (uid) => {
       try {

@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import './titleCards.css';
 import { db } from '../../../firebase'; 
 
-const TitleCards1 = ({ title, category, genres, country, onMovieClick }) => {
+const TitleCardsShow1 = ({ title, category, genres, country, onMovieClick }) => {
   const [firebaseData, setFirebaseData] = useState([]);
   const cardsRef = useRef();
 
@@ -16,7 +16,7 @@ const TitleCards1 = ({ title, category, genres, country, onMovieClick }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const moviesRef = collection(db, "movies");
+        const moviesRef = collection(db, "tvShows");
   
         // Truy vấn riêng lẻ
         const genresQuery = genres?.length 
@@ -66,4 +66,4 @@ const TitleCards1 = ({ title, category, genres, country, onMovieClick }) => {
     </div>
   );
 }
-export default TitleCards1;
+export default TitleCardsShow1;

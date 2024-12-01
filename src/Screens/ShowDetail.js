@@ -119,48 +119,47 @@ const ImageButton = styled.button`
     }
 
     @media (max-width: 480px) {
-        padding: 7px 10px;
-        font-size: 13px;
+      padding: 7px 10px;
+      font-size: 13px;
     }
 
     &.btn-watch {
-        background-color: #28BD11;
-        color: #ffffff;
+      background-color: #28BD11;
+      color: #ffffff;
 
-        &:hover {
+      &:hover {
         background-color: #23a30f;
         color: #fff;
-        }
+      }
     }
 
     &.btn-like {
-        background-color: #fff;
-        color: #000;
+      background-color: #fff;
+      color: #000;
 
-        &:hover {
+      &:hover {
         background-color: #ffb3b3;
         color: #000;
-        }
+      }
 
-        &.liked { 
-            color: red; 
-            background-color: #ffb3b3;
+      &.liked {
+        color: red;
+        background-color: #ffb3b3;
 
-            svg {
-                color: red; 
-            }
+        svg {
+          color: red;
         }
-  }
+      }
+    }
 `;
 
 const Content = styled.div`
   margin: 20px 25px 15px 25px;
 `;
 
-function ShowDetail({ movie, onClose, type = "tmdb" }) {
-  const user = auth.currentUser; // Lấy thông tin người dùng đã đăng nhập
-  const userId = user ? user.uid : null; // Lấy userId nếu người dùng đã đăng nhập
-  // Kiểm tra xem userId có hợp lệ không
+function ShowDetail({ movie, onClose }) {
+  const user = auth.currentUser;
+  const userId = user ? user.uid : null; 
 
   const { addFavorite, removeFavorite, favorites } = useContext(FavoritesContext);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -169,34 +168,33 @@ function ShowDetail({ movie, onClose, type = "tmdb" }) {
     if (userId) {
       setIsFavorite(checkIfFavorite());
     }
-  }, [favorites, movie.movieId, userId]);
-  // Xử lý nội dung dự phòng cho overview
+  }, [favorites, movie.id, userId]);
+
   if (!movie.overview) {
     movie.overview = "Khám phá thế giới truyền hình với những câu chuyện đa dạng và hấp dẫn...";
   }
 
   const backdropUrl = movie.backdrop_path
-  ? (type === "tmdb" && !movie.backdrop_path.includes("http") 
-      ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
-      : movie.backdrop_path)
-  : null;
+    ? (movie.backdrop_path.includes("http") 
+        ? movie.backdrop_path 
+        : `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`)
+    : null;
+
   const handleToggleFavorite = async () => {
-    const userDoc = doc(db, 'users', userId); // Đường dẫn tới tài liệu người dùng trong Firestore
+    const userDoc = doc(db, 'users', userId);
     try {
       if (isFavorite) {
-        // Xóa khỏi danh sách yêu thích
         await updateDoc(userDoc, {
-          favorites: arrayRemove(movie.movieId)
+          favorites: arrayRemove(movie.id)
         });
-        removeFavorite(movie.movieId); // Cập nhật danh sách yêu thích trong state
+        removeFavorite(movie.id);
       } else {
-        // Thêm vào danh sách yêu thích
         await updateDoc(userDoc, {
-          favorites: arrayUnion(movie.movieId)
+          favorites: arrayUnion(movie.id)
         });
-        addFavorite(movie); // Cập nhật danh sách yêu thích trong state
+        addFavorite(movie);
       }
-      setIsFavorite(!isFavorite); // Đổi trạng thái yêu thích
+      setIsFavorite(!isFavorite);
     } catch (error) {
       console.error("Lỗi khi cập nhật danh sách yêu thích: ", error);
     }
@@ -204,22 +202,18 @@ function ShowDetail({ movie, onClose, type = "tmdb" }) {
 
   useEffect(() => {
     setIsFavorite(checkIfFavorite());
-  }, [favorites, movie.movieId]);
+  }, [favorites, movie.id]);
 
   if (!movie) {
     return <p>Loading...</p>;
   }
 
-  // Xử lý ngôn ngữ và thể loại
   const languages = movie.language || 'Không rõ';
   const genreNames = movie.genres || []; 
-  
-  // Kiểm tra xem phim có nằm trong danh sách yêu thích không
-  const checkIfFavorite = () => {
-    return favorites.some(fav => fav.movieId === movie.movieId);
-  };
 
- 
+  const checkIfFavorite = () => {
+    return favorites.some(fav => fav.movieId === movie.id);
+  };
 
   return (
     <Backdrop onClick={onClose}>
@@ -231,7 +225,7 @@ function ShowDetail({ movie, onClose, type = "tmdb" }) {
               <RiCloseLine />
             </CloseButton>
             <BtnGroup>
-              <Link to={`/truyenhinh/${movie.movieId}`}>
+              <Link to={`/truyenhinh/${movie.id}`}>
                 <ImageButton className="btn-watch">
                   <FaPlay /> Xem ngay
                 </ImageButton>
@@ -267,7 +261,7 @@ function ShowDetail({ movie, onClose, type = "tmdb" }) {
                 <div className="content_right">
                   <p className="language">Ngôn ngữ: <span>{languages}</span></p>
                   <p className="genre">Thể loại: <span>{genreNames.join(' , ')}</span></p>
-                  </div>
+                </div>
               </div>
             </div>
           </Content>
