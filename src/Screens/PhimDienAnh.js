@@ -11,6 +11,12 @@ import TitleCards1 from '../Components/Home/TitleCards/TitleCards1';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
+import { useNavigate } from 'react-router-dom';
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from '../firebase'; 
 
 import { useContext } from 'react';
 import { UserContext } from '../Context/UserContext';
@@ -114,14 +120,26 @@ function PhimDienAnh() {
 
   useEffect(() => {
     const fetchBannerMovies = async () => {
-      const ids = ['X1xOnuDlQx6PEdp5JA03', 'KTmHn9tDKw8kavGruvsM', 'HP0cVHuzY2aDnblcaBcX', 'D2IkmJBeXwH4khYvOIB6', 'jwTJreOnddAiiZiO8t1L', 'pIZ8EwEwp5FXRRaZDQvi'];
-      //Chỗ này thay id của mấy phim trên banner
-      const moviePromises = ids.map((movieId) => GetMovieInfoFromFirebase(movieId));
-      const moviesData = await Promise.all(moviePromises);
+      try {
+        const moviesRef = collection(db, "movies"); // Thay "movies" bằng tên collection của bạn
+        const q = query(
+          moviesRef,
+          where("category", "==", "popular"),
+          where("genres", "array-contains", "Điện ảnh")
+        );
     
-      const validMovies = moviesData.filter((movie) => movie !== null && movie !== undefined);
-      setBannerMovies(validMovies);
+        const querySnapshot = await getDocs(q);
+        const moviesData = [];
+        querySnapshot.forEach((doc) => {
+          moviesData.push({ movieId: doc.id, ...doc.data() });
+        });
+    
+        setBannerMovies(moviesData);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
     };
+
     
     fetchBannerMovies();
   }, []);

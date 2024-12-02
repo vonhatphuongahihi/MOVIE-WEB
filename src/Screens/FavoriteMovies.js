@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
 import { updateFavoriteMovies, getFavoriteMovies } from "../firebase";
+import { NavLink } from "react-router-dom";
 
 const MovieContainer = styled.div`
   border-radius: 8px;
@@ -180,11 +181,13 @@ function FavoriteMovies() {
     <Layout_main>
       <br />
       <br />
-      <img
-        src="/images/Back.svg"
-        alt="Back Icon"
-        className="ml-2 w-12 h-12"
-      />
+      <NavLink to="/">
+        <img
+          src="/images/Back.svg"
+          alt="Back Icon"
+          className="ml-2 w-12 h-12"
+        />
+      </NavLink>
       <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] mb-4 text-subMain ml-10">
         DANH SÁCH YÊU THÍCH
       </h3>
@@ -211,8 +214,8 @@ function FavoriteMovies() {
                     onError={(e) => e.target.src = '/path/to/default-image.jpg'}
                   />
                   <HeartIcon onClick={() => removeFavorite(movie.movieId)}/>
-                  <Link to={`/movie/${movie.movieId}`}>
-                    <WatchButtonWrapper>
+                  <Link to={`/${movie.type === 'tvshow' ? 'truyenhinh' : 'movie'}/${movie.movieId}`}>
+                  <WatchButtonWrapper>
                       <FiPlay /> <span>Xem ngay</span>
                     </WatchButtonWrapper>
                   </Link>

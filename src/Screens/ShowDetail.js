@@ -220,7 +220,7 @@ function ShowDetail({ movie, onClose }) {
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalContent>
           <ImageContainer>
-            {backdropUrl && <Image src={backdropUrl} alt={movie.name} />}
+            {backdropUrl && <Image src={backdropUrl} alt={movie.title} />}
             <CloseButton onClick={onClose}>
               <RiCloseLine />
             </CloseButton>
@@ -241,17 +241,17 @@ function ShowDetail({ movie, onClose }) {
 
           <Content>
             <div>
-              <div className="title_info">{movie.name}</div>
+              <div className="title_info">{movie.title}</div>
               <div className="evaluation">
                 <p className="evaluationItem">{movie.vote_count} lượt đánh giá</p>
                 <p className="evaluationItem">Điểm đánh giá: {movie.vote_average}</p>
                 <div className="evaluationItem">
-                  <FaRegCalendar />
-                  <span>{movie.first_air_date}</span>
+                  <FaRegCalendar className="text-subMain"/>
+                  <span>{movie.release_date}</span>
                 </div>
                 <div className="evaluationItemLast">
-                  <IoTimeOutline />
-                  <span>{movie.episode_run_time} phút</span>
+                  <IoTimeOutline className="text-subMain"/>
+                  <span>{movie.runtime} phút</span>
                 </div>
               </div>
               <div className="main_content">

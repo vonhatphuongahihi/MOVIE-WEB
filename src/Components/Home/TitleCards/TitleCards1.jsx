@@ -18,35 +18,42 @@ const TitleCards1 = ({ title, category, genres, country, onMovieClick }) => {
       try {
         const moviesRef = collection(db, "movies");
   
-        // Truy vấn riêng lẻ
-        const genresQuery = genres?.length 
-          ? query(moviesRef, where("genres", "array-contains-any", genres)) 
-          : null;
-        const categoryQuery = category 
-          ? query(moviesRef, where("category", "==", category)) 
-          : null;
+        // Truy vấn dựa trên genres, category, và country
+        const conditions = [];
+        if (genres?.length) {
+          conditions.push(where("genres", "array-contains-any", genres));
+        }
+        if (category) {
+          conditions.push(where("category", "==", category));
+        }
+        if (country) {
+          conditions.push(where("country", "==", country));
+        }
   
-        const [genresSnapshot, categorySnapshot] = await Promise.all([
-          genresQuery ? getDocs(genresQuery) : Promise.resolve({ docs: [] }),
-          categoryQuery ? getDocs(categoryQuery) : Promise.resolve({ docs: [] }),
-        ]);
+        const moviesQuery = conditions.length 
+          ? query(moviesRef, ...conditions) 
+          : moviesRef;
   
-        const genresMovies = genresSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const categoryMovies = categorySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const moviesSnapshot = await getDocs(moviesQuery);
+        let movies = moviesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   
-        // Hợp nhất và lọc dữ liệu
-        const mergedMovies = genresMovies.filter(movie => 
-          categoryMovies.some(catMovie => catMovie.id === movie.id)
-        );
+        // Lọc phim chứa tất cả các thể loại trong genres
+        if (genres?.length) {
+          movies = movies.filter(movie => 
+            genres.every(genre => movie.genres.includes(genre))
+          );
+        }
   
-        setFirebaseData(mergedMovies);
+        setFirebaseData(movies);
       } catch (error) {
-        console.error("Error fetching movies from Firebase:", error);
+        console.error("Error fetching movies:", error);
       }
     };
   
     fetchData();
   }, [category, genres, country]);
+  
+  
   
 
   return (

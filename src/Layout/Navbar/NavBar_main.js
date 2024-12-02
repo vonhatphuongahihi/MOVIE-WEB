@@ -61,13 +61,13 @@ function Navbar() {
                 <img src="/images/home_icon.svg" alt="Home Icon" className="w-5 h-5 inline-block mr-2 mb-1" />
                 Trang chủ
               </NavLink>
-              <NavLink to="/truyenhinh" className={getNavLinkClass}>
-                <img src="/images/tv_icon.svg" alt="TV Show Icon" className="w-5  h-5 inline-block mr-2 mb-1 text-subMain" />
-                Truyền hình
-              </NavLink>
-              <NavLink to="/phim" className={getNavLinkClass}>
+              <NavLink to="/thethao" className={getNavLinkClass}>
                 <img src="/images/sport_icon.svg" alt="Sport Icon" className="w-5 h-5 inline-block mr-2 mb-1" />
                 Thể thao
+              </NavLink>
+              <NavLink to="/thieunhi" className={getNavLinkClass}>
+                <img src="/images/thieu_nhi_icon.svg" alt="TV Show Icon" className="w-5  h-5 inline-block mr-2 mb-1 text-subMain" />
+                Thiếu nhi
               </NavLink>
             </div>
           </div>
@@ -143,7 +143,7 @@ function Navbar() {
           <div className="lg:hidden bg-main py-4">
             <div className="flex flex-col items-center space-y-4">
               <NavLink to="/" className={getNavLinkClass}>Trang chủ</NavLink>
-              <NavLink to="/truyenhinh" className={getNavLinkClass}>Show truyền hình</NavLink>
+              <NavLink to="/thieunhi" className={getNavLinkClass}>Show truyền hình</NavLink>
               <NavLink to="/phim" className={getNavLinkClass}>Phim</NavLink>
               <NavLink to="/dangkyvip" className={getNavLinkClass}>Đăng ký VIP</NavLink>
             </div>

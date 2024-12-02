@@ -19,16 +19,20 @@ const MovieCasts = ({ movie = {}, isApiMovie = true }) => {
     return castList.map((actor, index) => (
       <SwiperSlide key={actor.id || index}>
         <div className="w-full p-3 italic text-xs text-text rounded flex-colo">
-          <img
+        <img
             src={
               actor.profile_path
-                ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
-                : "/default-avatar.png" // Ảnh dự phòng
+                ? actor.profile_path.startsWith("http")
+                  ? actor.profile_path
+                  : `https://image.tmdb.org/t/p/w500${actor.profile_path}`
+                : "/default-avatar.png"
             }
-            alt={actor.name || "Unknown"}
+            alt={actor.name || "Không rõ tên"}
             className="w-full h-64 object-cover rounded-full mb-4"
           />
+
           <p>{actor.name || "Không rõ tên"}</p>
+          {actor.character && <p className="text-gray-400">({actor.character})</p>}
         </div>
       </SwiperSlide>
     ));

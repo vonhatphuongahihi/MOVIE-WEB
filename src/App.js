@@ -14,7 +14,8 @@ import HomeScreen from './Screens/HomeScreen';
 import PhimDienAnh from './Screens/PhimDienAnh';
 import Anime from './Screens/Anime';
 import Anhtraisayhi from './Screens/Anhtraisayhi';
-import PhimTrung from './Screens/PhimTrung';
+import Thethao from './Screens/Thethao'
+import Haingaymotdem from './Screens/Haingaymotdem';
 import Login from './Screens/Login/Login';
 import Signup from './Screens/Login/Signup';
 import MoviesPage from './Screens/Movies';
@@ -43,7 +44,7 @@ import FAQScreen from './Screens/FAQScreen';
 import Movie1 from './Screens/Movie1';
 import Payment from './Screens/Payment';
 import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
-import TVShow from './Screens/TVShow';
+import Thieunhi from './Screens/Thieunhi';
 import VipRegistration from './Screens/VipRegistration';
 import TvShowFetcher from './TvShowFetcher';
 
@@ -112,11 +113,11 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/search" element={<SearchResults />} />
-          <Route path="/truyenhinh" element={<TVShow/>} />
+          <Route path="/thieunhi" element={<Thieunhi/>} />
           <Route path="/phimdienanh" element={<PhimDienAnh />} />
           <Route path="/anhtraisayhi" element={<Anhtraisayhi />} />
-          <Route path="/phim" element={<Movie1/>} />
-          <Route path="/phimtrung" element={<PhimTrung />} />
+          <Route path="/2n1d" element={<Haingaymotdem />} />
+          <Route path="/thethao" element={<Thethao />}/>
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/movieslist" element={<MoviesList />} />
           <Route path="/admin/showslist" element={<ShowsList />} />

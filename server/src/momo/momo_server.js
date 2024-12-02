@@ -36,6 +36,7 @@ app.post('/payment', async (req, res) => {
     var orderInfo = 'Thanh toán gói ' + packageName;
     var partnerCode = 'MOMO';
     var redirectUrl = 'http://localhost:3000';
+
     var ipnUrl = 'https://4e83-113-161-91-102.ngrok-free.app/callback';
     var requestType = "payWithMethod";
     

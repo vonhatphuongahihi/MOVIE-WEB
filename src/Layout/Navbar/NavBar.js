@@ -60,13 +60,13 @@ function Navbar() {
                 <img src="/images/home_icon.svg" alt="Home Icon" className="w-5 h-5 inline-block mr-2 mb-1" />
                 Trang chủ
               </NavLink>
-              <NavLink to="/truyenhinh" className={getNavLinkClass}>
-                <img src="/images/tv_icon.svg" alt="TV Show Icon" className="w-5  h-5 inline-block mr-2 mb-1 text-subMain" />
-                Truyền hình
-              </NavLink>
-              <NavLink to="/phim" className={getNavLinkClass}>
+              <NavLink to="/thethao" className={getNavLinkClass}>
                 <img src="/images/sport_icon.svg" alt="Sport Icon" className="w-5 h-5 inline-block mr-2 mb-1" />
                 Thể thao
+              </NavLink>
+              <NavLink to="/thieunhi" className={getNavLinkClass}>
+                <img src="/images/thieu_nhi_icon.svg" alt="TV Show Icon" className="w-5  h-5 inline-block mr-2 mb-1 text-subMain" />
+                Thiếu nhi
               </NavLink>
             </div>
           </div>
@@ -143,7 +143,7 @@ function Navbar() {
             <div className="flex flex-col items-center space-y-4">
               <NavLink to="/" className={getNavLinkClass}>Trang chủ</NavLink>
               <NavLink to="/truyenhinh" className={getNavLinkClass}>Show truyền hình</NavLink>
-              <NavLink to="/phim" className={getNavLinkClass}>Phim</NavLink>
+              <NavLink to="/thethao" className={getNavLinkClass}>Phim</NavLink>
               <NavLink to="/dangkyvip" className={getNavLinkClass}>Đăng ký VIP</NavLink>
             </div>
           </div>
@@ -151,7 +151,6 @@ function Navbar() {
         {/* Secondary NavBar */}
       <div className="bg-main shadow-md fixed top-8 md:top-12 left-0 right-0 z-10 block">
         <div className="container mx-auto py-2 px-2 flex gap-4 justify-center items-center text-center text-wrap text-xs sm:text-sm lg:text-base">
-          <NavLink to="/phimtrung" className={getNavLinkClass}>Phim Trung</NavLink>
           <NavLink to="/phimdienanh" className={getNavLinkClass}>Phim Điện Ảnh</NavLink>
           <NavLink to="/anime" className={getNavLinkClass}>Anime</NavLink>
           <NavLink to="/2n1d" className={getNavLinkClass}>2N1D</NavLink>

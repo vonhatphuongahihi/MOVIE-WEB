@@ -100,7 +100,7 @@ const SwiperControls = styled.div`
   }
 `;
 
-function Anhtraisayhi() {
+function Thethao() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -219,7 +219,7 @@ function Anhtraisayhi() {
             </BannerButton>
             <BannerButton
               className="btn-detail"
-              onClick={() => handleMovieClick(bannerMovies)}
+              onClick={() => console.log("Thông tin video:", bannerMovies?.info)}
             >
               <IoInformationCircleOutline /> Thông tin
             </BannerButton>
@@ -228,11 +228,10 @@ function Anhtraisayhi() {
       </div>
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCardsShow1 title={"MÀN TRÌNH DIỄN ĐẶC SẮC 30 ANH TRAI"} category={"row1"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"ANH TRAI SAY HI TRỌN BỘ"} category={"row2"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"BEST MOMENT 30 ANH TRAI"} category={"row3"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"HẬU TRƯỜNG 30 ANH TRAI"} category={"row4"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"FOCUS CAM 30 ANH TRAI"} category={"row5"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1 title={"AFC - BÓNG ĐÁ CHÂU Á"} category={"row1"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} /> 
+          <TitleCardsShow1  title={"SAIGON PHANTOM AOV"} category={"row2"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1  title={"NGOẠI HẠNG ANH - PREMIER LEAGUE"} category={"row3"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1  title={"THỂ THAO SẮP PHÁT SÓNG"} category={"row4"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
         </div>
       </div>
 
@@ -250,4 +249,4 @@ function Anhtraisayhi() {
   );
 }
 
-export default Anhtraisayhi;
+export default Thethao;
