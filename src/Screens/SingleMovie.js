@@ -110,10 +110,9 @@ function SingleMovie() {
       <br></br>
 
       <div className="flex items-center space-x-4">
-        <NavLink to="/" className="flex items-center text-subMain">
+        <NavLink to="/">
           <img
             src="/images/Back.svg"
-            alt="Back Icon"
             className="w-12 h-12"
           />
         </NavLink>
@@ -203,13 +202,13 @@ function SingleMovie() {
               <div className="flex-2 w-1/5 flex items-center gap-2">
                 <FaRegCalendar className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
-                  {isApiMovie ? movie.release_date: movie.releaseYear || "N/A"}
+                  {isApiMovie ? movie.release_date: movie.release_date || "N/A"}
                 </span>
               </div>
               <div className="flex-2 w-2/5 flex items-center gap-2">
                 <IoTimeOutline className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
-                  {isApiMovie ? movie.runtime : movie.duration || "N/A"} phút
+                  {isApiMovie ? movie.runtime : movie.runtime || "N/A"} phút
                 </span>
               </div>
             </div>
@@ -217,8 +216,8 @@ function SingleMovie() {
             <hr className="border-t-1 border-gray-300 mb-8" />
 
             <div className="mb-4 flex">
-            <span className="text-sm font-medium mr-2">Thể loại: </span>
-            <span className="text-sm font-medium ">
+            <span className="font-medium mr-2">Thể loại: </span>
+            <span className="font-medium ">
               {isApiMovie ? movie.genres.map(genre => genre.name).join(', ') : movie.genres.join(', ')}
             </span>
             </div>
@@ -257,8 +256,7 @@ function SingleMovie() {
         </div>
       </div>
 
-      <MovieCasts movie={movie} />
-
+      <MovieCasts movie={movie} isApiMovie={isApiMovie} />
       <div className="my-16">
         <Titles title="Nội dung liên quan" Icon={BsCollectionFill} />
         <div className="flex overflow-x-auto mt-6 sm:mt-10 gap-6">

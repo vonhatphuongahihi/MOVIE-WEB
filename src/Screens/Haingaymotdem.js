@@ -21,7 +21,7 @@ import { db } from '../firebase';
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/effect-fade";   
+import "swiper/css/effect-fade";    // CSS cho hiệu ứng fade
 import "swiper/css/autoplay";  
 
 const ChatbotIconWrapper = styled.div`
@@ -100,7 +100,7 @@ const SwiperControls = styled.div`
   }
 `;
 
-function Anhtraisayhi() {
+function Haingaymotdem() {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -114,7 +114,7 @@ function Anhtraisayhi() {
   useEffect(() => {
     const fetchMovieById = async () => {
       try {
-        const movieDoc = await getDoc(doc(db, "tvShows", "St9wjDjv95pryg4N180w"));
+        const movieDoc = await getDoc(doc(db, "tvShows", "beO4G1fGhSqD1s3p7vZh"));
         if (movieDoc.exists()) {
           setBannerMovies(movieDoc.data());
         } else {
@@ -127,7 +127,6 @@ function Anhtraisayhi() {
   
     fetchMovieById();
   }, []);
-  
   
 
   const openPopup = () => {
@@ -186,7 +185,7 @@ function Anhtraisayhi() {
       <div className="home">
         <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <video
-            src="./videos/teaser_atsh.mp4"
+            src="./videos/teaser_2n1d.mp4"
             autoPlay
             loop
             muted
@@ -208,7 +207,7 @@ function Anhtraisayhi() {
                 marginBottom: '35px',
               }}
             >
-              { "Quy tụ 30 nam ca sĩ trẻ tượng trưng cho thế hệ mới, mang trông mình tuổi trẻ tươi nguyên, khát vọng đột phá và giấc mơ rạng danh văn hóa bản địa."}
+              { "2 Ngày 1 Đêm là chương trình truyền hình thực tế – nơi các nghệ sĩ có những chuyến đi trong vòng #2Ngay1Dem đến nhiều vùng miền khác nhau, khám phá những cảnh đẹp hùng vĩ, những nét văn hóa độc đáo và những con người thân thiện của Việt Nam. Các thành viên phải hoàn thành nhiều nhiệm vụ và thử thách khác nhau để nhận những phần thưởng/hình phạt thú vị."}
             </p>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
             <BannerButton
@@ -226,13 +225,12 @@ function Anhtraisayhi() {
           </div>
         </div>
       </div>
-
-        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCardsShow1 title={"MÀN TRÌNH DIỄN ĐẶC SẮC 30 ANH TRAI"} category={"row1"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"ANH TRAI SAY HI TRỌN BỘ"} category={"row2"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"BEST MOMENT 30 ANH TRAI"} category={"row3"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"HẬU TRƯỜNG 30 ANH TRAI"} category={"row4"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"FOCUS CAM 30 ANH TRAI"} category={"row5"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
+        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}> 
+          <TitleCardsShow1 title={"2 NGÀY 1 ĐÊM MÙA 3 - SHOW HOT NHẤT 2024"} category={"row1"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
+          <TitleCardsShow1  title={"CHƠI KHÔNG GIỚI HẠN - CƯỜI NGHIÊNG NGẢ"} category={"row2"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
+          <TitleCardsShow1  title={"2 NGÀY 1 ĐÊM MÙA 2"} category={"row3"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
+          <TitleCardsShow1  title={"HẬU TRƯỜNG 2 NGÀY 1 ĐÊM MÙA 2"} category={"row4"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
+          <TitleCardsShow1  title={"2 NGÀY 1 ĐÊM MÙA LỄ HỖI"} category={"row5"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
         </div>
       </div>
 
@@ -250,4 +248,4 @@ function Anhtraisayhi() {
   );
 }
 
-export default Anhtraisayhi;
+export default Haingaymotdem;
