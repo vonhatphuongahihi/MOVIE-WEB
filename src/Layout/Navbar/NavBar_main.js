@@ -5,8 +5,10 @@ import { IoFilter } from "react-icons/io5";
 import { Link, NavLink } from 'react-router-dom';
 import FilterPopup from '../../Components/FilterPopup';
 import SearchForm from '../../Components/SearchForm';
-import { logout } from '../../firebase';
 import NotificationIcon from '../../Components/Notification/NotificationIcon';
+import { getUserProfile, logout } from "../../firebase";
+import { getAuth } from "firebase/auth";
+
 
 import './NavBar.css'
 
@@ -20,6 +22,7 @@ function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isFilterPopupOpen, setFilterPopupOpen] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState(null);
   
   const toggleDropdown = () => {
     setShowDropdown((prev) => !prev);
@@ -32,6 +35,23 @@ function Navbar() {
   const toggleFilterPopup = () => {
     setFilterPopupOpen((prev) => !prev);
   };
+
+  // Lấy avatar khi người dùng đã đăng nhập.
+  useEffect(() => {
+    const fetchUserAvatar = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        const userProfile = await getUserProfile(user.uid); // Hàm lấy dữ liệu từ Firestore
+        if (userProfile?.avatarUrl) {
+          setAvatarUrl(userProfile.avatarUrl); // Lưu avatar URL vào state
+        }
+      }
+    };
+
+    fetchUserAvatar();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -88,7 +108,15 @@ function Navbar() {
             <NotificationIcon />
             <div className="relative dropdown-container">
               <button onClick={toggleDropdown} className="mx-4">
-                <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer" />
+                {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt="User Avatar"
+                      className="w-6 h-6 rounded-full object-cover cursor-pointer"
+                    />
+                  ) : (
+                    <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer" />
+                  )}              
               </button>
               {showDropdown && (
                 <div className="absolute right-0 mt-2 bg-[#8B8B8B] shadow-lg rounded-lg w-40 py-1 z-20">
