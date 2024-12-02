@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { FaBars, FaRegUserCircle } from 'react-icons/fa';
-import { IoMdNotificationsOutline } from 'react-icons/io';
+import React, { useEffect, useState } from 'react';
+import { FaRegUserCircle } from 'react-icons/fa';
 import { IoFilter } from "react-icons/io5";
 import { Link, NavLink } from 'react-router-dom';
 import FilterPopup from '../../Components/FilterPopup';
+import NotificationIcon from '../../Components/Notification/NotificationIcon';
 import SearchForm from '../../Components/SearchForm';
 import { logout } from '../../firebase';
-import NotificationIcon from '../../Components/Notification/NotificationIcon';
 
-import './NavBar.css'
+import './NavBar.css';
 
 function Navbar() {
   const hover = "hover:text-subMain transition text-subMain";
@@ -73,7 +72,7 @@ function Navbar() {
           </div>
 
           {/* Search Form */}
-          <div className="flex items-center space-x-2 w-1/3">
+          <div className="flex items-center space-x-2 w-1/3 z-20">
             <SearchForm />
             <button onClick={toggleFilterPopup} className="block">
               <IoFilter className="w-5 h-5 text-subMain cursor-pointer" />

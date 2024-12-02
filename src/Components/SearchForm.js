@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { RiCloseLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { GetMovieInfoFromFirebase } from "./Home/GetMovieInfoFromFirebase";
 
 function SearchForm() {
   const [query, setQuery] = useState("");
@@ -12,39 +13,17 @@ function SearchForm() {
 
   const [trendingContent, setTrendingContent] = useState([]);
 
-  // Lấy danh sách phim và show truyền hình xu hướng từ TMDB
+  // Lấy danh sách phim xu hướng từ Firebase
   useEffect(() => {
     const fetchTrendingData = async () => {
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlYjBmODI3MTcyNGVjN2RkMDhjNjM4N2E4N2IyOTdiOCIsIm5iZiI6MTcyNzI4MDU5My4xNzQ4MDcsInN1YiI6IjY2ZjI0NzQ0NmMzYjdhOGQ2NDhlMGJjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ogqT5xPvWtOvhmZVifUCsnAxuijTrhZYoX5L7IcxE_o",
-        },
-      };
-
-      try {
-        // Gửi yêu cầu đồng thời cho trending movies và TV shows
-        const [moviesResponse, tvShowsResponse] = await Promise.all([
-          fetch("https://api.themoviedb.org/3/trending/movie/day?language=vi-VN", options),
-          fetch("https://api.themoviedb.org/3/trending/tv/day?language=vi-VN", options),
-        ]);
-
-        const moviesData = await moviesResponse.json();
-        const tvShowsData = await tvShowsResponse.json();
-
-        // Hợp nhất và sắp xếp theo độ phổ biến
-        const combinedTrending = [...moviesData.results, ...tvShowsData.results];
-        const sortedTrending = combinedTrending
-          .sort((a, b) => b.popularity - a.popularity)
-          .slice(0, 3); // Lấy 3 mục có độ phổ biến cao nhất
-
-        setTrendingContent(sortedTrending);
-      } catch (error) {
-        console.error("Error fetching trending data:", error);
-      }
+      const ids = ['1eWpVBtw5FUyhab5K8oH', '72zTKCt3KMhQnNKCESMB', 'HP0cVHuzY2aDnblcaBcX'];
+      const moviePromises = ids.map((movieId) => GetMovieInfoFromFirebase(movieId));
+      const moviesData = await Promise.all(moviePromises);
+    
+      const validMovies = moviesData.filter((movie) => movie !== null && movie !== undefined);
+      setTrendingContent(validMovies);
     };
-
+    
     fetchTrendingData();
   }, []);
 
@@ -199,12 +178,12 @@ function SearchForm() {
           <ul className="mt-3 ml-3.5 mr-3.5">
             {trendingContent.map((item, index) => (
               <li
-                key={item.id || index}
+                key={item.movieId || index}
                 className="text-black cursor-pointer flex items-center mb-3 hover:bg-neutral-200"
-                onClick={() => navigate(`/movie/${item.id}`)}
+                onClick={() => navigate(`/movie/${item.movieId}`)}
               >
                 <img
-                  src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
+                  src={item.type === 'tmdb' ? `https://image.tmdb.org/t/p/w500${item.backdrop_path}` : item.backdrop_path}
                   alt={item.title || item.name}
                   className="w-44 h-26 rounded mr-6"
                 />
