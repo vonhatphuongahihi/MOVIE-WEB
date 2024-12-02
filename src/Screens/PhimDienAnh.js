@@ -11,25 +11,19 @@ import TitleCards1 from '../Components/Home/TitleCards/TitleCards1';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
-import { useNavigate } from 'react-router-dom';
-import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from '../firebase'; 
 
 import { useContext } from 'react';
 import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
 
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from '../firebase'; 
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/effect-fade"; // CSS cho hiệu ứng fade
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-
 const ChatbotIconWrapper = styled.div`
   position: fixed;
   bottom: 20px;
