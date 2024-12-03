@@ -12,21 +12,20 @@ import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
 
-
 import { useContext } from 'react';
 import { RecentlyContext } from '../Context/RecentlyContext';
 import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
 
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from '../firebase'; 
+
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/effect-fade"; // CSS cho hiệu ứng fade
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { db } from '../firebase';
-
 
 const ChatbotIconWrapper = styled.div`
   position: fixed;

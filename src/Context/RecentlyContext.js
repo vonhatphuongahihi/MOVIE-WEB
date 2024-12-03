@@ -20,11 +20,16 @@ export const RecentlyProvider = ({ children }) => {
   const addRecently = (item) => {
     setRecently((prev) => {
       // Kiểm tra nếu item đã tồn tại trong lịch sử
-      if (!prev.find((rec) => rec.id === item.id)) {
-        const updatedHistory = [...prev, item];
+      if (!prev.some((rec) => rec.id === item.id)) {
+        const MAX_RECENTLY = 10; // Số mục tối đa
+        const updatedHistory = [...prev, item].slice(-MAX_RECENTLY);
   
-        // Cập nhật Firebase
-        updateRecently(updatedHistory);
+        try {
+          // Cập nhật Firebase
+          updateRecently(updatedHistory);
+        } catch (error) {
+          console.error("Error updating Firebase:", error);
+        }
   
         return updatedHistory;
       }
