@@ -1,13 +1,15 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaHeart, FaPlay, FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from 'react-icons/io5';
 import { RiCloseLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { FavoritesContext } from '../Context/FavoritesContext';
+import { RecentlyContext } from '../Context/RecentlyContext';
+import { UserContext } from '../Context/UserContext';
+import { auth } from '../firebase';
 import './MovieDetail/MovieDetail.css';
-import { db, auth } from '../firebase';
-import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import VipPopup from './Popup/VipLimitPopup';
 
 const Backdrop = styled.div`
   position: fixed;
@@ -158,6 +160,15 @@ const Content = styled.div`
 `;
 
 function ShowDetail({ movie, onClose }) {
+  const { addRecently } = useContext(RecentlyContext);
+  const { isUserVip } = useContext(UserContext); // Lấy trạng thái VIP từ Context
+  const navigate = useNavigate();
+  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
+  const [popupContent, setPopupContent] = useState({
+    action: ""
+  });
+
+
   const user = auth.currentUser;
   const userId = user ? user.uid : null; 
 
@@ -180,23 +191,16 @@ function ShowDetail({ movie, onClose }) {
         : `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`)
     : null;
 
-  const handleToggleFavorite = async () => {
-    const userDoc = doc(db, 'users', userId);
-    try {
+  const handleToggleFavorite = (isItemVip) => {
+    if (isItemVip === true && isUserVip === false) {
+      openVipPopup("Bạn cần đăng ký gói VIP để yêu thích nội dung này.");
+    } else {
       if (isFavorite) {
-        await updateDoc(userDoc, {
-          favorites: arrayRemove(movie.id)
-        });
-        removeFavorite(movie.id);
+        removeFavorite(movie.movieId);
       } else {
-        await updateDoc(userDoc, {
-          favorites: arrayUnion(movie.id)
-        });
         addFavorite(movie);
       }
       setIsFavorite(!isFavorite);
-    } catch (error) {
-      console.error("Lỗi khi cập nhật danh sách yêu thích: ", error);
     }
   };
 
@@ -208,9 +212,29 @@ function ShowDetail({ movie, onClose }) {
     return <p>Loading...</p>;
   }
 
+  const handleWatchNowClick = (tvShowId, isItemVip) => {
+    addRecently(movie);
+    if (isItemVip === true && isUserVip === false) {
+      openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
+    } else {
+      navigate(`/truyenhinh/${tvShowId}`);
+    }
+  };
+
+  const openVipPopup = (action) => {
+    setPopupContent({ action });
+    setVipPopupOpen(true);
+  };
+
+  const closeVipPopup = () => {
+    setVipPopupOpen(false);
+  };
+
+  // Xử lý ngôn ngữ và thể loại
   const languages = movie.language || 'Không rõ';
   const genreNames = movie.genres || []; 
 
+  // Kiểm tra xem phim có nằm trong danh sách yêu thích không
   const checkIfFavorite = () => {
     return favorites.some(fav => fav.movieId === movie.id);
   };
@@ -225,14 +249,15 @@ function ShowDetail({ movie, onClose }) {
               <RiCloseLine />
             </CloseButton>
             <BtnGroup>
-              <Link to={`/truyenhinh/${movie.id}`}>
-                <ImageButton className="btn-watch">
-                  <FaPlay /> Xem ngay
-                </ImageButton>
-              </Link>
+              <ImageButton
+                className="btn-watch"
+                onClick={() => handleWatchNowClick(movie.id, movie.vip)}
+              >
+                <FaPlay /> Xem ngay
+              </ImageButton>
               <ImageButton
                 className={`btn-like ${isFavorite ? 'liked' : ''}`}
-                onClick={handleToggleFavorite}
+                onClick={() => handleToggleFavorite(movie.vip)}
               >
                 <FaHeart /> {isFavorite ? 'Đã thích' : 'Yêu thích'}
               </ImageButton>
@@ -267,6 +292,7 @@ function ShowDetail({ movie, onClose }) {
           </Content>
         </ModalContent>
       </ModalContainer>
+      {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
     </Backdrop>
   );
 }

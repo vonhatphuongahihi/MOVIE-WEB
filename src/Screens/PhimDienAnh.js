@@ -11,23 +11,21 @@ import TitleCards1 from '../Components/Home/TitleCards/TitleCards1';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
-import { useNavigate } from 'react-router-dom';
-import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from '../firebase'; 
+
 
 import { useContext } from 'react';
+import { RecentlyContext } from '../Context/RecentlyContext';
 import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
 
+import { collection, getDocs, query, where } from "firebase/firestore";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/effect-fade"; // CSS cho hiệu ứng fade
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { db } from '../firebase';
 
 
 const ChatbotIconWrapper = styled.div`
@@ -107,6 +105,7 @@ const SwiperControls = styled.div`
 `;
 
 function PhimDienAnh() {
+  const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -177,10 +176,20 @@ function PhimDienAnh() {
   const [isVipPopupOpen, setVipPopupOpen] = useState(false);
 
   const handleWatchNowClick = (movieId, isItemVip) => {
+    // Tìm movie từ bannerMovies bằng movieId
+    const movie = bannerMovies.find((movie) => movie.movieId === movieId);
+  
+    if (!movie) {
+      console.error("Không tìm thấy thông tin phim.");
+      return;
+    }
+  
+    // Kiểm tra quyền truy cập VIP
     if (isItemVip === true && isUserVip === false) {
       openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
-      navigate(`/phimdienanh/${movieId}`);
+      addRecently(movie);
+      navigate(`/movie/${movieId}`);
     }
   };
 

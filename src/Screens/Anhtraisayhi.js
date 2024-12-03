@@ -1,28 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaPlay } from "react-icons/fa";
-import { GrNext, GrPrevious } from "react-icons/gr";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFirebase';
 
 import TitleCardsShow1 from '../Components/Home/TitleCards/TitleCardsShow1';
 import Layout from '../Layout/Layout';
-import ShowDetail from './ShowDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
+import ShowDetail from './ShowDetail';
 
+import { useContext } from 'react';
+import { RecentlyContext } from '../Context/RecentlyContext';
+import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
-import { collection, query, where, getDoc, doc } from "firebase/firestore";
-import { db } from '../firebase'; 
+
+import { doc, getDoc } from "firebase/firestore";
 import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/effect-fade";   
-import "swiper/css/autoplay";  
+import { db } from '../firebase';
 
 const ChatbotIconWrapper = styled.div`
   position: fixed;
@@ -101,12 +102,14 @@ const SwiperControls = styled.div`
 `;
 
 function Anhtraisayhi() {
+  const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
 
-  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
-  const navigate = useNavigate();
+  const [popupContent, setPopupContent] = useState({
+    action: ""
+  });
 
   // Tạo một tham chiếu đến Swiper
   const swiperRef = useRef(null);
@@ -156,17 +159,36 @@ function Anhtraisayhi() {
     setSelectedMovie(null);
   };
 
-  const handleWatchNowClick = (id) => {
-    if (id) {
-      console.log("Navigating to:", id);
-      navigate(`/truyenhinh/${id}`);
+  // Xử lý phim VIP
+  const { isUserVip } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
+
+  const handleWatchNowClick = (tvShowId, isItemVip) => {
+    // Tìm tvShow từ bannerMovies bằng tvShowId
+    const tvShow = bannerMovies.id === tvShowId ? bannerMovies : null;
+  
+    if (!tvShow) {
+      console.error("Không tìm thấy thông tin.");
+      return;
+    }
+  
+    // Kiểm tra quyền truy cập VIP
+    if (isItemVip === true && isUserVip === false) {
+      openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
-      console.error("Movie ID is undefined"); // Thông báo nếu ID chưa được xác định
+      addRecently(tvShow);
+      navigate(`/truyenhinh/${tvShowId}`);
     }
   };
   
+  const openVipPopup = (action) => {
+    setPopupContent({ action });
+    setVipPopupOpen(true);
 
-  const closeVIP = () => {
+  };
+  
+  const closeVipPopup = () => {
     setVipPopupOpen(false);
   };
 
@@ -213,7 +235,7 @@ function Anhtraisayhi() {
           <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
             <BannerButton
               className="btn-watch"
-              onClick={() => handleWatchNowClick(bannerMovies?.id)}
+              onClick={() => handleWatchNowClick(bannerMovies?.id, bannerMovies?.vip)}
             >
               <FaPlay /> Xem ngay
             </BannerButton>
@@ -245,7 +267,7 @@ function Anhtraisayhi() {
 
       {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
-      {isVipPopupOpen && <VipPopup onClose={closeVIP}/>}
+      {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
     </Layout>
   );
 }
