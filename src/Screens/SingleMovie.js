@@ -1,5 +1,5 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs,query, where } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
@@ -31,6 +31,10 @@ function SingleMovie() {
   const [videos, setVideos] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [isApiMovie, setIsApiMovie] = useState(false);
+  const [voteCount, setvoteCount] = useState(0);
+  const [voteAverage, setvoteAverage] = useState(0);
+  
+
 
   useEffect(() => {
     const auth = getAuth();
@@ -73,6 +77,32 @@ function SingleMovie() {
         setIsApiMovie(true); // Phim từ TMDB API
         console.log("Movie from TMDB:", apiData);
       }
+
+      // Fetch comments for this movie
+    const commentsSnapshot = await getDocs(
+      query(collection(db, "comments"), where("movieId", "==", id))
+    );
+    const comments = [];
+    let totalRating = 0;
+
+    commentsSnapshot.forEach((doc) => {
+      const commentData = doc.data();
+      const rating = parseFloat(commentData.rating);
+      
+      if (!isNaN(rating)) { // Kiểm tra rating có phải là số hợp lệ không
+        comments.push(commentData);
+        totalRating += rating; // Cộng điểm rating hợp lệ
+      }
+    });
+
+    const totalComments = comments.length; // Tổng số comment
+    const averageRating = totalComments > 0 ? (totalRating / totalComments).toFixed(1) : 0;
+
+    // Cập nhật state
+    setvoteCount(totalComments);
+    setvoteAverage(averageRating);
+      console.log("Comments:", comments);
+    
 
       // Fetch recommendations
       const recommendationsSnapshot = await getDocs(collection(db, "movies"));
@@ -169,7 +199,7 @@ function SingleMovie() {
               <img
                 src={isApiMovie 
                   ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` 
-                  : movie.backdropUrl} // URL nền cho phim do người dùng tải lên
+                  : movie.backdrop_path} // URL nền cho phim do người dùng tải lên
                 alt={movie?.title}
                 className="w-full h-full object-cover rounded-lg"
               />
@@ -183,11 +213,11 @@ function SingleMovie() {
             <div className="flex items-center gap-6">
               <div className="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
                 <img className="size-6" src="/rate-star.png" alt="Star Rating" />
-                <p className="font-bold text-xl">{isApiMovie ? movie.vote_average : movie.voteAverage}</p>
-                <p className="size-6 text-gray-500">({isApiMovie ? movie.vote_count : movie.voteCount})</p>
+                <p className="font-bold text-xl">{isApiMovie ? movie.vote_average : voteAverage}</p>
+                <p className="size-6 text-gray-500">({isApiMovie ? movie.vote_count : voteCount})</p>
               </div>
               <div className="flex text-lg gap-2 items-center text-star">
-                <Rating value={isApiMovie ? movie.vote_average : movie.voteAverage} />
+                <Rating value={isApiMovie ? movie.vote_average : voteAverage} />
               </div>
             </div>
 
@@ -286,7 +316,7 @@ function SingleMovie() {
         </div>
       </div>
 
-      <MovieRates movie={movie} user={user} />
+      <MovieRates movie={movie} user={user} onAddCompleted={fetchMovieData} />
     </Layout>
   );
 }
