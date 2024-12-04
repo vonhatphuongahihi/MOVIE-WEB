@@ -6,7 +6,7 @@ import Rating from "../Stars";
 import { addCommentToMovie, getCommentsForMovie, addReplyToComment, updateLikesDislikes } from "../../firebase";
 import { AiFillLike, AiFillDislike, AiOutlineComment } from "react-icons/ai";
 
-function MovieRates({ movie, user }) {
+function MovieRates({ movie, user, onAddCompleted }) {
   const Ratings = [
     { title: "Rất kém", value: 0 },
     { title: "Kém", value: 1 },
@@ -136,24 +136,25 @@ function MovieRates({ movie, user }) {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const movieComments = await getCommentsForMovie(movie.id);
+      const movieComments = await getCommentsForMovie(movie.movieId);
       setComments(movieComments);
     };
 
     
 
     fetchComments();
-  }, [movie.id]);
+  }, [movie.movieId]);
 
   const handleCommentSubmit = async () => {
     if (commentContent.trim()) {
       try {
-        await addCommentToMovie(movie.id, user.uid, commentContent, rating, user.name, user.avatarUrl);
+        await addCommentToMovie(movie.movieId, user.uid, commentContent, rating, user.name, user.avatarUrl);
         setCommentContent("");
         setRating(0);
         
-        const updatedComments = await getCommentsForMovie(movie.id);
+        const updatedComments = await getCommentsForMovie(movie.movieId);
         setComments(updatedComments);
+        onAddCompleted();
       } catch (error) {
         console.error("Error submitting comment:", error);
       }
@@ -209,23 +210,7 @@ function MovieRates({ movie, user }) {
               />
             </div>
           ) : (
-            // comments.map((comment) => (
-            //   <div key={comment.id} className="flex gap-4 p-4 border-b border-gray-200">
-            //     <img
-            //       src={comment.avatarUrl}
-            //       className="w-12 h-12 rounded-full object-cover"
-            //     />
-            //     <div>
-            //       <h4 className="text-lg font-semibold">{comment.userName}</h4>
-            //       <div className="flex mt-4 text-lg gap-2 text-star pb-3">
-            //   <Rating value={comment.rating} />
-            // </div>
-            //       <p className="text-gray-600">{comment.content}</p>
-                  
             
-            //     </div>
-            //   </div>
-            // ))
 
 
 <div className="grid grid-cols-1 gap-4">
