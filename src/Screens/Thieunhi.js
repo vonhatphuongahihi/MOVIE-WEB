@@ -1,25 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaPlay } from "react-icons/fa";
+import { GrNext, GrPrevious } from "react-icons/gr";
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoInformationCircleOutline } from "react-icons/io5";
-import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFirebase';
-import TitleCardsShow from '../Components/Home/TitleCards/TitleCardsShow';
-import Layout from '../Layout/Layout';
-import ShowDetail from './ShowDetail';
-import ChatbotPopup from './Popup/Chatbot_popup';
 import { useNavigate } from 'react-router-dom';
-import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import styled from 'styled-components';
 
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFirebase';
+
+import TitleCards1 from '../Components/Home/TitleCards/TitleCards1';
+import Layout from '../Layout/Layout';
+import MovieDetail from './MovieDetail';
+import ChatbotPopup from './Popup/Chatbot_popup';
+
+import { useContext } from 'react';
+import { RecentlyContext } from '../Context/RecentlyContext';
+import { UserContext } from '../Context/UserContext';
+import VipPopup from './Popup/VipLimitPopup';
+
+import { collection, getDocs, query, where } from "firebase/firestore";
 import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/effect-fade"; // CSS cho hiệu ứng fade
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/effect-fade";    // CSS cho hiệu ứng fade
-import "swiper/css/autoplay";  
-
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
+import { db } from '../firebase';
 
 const ChatbotIconWrapper = styled.div`
   position: fixed;
@@ -97,24 +104,40 @@ const SwiperControls = styled.div`
   }
 `;
 
-function TVShow() {
+function Thieunhi() {
+  const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
-  
-  const navigate = useNavigate();
+
+  const [popupContent, setPopupContent] = useState({
+    action: ""
+  });
 
   // Tạo một tham chiếu đến Swiper
   const swiperRef = useRef(null);
 
   useEffect(() => {
-    const fetchBannerMovies = async () => {
-      const ids = ['252373', '81329'];
-      const moviePromises = ids.map((movieId) => GetShowsInfoFromFirebase(movieId));
-      const moviesData = await Promise.all(moviePromises);
-      const validMovies = moviesData.filter((movie) => movie !== null && movie !== undefined);
-      setBannerMovies(validMovies);
-    };
+      const fetchBannerMovies = async () => {
+        try {
+          const moviesRef = collection(db, "movies"); 
+          const q = query(
+            moviesRef,
+            where("category", "==", "popular"),
+            where("genres", "array-contains", "Hoạt hình")
+          );
+      
+          const querySnapshot = await getDocs(q);
+          const moviesData = [];
+          querySnapshot.forEach((doc) => {
+            moviesData.push({ movieId: doc.id, ...doc.data() });
+          });
+      
+          setBannerMovies(moviesData);
+        } catch (error) {
+          console.error("Error fetching movies:", error);
+        }
+      };
     
     fetchBannerMovies();
   }, []);
@@ -128,33 +151,58 @@ function TVShow() {
     setPopupOpen(false);
   };
 
+  const handleMovieClick = async (movie) => {
+    if (!movie || !movie.movieId) {
+      console.error("Movie or movieId is undefined", movie);
+      return;
+    }
+    const pmovie = await GetMovieInfoFromFirebase(movie.movieId);
+    if (pmovie) {
+      setSelectedMovie(pmovie);
+    } else {
+      console.error("Could not fetch movie details", movie.movieId);
+    }
+  };
   
 
   const closeMoviePopup = () => {
     setSelectedMovie(null);
   };
 
-  const handleMovieClick = async (movie) => {
-    if (!movie || !movie.id) { // Sử dụng 'id' thay vì 'movieId'
-      console.error("Movie or movieId is undefined", movie);
+  // Xử lý phim VIP
+  const { isUserVip } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [isVipPopupOpen, setVipPopupOpen] = useState(false);
+
+  const handleWatchNowClick = (movieId, isItemVip) => {
+    // Tìm movie từ bannerMovies bằng movieId
+    const movie = bannerMovies.find((movie) => movie.movieId === movieId);
+  
+    if (!movie) {
+      console.error("Không tìm thấy thông tin phim.");
       return;
     }
-    const pmovie = await GetShowsInfoFromFirebase(movie.id); // Cập nhật ở đây
-    if (pmovie) {
-      setSelectedMovie(pmovie);
+  
+    // Kiểm tra quyền truy cập VIP
+    if (isItemVip === true && isUserVip === false) {
+      openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
-      console.error("Could not fetch movie details", movie.id);
+      addRecently(movie);
+      navigate(`/movie/${movieId}`);
     }
+  };
+  
+
+  const openVipPopup = (action) => {
+    setPopupContent({ action });
+    setVipPopupOpen(true);
+
+  };
+  
+  const closeVipPopup = () => {
+    setVipPopupOpen(false);
   };
 
-  const handleWatchNowClick = (movieId) => {
-    if (movieId) {
-      console.log("Navigating to:", movieId);
-      navigate(`/truyenhinh/${movieId}`); // Cập nhật ở đây
-    } else {
-      console.error("Movie ID is undefined");
-    }
-  };
   const bannerCaptionStyle = {
     position: 'absolute',
     width: '100%',
@@ -208,7 +256,8 @@ function TVShow() {
                   </p>
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
                     <BannerButton
-                      className="btn-watch"onClick={() => handleWatchNowClick(movie.movieId)} // Dùng movie.movieId nếu nó là ID đúng
+                      className="btn-watch"
+                      onClick={() => handleWatchNowClick(movie.movieId, movie.vip)}
                       >
                       <FaPlay /> Xem ngay
                     </BannerButton>
@@ -233,10 +282,9 @@ function TVShow() {
         </SwiperControls>
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCardsShow title={"THỊNH HÀNH"} category={"popular"} onMovieClick={handleMovieClick} />
-          <TitleCardsShow title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
-          <TitleCardsShow title={"MỚI NHẤT"} category={"on_the_air"} onMovieClick={handleMovieClick} />
-          <TitleCardsShow title={"SẮP PHÁT SÓNG"} category={"airing_today"} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"THỊNH HÀNH"} category={"popular"} genres={["Hoạt hình"]} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"PHIM HOẠT HÌNH TUỔI THƠ"}  genres={["Hoạt hình","Tuổi thơ"]} onMovieClick={handleMovieClick} />
+          <TitleCards1 title={"HOẠT HÌNH DISNEY"}  genres={["Hoạt hình","Disney"]} onMovieClick={handleMovieClick} />
         </div>
       </div>
 
@@ -247,9 +295,11 @@ function TVShow() {
       )}
       {isPopupOpen && <ChatbotPopup closePopup={closePopup} isOpen={isPopupOpen} />}
 
-      {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
+      {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
+
+      {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
     </Layout>
   );
 }
 
-export default TVShow;
+export default Thieunhi;

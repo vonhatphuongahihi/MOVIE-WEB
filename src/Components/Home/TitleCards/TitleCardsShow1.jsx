@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import './titleCards.css';
 import { db } from '../../../firebase'; 
 
-const TitleCardShows = ({ title, category, genres, country, onMovieClick}) => {
+const TitleCardsShow1 = ({ title, category, genres, country, onMovieClick }) => {
   const [firebaseData, setFirebaseData] = useState([]);
   const cardsRef = useRef();
 
@@ -16,7 +16,7 @@ const TitleCardShows = ({ title, category, genres, country, onMovieClick}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const moviesRef = collection(db, "movies");
+        const moviesRef = collection(db, "tvShows");
   
         // Truy vấn riêng lẻ
         const genresQuery = genres?.length 
@@ -47,6 +47,7 @@ const TitleCardShows = ({ title, category, genres, country, onMovieClick}) => {
   
     fetchData();
   }, [category, genres, country]);
+  
 
   return (
     <div className='title-cards'>
@@ -55,8 +56,8 @@ const TitleCardShows = ({ title, category, genres, country, onMovieClick}) => {
         {firebaseData.map((card, index) => (
           <div key={index} className="card" onClick={() => onMovieClick(card)}>
             <img 
-                src={`https://image.tmdb.org/t/p/w1280${card.backdrop_path}`} 
-                alt={card.title} 
+              src={card.type === 'tmdb' ? `https://image.tmdb.org/t/p/w1280${card.backdrop_path}` : card.backdrop_path || 'default-image-path.jpg'} 
+              alt={card.title} 
             />
             <p>{card.title}</p>
           </div>
@@ -65,4 +66,4 @@ const TitleCardShows = ({ title, category, genres, country, onMovieClick}) => {
     </div>
   );
 }
-export default TitleCardShows;
+export default TitleCardsShow1;

@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { FiFilm, FiTrash, FiPlay, FiStopCircle } from "react-icons/fi";
-import Layout from "../Layout/Layout";
+import Layout_main from "../Layout/Layout_main";
 import { RecentlyContext } from "../Context/RecentlyContext";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const MovieContainer = styled.div`
   background: #121110;
@@ -132,22 +133,31 @@ const SideButton = styled.button`
   }
 `;
 
+
 function RecentlyWatch() {
   const { recently, removeRecently, removeAll, loadRecently } = useContext(RecentlyContext);
   const navigate = useNavigate();
-  const getLang = (movie) => {
-    return movie.spoken_languages.map(spoken_languages => spoken_languages.english_name).join(', ');
-  }
   useEffect(()=>{
     loadRecently();
   },[])
   return (
-    <Layout>
-      <h3 className="text-lg lg:text-2xl mt-24 mb-5 mx-5 font-semibold text-subMain ">
-        LỊCH SỬ XEM PHIM
+    <Layout_main>
+      <br></br>
+      <br></br>
+      <NavLink to="/">
+        <img
+          src="/images/Back.svg"
+          alt="Back Icon"
+          className="ml-2 w-12 h-12"
+        />
+      </NavLink>
+      <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] mb-4 text-subMain ml-10">
+        LỊCH SỬ XEM
       </h3>
+      
 
       <div className="min-h-screen flex flex-col items-center justify-between;">
+    
         {recently.length === 0 ? (
           <div className="flex justify-center items-center m-20 p-20">
             <FiFilm className="text-4xl mr-2 text-white" />
@@ -164,10 +174,14 @@ function RecentlyWatch() {
                 .map((movie, index) => (
                   <MovieContainer key={index}>
                     <ImageContainer>
-                      <Image
-                        src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
-                        alt={movie.title}
-                      />
+                    <Image
+                      src={movie.backdrop_path
+                        ? (!movie.backdrop_path.includes("http") 
+                            ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+                            : movie.backdrop_path)
+                        : "/path/to/default-image.jpg"} 
+                      alt={movie.title || "No title available"}
+                    />
                     </ImageContainer>
                     <div class="mx-10">
                       <Title>{movie.title}</Title>
@@ -178,7 +192,6 @@ function RecentlyWatch() {
                       <Evaluation>
                         <p>{movie.runtime} phút</p>
                         <p>|</p>
-                        <p>{getLang(movie)}</p>
                       </Evaluation>
 
                       <ButtonContainer>
@@ -215,7 +228,7 @@ function RecentlyWatch() {
           </div>
         )}
       </div>
-    </Layout>
+    </Layout_main>
   );
 }
 export default RecentlyWatch;

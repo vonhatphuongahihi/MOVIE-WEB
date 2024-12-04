@@ -14,7 +14,7 @@ import TitleCards from '../Components/Home/TitleCards/TitleCards';
 import Layout from '../Layout/Layout';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
-
+import { RecentlyContext } from '../Context/RecentlyContext';
 import { useContext } from 'react';
 import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
@@ -102,6 +102,7 @@ const SwiperControls = styled.div`
 `;
 
 function HomeScreen() {
+  const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -159,12 +160,23 @@ function HomeScreen() {
   const [isVipPopupOpen, setVipPopupOpen] = useState(false);
 
   const handleWatchNowClick = (movieId, isItemVip) => {
+    // Tìm movie từ bannerMovies bằng movieId
+    const movie = bannerMovies.find((movie) => movie.movieId === movieId);
+  
+    if (!movie) {
+      console.error("Không tìm thấy thông tin phim.");
+      return;
+    }
+  
+    // Kiểm tra quyền truy cập VIP
     if (isItemVip === true && isUserVip === false) {
       openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
+      addRecently(movie);
       navigate(`/movie/${movieId}`);
     }
   };
+  
 
   const openVipPopup = (action) => {
     setPopupContent({ action });

@@ -104,14 +104,25 @@ function SingleMovie() {
 
   return (
     <Layout>
-      <div className="flex-btn flex-wrap gap-2 bg-main rounded border border-gray-800 p-6">
-        <NavLink to="/" className="md:text-xl text-sm flex gap-5 items-center font-bold text-dryGray">
-          <BiArrowBack /> {movie?.title}
-        </NavLink>
-      </div>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
 
-      <div id="Watch" className="my-8">
-        <div className="container mx-auto bg-dry p-12 mb-12">
+      <div className="flex items-center space-x-4">
+        <NavLink to="/">
+          <img
+            src="/images/Back.svg"
+            className="w-12 h-12"
+          />
+        </NavLink>
+        <p className="text-2xl text-[20px] mb-0 text-subMain">
+          {movie?.title}
+        </p>
+      </div>
+ 
+      <div id="Watch">
+        <div className="container mx-auto bg-main p-6">
           {play ? (
             isApiMovie ? (
               <YouTube
@@ -168,7 +179,7 @@ function SingleMovie() {
 
         <div className="flex justify-between mx-20">
           <div className="flex flex-col w-1/2 mb-15">
-            <h1 className="font-bold mb-10 text-3xl">{movie?.title}</h1>
+          <h1 className="font-bold mb-10 text-3xl text-left">{movie?.title}</h1>
             <div className="flex items-center gap-6">
               <div className="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
                 <img className="size-6" src="/rate-star.png" alt="Star Rating" />
@@ -191,13 +202,13 @@ function SingleMovie() {
               <div className="flex-2 w-1/5 flex items-center gap-2">
                 <FaRegCalendar className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
-                  {isApiMovie ? movie.release_date.substring(0, 4) : movie.releaseYear || "N/A"}
+                  {isApiMovie ? movie.release_date: movie.release_date || "N/A"}
                 </span>
               </div>
               <div className="flex-2 w-2/5 flex items-center gap-2">
                 <IoTimeOutline className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
-                  {isApiMovie ? movie.runtime : movie.duration || "N/A"} phút
+                  {isApiMovie ? movie.runtime : movie.runtime || "N/A"} phút
                 </span>
               </div>
             </div>
@@ -205,13 +216,13 @@ function SingleMovie() {
             <hr className="border-t-1 border-gray-300 mb-8" />
 
             <div className="mb-4 flex">
-            <IoIosRadioButtonOn />
-            <span className="text-sm font-medium ">
+            <span className="font-medium mr-2">Thể loại: </span>
+            <span className="font-medium ">
               {isApiMovie ? movie.genres.map(genre => genre.name).join(', ') : movie.genres.join(', ')}
             </span>
             </div>
 
-            <p className="mb-10">{movie?.overview}</p>
+            <p className="mb-10 text-justify">{movie?.overview}</p>
           </div>
 
           <div className="flex flex-col justify-center mt-10">
@@ -225,7 +236,7 @@ function SingleMovie() {
             </div>
 
             <div className="flex justify-between">
-              <p className="font-medium">Diễn Viên:</p>
+              <p className="font-medium mr-2">Diễn viên:</p>
               <p className="font-medium">
                 {isApiMovie 
                   ? movie.casts.cast.slice(0, 2).map(actor => actor.name).join(', ') || "Không có thông tin"
@@ -245,8 +256,7 @@ function SingleMovie() {
         </div>
       </div>
 
-      <MovieCasts movie={movie} />
-
+      <MovieCasts movie={movie} isApiMovie={isApiMovie} />
       <div className="my-16">
         <Titles title="Nội dung liên quan" Icon={BsCollectionFill} />
         <div className="flex overflow-x-auto mt-6 sm:mt-10 gap-6">

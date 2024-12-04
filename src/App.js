@@ -13,7 +13,9 @@ import ForgotPassword from './Screens/ForgotPassword';
 import HomeScreen from './Screens/HomeScreen';
 import PhimDienAnh from './Screens/PhimDienAnh';
 import Anime from './Screens/Anime';
-import PhimTrung from './Screens/PhimTrung';
+import Anhtraisayhi from './Screens/Anhtraisayhi';
+import Thethao from './Screens/Thethao'
+import Haingaymotdem from './Screens/Haingaymotdem';
 import Login from './Screens/Login/Login';
 import Signup from './Screens/Login/Signup';
 import MoviesPage from './Screens/Movies';
@@ -35,13 +37,14 @@ import MoviesList from './Screens/Dashboard/Admin/MovieList';
 import ShowsList from './Screens/Dashboard/Admin/ShowList';
 import UsersList from './Screens/Dashboard/Admin/UserList';
 import AddMovie from './Screens/Dashboard/Admin/AddMovie';
+import AddShow from './Screens/Dashboard/Admin/AddShow';
 import SingleShow from './Screens/SingleShow';
 import FAQScreen from './Screens/FAQScreen';
 
 import Movie1 from './Screens/Movie1';
 import Payment from './Screens/Payment';
 import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
-import TVShow from './Screens/TVShow';
+import Thieunhi from './Screens/Thieunhi';
 import VipRegistration from './Screens/VipRegistration';
 import TvShowFetcher from './TvShowFetcher';
 
@@ -110,15 +113,17 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/search" element={<SearchResults />} />
-          <Route path="/truyenhinh" element={<TVShow/>} />
+          <Route path="/thieunhi" element={<Thieunhi/>} />
           <Route path="/phimdienanh" element={<PhimDienAnh />} />
-          <Route path="/phim" element={<Movie1/>} />
-          <Route path="/phimtrung" element={<PhimTrung />} />
+          <Route path="/anhtraisayhi" element={<Anhtraisayhi />} />
+          <Route path="/2n1d" element={<Haingaymotdem />} />
+          <Route path="/thethao" element={<Thethao />}/>
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/movieslist" element={<MoviesList />} />
           <Route path="/admin/showslist" element={<ShowsList />} />
           <Route path="/admin/userslist" element={<UsersList />} />
           <Route path="/admin/addmovie" element={<AddMovie />} />
+          <Route path="/admin/addshow" element={<AddShow />} />
           <Route path="/phimtrung/:movieId" element={<SingleMoviePhimTrung />} />
           <Route path="/faqs" element={<FAQScreen />} />
           <Route path="/truyenhinh/:id" element={<SingleShow />} />

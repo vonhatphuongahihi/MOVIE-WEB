@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../firebase"; 
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore"; 
+import { db } from "../firebase";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+
 import { FaCloudDownloadAlt, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -9,58 +10,90 @@ import { GoEye } from "react-icons/go";
 const Head = "text-xs text-left text-main font-semibold px-6 py-2 uppercase text-white";
 const Text = "text-sm text-left leading-6 whitespace-nowrap px-5 py-3 text-white";
 
-// Fetch TV shows from Firebase
+// Lấy dữ liệu từ Firebase
 const fetchShows = async () => {
-  const showsCollection = collection(db, "tvShows"); 
-  const showsSnapshot = await getDocs(showsCollection);
-  const showsList = showsSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  return showsList;
+  const showsCollection = collection(db, "tvShows");
+  const showSnapshot = await getDocs(showsCollection);
+  const showList = showSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  return showList;
 };
 
-// Delete TV show from Firebase
-const deleteShow = async (showId, setShows) => {
+// Xóa phim từ Firebase
+const deleteShow = async (id, setShows) => {
   try {
-    const showDocRef = doc(db, "tvShows", showId);
-    await deleteDoc(showDocRef);
-    setShows((prevShows) => prevShows.filter(show => show.id !== showId)); 
+    // Tìm tài liệu phim trong Firestore
+    const showDocRef = doc(db, "tvShows", id);
+    await deleteDoc(showDocRef); // Xóa tài liệu
+
+    // Cập nhật lại danh sách phim sau khi xóa
+    setShows((prevShows) => prevShows.filter(show => show.id !== id));
   } catch (error) {
     console.error("Error deleting show: ", error);
   }
 };
 
-// Rows for TV show table
+// rows
+// rows
 const Rows = (show, i, admin, setShows) => {
+  // Kiểm tra loại phim (tmdb hoặc upload)
+  const isTmdb = show.type === "tvtmdb";
+
   return (
     <tr key={i}>
+      {/* Poster */}
       <td className={`${Text}`}>
         <div className="w-12 p-1 bg-dry border border-border h-12 rounded overflow-hidden">
           <img
             className="h-full w-full object-cover"
-            src={`https://image.tmdb.org/t/p/w500${show.poster_path}`}
-            alt={show?.name}
+            // Nếu là TMDB, lấy poster từ URL TMDB, nếu là upload, lấy trực tiếp từ Firestore
+            src={isTmdb ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : show.poster_path}
+            alt={show?.title}
           />
         </div>
       </td>
+
+      {/* Backdrop */}
       <td className={`${Text}`}>
         <div className="w-12 p-1 bg-dry border border-border h-12 rounded overflow-hidden">
           <img
             className="h-full w-full object-cover"
-            src={`https://image.tmdb.org/t/p/w500${show.backdrop_path}`}
-            alt={show?.name}
+            // Nếu là TMDB, lấy backdrop từ URL TMDB, nếu là upload, lấy trực tiếp từ Firestore
+            src={isTmdb ? `https://image.tmdb.org/t/p/w500${show.backdrop_path}` : show.backdrop_path}
+            alt={show?.title}
           />
         </div>
       </td>
-      <td className={`${Text} truncate`}>{show.name}</td>
+
+      {/* Title */}
+      <td className={`${Text} truncate`}>{show.title}</td>
+      
+      {/* Category */}
       <td className={`${Text}`}>{show.category}</td>
-      <td className={`${Text}`}>{show.country?.[0] || "Unknown"}</td>
+      
+      {/* Country */}
+      <td className={`${Text}`}>{show.country}</td>
+
+      {/* Genres */}
       <td className={`${Text}`}>
-        {show.genres?.join(", ") || "No genres available"}
-      </td>
-      <td className={`${Text}`}>{show.first_air_date}</td>
-      <td className={`${Text}`}>{show.episode_run_time} mins</td>
+        {Array.isArray(show.genres) && show.genres.length > 0 
+          ? show.genres.join(", ") 
+          : "No genres available"}
+      </td>      
+
+      {/* Release Date */}
+      <td className={`${Text}`}>{show.release_date}</td>
+
+      {/* Runtime */}
+      <td className={`${Text}`}>{show.runtime} mins</td>
+
+      {/* Vote Average */}
       <td className={`${Text}`}>{show.vote_average}</td>
+
+      {/* Vote Count */}
       <td className={`${Text}`}>{show.vote_count}</td>
-      <td className={`${Text}`}>{show.seasons} seasons</td>
+
+
+      {/* Actions */}
       <td className={`${Text} float-right flex-rows gap-2`}>
         {admin ? (
           <>
@@ -68,7 +101,7 @@ const Rows = (show, i, admin, setShows) => {
               Edit <FaEdit className="text-green-500" />
             </button>
             <button
-              onClick={() => deleteShow(show.id, setShows)}
+              onClick={() => deleteShow(show.id, setShows)} // Gọi hàm xóa khi nhấn nút
               className="bg-subMain text-white rounded flex-colo w-6 h-6"
             >
               <MdDelete />
@@ -80,7 +113,7 @@ const Rows = (show, i, admin, setShows) => {
               Download <FaCloudDownloadAlt className="text-green-500" />
             </button>
             <Link
-              to={`/show/${show?.id}`}
+              to={`/truyenhinh/${show?.id}`}
               className="bg-subMain text-white rounded flex-colo w-6 h-6"
             >
               <GoEye />
@@ -92,14 +125,16 @@ const Rows = (show, i, admin, setShows) => {
   );
 };
 
+
+// table
 function Table3({ admin }) {
   const [shows, setShows] = useState([]);
 
-  // Fetch shows from Firestore when component mounts
+  // Fetch Shows from Firestore when component mounts
   useEffect(() => {
     const getShows = async () => {
-      const showsList = await fetchShows();
-      setShows(showsList);
+      const showList = await fetchShows();
+      setShows(showList);
     };
 
     getShows();
@@ -111,16 +146,15 @@ function Table3({ admin }) {
         <thead>
           <tr className="bg-dryGray">
             <th scope="col" className={Head}>Poster</th>
-            <th scope="col" className={Head}>Backdrop</th>
-            <th scope="col" className={Head}>Name</th>
+            <th scope="col" className={Head}>Dropback</th>
+            <th scope="col" className={Head}>Title</th>
             <th scope="col" className={Head}>Category</th>
             <th scope="col" className={Head}>Country</th>
             <th scope="col" className={Head}>Genres</th>
-            <th scope="col" className={Head}>First Air Date</th>
+            <th scope="col" className={Head}>Release Date</th>
             <th scope="col" className={Head}>Runtime</th>
             <th scope="col" className={Head}>Vote Average</th>
             <th scope="col" className={Head}>Vote Count</th>
-            <th scope="col" className={Head}>Seasons</th>
             <th scope="col" className={`${Head} text-end`}>Actions</th>
           </tr>
         </thead>

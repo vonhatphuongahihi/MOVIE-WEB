@@ -1,8 +1,8 @@
+import { addDoc, collection, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
-import Header from "../SideBar";
 import { db } from "../../../firebase";
-import { collection, addDoc, updateDoc } from "firebase/firestore";
+import Header from "../SideBar";
 
 function AddMovie() {
   const [newCast, setNewCast] = useState({ name: "", character: "", profile_path: null });
@@ -69,22 +69,28 @@ function AddMovie() {
   };
 
   const handleAddCast = async () => {
-    if (newCast.profile_path) {
-      try {
-        // Upload cast profile image to Cloudinary
-        const profileImageUrl = await uploadToCloudinary(newCast.profile_path, "image");
+    try {
+      let profileImageUrl = newCast.profile_path;
   
-        // Add new cast with uploaded image URL
+      // Nếu có profile_path, thực hiện upload lên Cloudinary
+      if (profileImageUrl) {
+        profileImageUrl = await uploadToCloudinary(profileImageUrl, "image");
+      } else {
+        profileImageUrl = null; // Nếu không có ảnh, gán là null
+      }
+  
+      // Chỉ cần name hoặc character có giá trị mới thêm vào danh sách
+      if (newCast.name || newCast.character) {
         setCasts([...casts, { ...newCast, profile_path: profileImageUrl }]);
   
-        // Reset the newCast state
+        // Reset trạng thái newCast
         setNewCast({ name: "", character: "", profile_path: null });
-      } catch (error) {
-        console.error("Error uploading cast image:", error);
-        alert("Failed to upload cast image.");
+      } else {
+        alert("Please enter either the cast name or character name.");
       }
-    } else {
-      alert("Please upload a profile image for the cast.");
+    } catch (error) {
+      console.error("Error uploading cast image:", error);
+      alert("Failed to upload cast image.");
     }
   };
   

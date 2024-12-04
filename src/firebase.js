@@ -172,32 +172,47 @@ const getNotifications = async () => {
 };
 
 const updateRecently = async (movieList) => {
-    try {
-        const user = auth.currentUser; 
-        const uid = user.uid;
-        const userDocRef = doc(db, "users", uid);
-        await updateDoc(userDocRef, {"history": movieList});
-        console.log("Cập nhật danh sách history: ",movieList);
-    }catch (error) {
-        console.error("Không thêm được phim:", error);
-    }
-}
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Người dùng chưa đăng nhập.");
+
+    const uid = user.uid;
+    const userDocRef = doc(db, "users", uid);
+
+    // Lưu toàn bộ `movieList` vào `history`
+    await updateDoc(userDocRef, { history: movieList });
+
+    console.log("Cập nhật danh sách history:", movieList);
+  } catch (error) {
+    console.error("Không thể cập nhật lịch sử:", error);
+  }
+};
+
+
 
 const getRecently = async () => {
-    try{
-        const user = auth.currentUser; 
-        const uid = user.uid;
-        
-            const userDoc = doc(db, "users", uid);
-            const userDocRef = await getDoc((userDoc))
-            const history = userDocRef.data().history;
-            console.log("Lấy history:",history)
-            return history;
-    }catch(error){
-        console.error("Không tìm được phim",error);
-        return [];
+  try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("Người dùng chưa đăng nhập.");
+
+    const uid = user.uid;
+    const userDoc = doc(db, "users", uid);
+    const userDocSnap = await getDoc(userDoc);
+
+    if (userDocSnap.exists()) {
+      const history = userDocSnap.data().history;
+      console.log("Lấy danh sách history:", history);
+      return history || []; // Trả về mảng rỗng nếu không có lịch sử
+    } else {
+      console.warn("Không tìm thấy tài liệu người dùng.");
+      return [];
     }
-}
+  } catch (error) {
+    console.error("Không thể lấy lịch sử:", error);
+    return [];
+  }
+};
+
 
 
 
@@ -285,13 +300,33 @@ export const updateMovie = async (movieId, updatedData) => {
       try {
         const userRef = doc(db, "users", uid);
         await updateDoc(userRef, { fav });
-        toast.success("Danh sách phim yêu thích được cập nhật thành công!");
         return true;
       } catch (error) {
         console.error("Lỗi khi cập nhật danh sách phim yêu thích:", error);
         return false;
       }
     };
+
+    const removeFavoriteMovie = async (uid, movieId) => {
+        try {
+            const userRef = doc(db, "users", uid);
+            const userSnap = await getDoc(userRef);
+    
+            if (userSnap.exists()) {
+                const currentFav = userSnap.data().fav || [];
+                const updatedFav = currentFav.filter(movie => movie !== movieId);
+                await updateDoc(userRef, { fav: updatedFav });
+                return true;
+            } else {
+                console.log("User not found.");
+                return false;
+            }
+        } catch (error) {
+            console.error("Error removing favorite movie:", error);
+            return false;
+        }
+    };
+    
   
     const getFavoriteMovies = async (uid) => {
       try {

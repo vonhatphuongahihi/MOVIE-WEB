@@ -26,64 +26,65 @@ function SearchResults() {
       try {
         const moviesRef = collection(db, "movies");
         const tvShowsRef = collection(db, "tvShows");
-
+  
         const filtersMovies = [];
         const filtersTVShows = [];
-
-        // Thêm bộ lọc cho movies
-        if (query) filtersMovies.push(where("title", "==", query));
+  
         if (releaseDateFrom) filtersMovies.push(where("release_date", ">=", releaseDateFrom));
         if (releaseDateTo) filtersMovies.push(where("release_date", "<=", releaseDateTo));
         if (minDuration) filtersMovies.push(where("runtime", ">=", minDuration));
         if (maxDuration) filtersMovies.push(where("runtime", "<=", maxDuration));
         if (language) filtersMovies.push(where("language", "==", language));
         if (genre) filtersMovies.push(where("genres", "array-contains", genre));
-
-        // Thêm bộ lọc cho tvShows
-        if (query) filtersTVShows.push(where("name", "==", query));
+  
         if (releaseDateFrom) filtersTVShows.push(where("first_air_date", ">=", releaseDateFrom));
         if (releaseDateTo) filtersTVShows.push(where("first_air_date", "<=", releaseDateTo));
         if (language) filtersTVShows.push(where("language", "==", language));
         if (genre) filtersTVShows.push(where("genres", "array-contains", genre));
-
-        // Tạo query Firebase
+  
+        // Tạo query Firebase cho movie và TV show
         const moviesQuery = firebaseQuery(moviesRef, ...filtersMovies);
         const tvShowsQuery = firebaseQuery(tvShowsRef, ...filtersTVShows);
-
-        // Lấy dữ liệu từ Firebase
+  
+  
         const [moviesSnapshot, tvShowsSnapshot] = await Promise.all([
           getDocs(moviesQuery),
           getDocs(tvShowsQuery),
         ]);
-
-        // Xử lý dữ liệu
+  
         const moviesData = moviesSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          itemType: "movie", // Đánh dấu để biết đây là movie
+          itemType: "movie",
         }));
         const tvShowsData = tvShowsSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-          itemType: "tvShow", // Đánh dấu để biết đây là tvShow
+          itemType: "tvShow",
         }));
-
-        // Kết hợp và loại bỏ trùng lặp
+  
         const combinedResults = [...moviesData, ...tvShowsData];
         const uniqueResults = combinedResults.reduce((acc, current) => {
           if (!acc.some((item) => item.id === current.id)) acc.push(current);
           return acc;
         }, []);
-
-        setResults(uniqueResults);
+  
+  
+        const filteredResults = uniqueResults.filter((item) =>
+          (item.title && item.title.toLowerCase().includes(query.toLowerCase())) || 
+          (item.name && item.name.toLowerCase().includes(query.toLowerCase()))
+        );
+  
+        setResults(filteredResults);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu từ Firebase:", error);
       }
       setLoading(false);
     };
-
+  
     fetchSearchResults();
   }, [query, releaseDateFrom, releaseDateTo, duration, language, genre]);
+  
 
   return (
     <LayoutMain>
