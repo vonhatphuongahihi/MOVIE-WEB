@@ -4,7 +4,6 @@ import classNames from "classnames/bind";
 import Notification from "./Notification"; // Component cho một thông báo
 import { getNotifications } from "../../firebase";
 import PopperWrapper from "../Popper/Popper";
-import TippyHeadless from "@tippyjs/react/headless";
 import styles from "./notification.css";
 const cx = classNames.bind(styles);
 const NotificationIcon = () => {
@@ -15,7 +14,7 @@ const NotificationIcon = () => {
     const fetchNotifications = async () => {
       const data = await getNotifications();
       setNotifications(data);
-      console.log(data); // In thông tin thông báo ra console để debug
+      
     };
 
     fetchNotifications();

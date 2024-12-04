@@ -238,7 +238,7 @@ function PhimDienAnh() {
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
           <TitleCards title={"THỊNH HÀNH"} category={"popular"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
-          <TitleCards title={"MỚI NHẤT"} category={"now_playing"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
+          <TitleCards title={"MỚI NHẤT"} category={"upcoming"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
         </div>
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
           <TitleCards title={"PHIM ĐIỆN ẢNH VIỆT NAM"} country={"Việt Nam"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
