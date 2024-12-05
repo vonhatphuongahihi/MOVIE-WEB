@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Footer() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" }); 
+  }
+
   const Links = [
     {
       title: "Giới thiệu",
@@ -53,7 +57,7 @@ function Footer() {
     },
   ];
   return (
-    <div className="bg-main py-4 border=t-2 border-black">
+    <div className="bg-main py-4 border-t border-gray-400 border-opacity-50" onClick={scrollToTop}>
       <div className="container mx-auto px-2">
         <div className="grid grid-cols-2 md:grid-cols-7 xl:grid-cols-12 gap-5 sm:gap-9 lg:gap-11 xl:gap-7 py-10 justify-between">
           <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-3 mx-10">
@@ -91,6 +95,7 @@ function Footer() {
                   <li key={index} className="flex items-baseline">
                     <Link
                       to={text.link}
+
                       className="text-border inline-block w-full hover:text-white"
                     >
                       {text.name}
@@ -104,7 +109,7 @@ function Footer() {
 
         <div className="flex flex-row justify-between">
           <p className="leading-7 text-sm text-border mt-3">
-            <span>UIT ĐHQG HCM, Đông Hòa, Dĩ An, Bình Dương, Việt Nam</span>
+            <span>UIT ĐHQG HCM, Đường Hàn Thuyên, khu phố 6 P, Thủ Đức, Hồ Chí Minh, Việt Nam</span>
             <br />
             <span>Hotline: +84 365 486 141</span>
             <br />

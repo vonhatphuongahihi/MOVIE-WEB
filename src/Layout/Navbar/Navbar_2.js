@@ -15,7 +15,7 @@ function Navbar2() {
         <div className="container mx-auto py-0 px-2 flex justify-between items-center">
           <div className="flex items-center">
             <Link to="/" className="mr-2 mb-1">
-              <img src="/images/logo.png" alt="logo" className="w-20 h-6 object-contain" />
+              <img src="/images/logo.png" alt="logo" className="w-25 h-10 object-contain" />
             </Link>
           </div>
           <div className="flex items-center justify-end space-x-4 mt-2 mb-2 lg:mr-2">

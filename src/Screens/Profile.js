@@ -113,7 +113,7 @@ function Profile() {
         className="bg-[#333333] p-8 rounded shadow-md w-full max-w-lg"
         onSubmit={(e) => e.preventDefault()}
       >
-        <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] ml-0 text-subMain ml-10">
+        <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] ml-0 text-subMain">
                     HỒ SƠ
         </h3>
         <div className="flex flex-col items-center mb-6 text-base">
