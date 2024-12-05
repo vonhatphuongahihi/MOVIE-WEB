@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { login } from '../../firebase';
 import './Login.css';
+import { Link } from "react-router-dom";
 
 const Login = () => {
     const navigate = useNavigate(); 
@@ -42,7 +43,9 @@ const Login = () => {
             </div>
         ) : (
             <div className="login">
+                <Link to={`/`}>
                 <img src="/images/logo.png" alt="Logo" className='login-logo' />
+                </Link>
                 <div className="login-form">
                     <img src="/images/logo.png" alt="Logo" className='form-logo' />
                     <form onSubmit={handleLogin}>
