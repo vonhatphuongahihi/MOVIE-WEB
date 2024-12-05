@@ -189,7 +189,6 @@ const updateRecently = async (movieList) => {
 };
 
 
-
 const getRecently = async () => {
   try {
     const user = auth.currentUser;

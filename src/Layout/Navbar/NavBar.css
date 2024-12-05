@@ -12,13 +12,22 @@
     opacity: 1;
   }
   .text-sm {
-    font-size: 0.9rem; 
+    font-size: 0.8rem; 
   }
   .text-base {
-    font-size: 0.875rem; 
+    font-size: 0.775rem; 
   }
   
   .text-wrap {
-    font-size: 0.9rem; 
+    font-size: 0.8rem; 
   }
+  .flex.items-center.space-x-6 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .fixed-font {
+    font-size: 11px;
+  }
+  
   

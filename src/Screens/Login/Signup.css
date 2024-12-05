@@ -118,6 +118,14 @@
     align-items: center;
     background-color: rgba(0, 0, 0, 0.8);
 }
+.terms-link {
+    color: #28BD11; 
+    cursor: pointer; 
+}
+
+.terms-link:hover {
+    color: #1d840d; 
+}
 
 .loading img {
     width: 80px;

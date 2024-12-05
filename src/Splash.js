@@ -5,7 +5,7 @@ const SplashScreen = ({ onLoad, logoSrc }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onLoad();
-    }, 3000);
+    }, 2500);
 
     return () => clearTimeout(timer);
   }, [onLoad]);

@@ -1,6 +1,5 @@
 input[type="date"]::-webkit-calendar-picker-indicator {
-    background-color: white; 
-    color: white; 
-    filter: invert(1); 
-  }
-  
+  background-color: white; 
+  color: white; 
+  filter: invert(1); 
+}

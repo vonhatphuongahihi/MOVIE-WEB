@@ -15,22 +15,42 @@ const Login = () => {
     const handleLogin = async (event) => {
         event.preventDefault();
         setLoading(true);
+        // Kiểm tra nếu các trường bị trống
+        if (!email) {
+            toast.error("Vui lòng nhập email.");
+            setLoading(false);
+            return;
+        }
+
+        if (!password) {
+            toast.error("Vui lòng nhập mật khẩu.");
+            setLoading(false);
+            return;
+        }
+
+        // Kiểm tra định dạng email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            toast.error("Email không hợp lệ. Vui lòng nhập đúng định dạng.");
+            setLoading(false);
+            return;
+        }
 
         try {
             const userData = await login(email, password);
             if (userData) {
-                const userRole = userData.role; 
-
+                const userRole = userData.role;
+    
                 if (userRole === "admin") {
                     toast.success("Đăng nhập thành công với quyền admin.");
-                    navigate('/admin'); 
+                    navigate('/admin');
                 } else {
                     toast.success("Đăng nhập thành công.");
-                    navigate('/'); 
+                    navigate('/');
                 }
             }
         } catch (error) {
-            toast.error(error.message);
+            toast.error("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin đăng nhập.");
         } finally {
             setLoading(false);
         }
@@ -43,9 +63,9 @@ const Login = () => {
             </div>
         ) : (
             <div className="login">
-                <Link to={`/`}>
-                <img src="/images/logo.png" alt="Logo" className='login-logo' />
-                </Link>
+
+                <img src="/images/logo.png" alt="Logo" className='login-logo hidden md:block' />
+
                 <div className="login-form">
                     <img src="/images/logo.png" alt="Logo" className='form-logo' />
                     <form onSubmit={handleLogin}>
