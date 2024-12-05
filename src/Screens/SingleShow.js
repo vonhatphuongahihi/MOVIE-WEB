@@ -30,6 +30,8 @@ function SingleShow() {
   const [show, setShow] = useState(null);
   const [videos, setVideos] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+  const [voteCount, setvoteCount] = useState(0);
+  const [voteAverage, setvoteAverage] = useState(0);
 
   useEffect(() => {
     const auth = getAuth();
@@ -55,7 +57,8 @@ function SingleShow() {
       if (showDoc.exists()) {
         const showData = showDoc.data();
         setShow(showData);
-        setVideos(showData.video);  
+        setVideos(showData.video); 
+        
       } else {
         console.error("Show not found");
       }
@@ -65,7 +68,7 @@ function SingleShow() {
     }
   };
   
-  
+  console.log("Show đang xem:", show); 
   useEffect(() => {
     console.log("Fetched id:", id);
     fetchShowData();
@@ -139,7 +142,7 @@ function SingleShow() {
               </button>
             </div>
             <img
-              src={show.backdrop_path ? `https://image.tmdb.org/t/p/w500${show.backdrop_path}` : "/images/default-backdrop.jpg"}
+              src={show.backdrop_path ? show.backdrop_path : "/images/default-backdrop.jpg"}
               alt={show?.name}
               className="w-full h-full object-cover rounded-lg"
             />
@@ -147,6 +150,84 @@ function SingleShow() {
         )}
 
         </div>
+
+        <div className="flex justify-between mx-20">
+        <div className="flex flex-col w-1/2 mb-15">
+        <h1 className="font-bold mb-10 text-3xl text-left">{show?.title}</h1>
+        <div className="flex items-center gap-6">
+              <div className="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
+                <img className="size-6" src="/rate-star.png" alt="Star Rating" />
+                <p className="font-bold text-xl">{voteAverage}</p>
+                <p className="size-6 text-gray-500">({voteCount})</p>
+              </div>
+              <div className="flex text-lg gap-2 items-center text-star">
+                <Rating value={voteAverage} />
+              </div>
+            </div>
+
+ {/* Info Section */}
+ <div className="flex gap-5 mb-8">
+              <div className="flex-2 w-2/5 flex items-center gap-2">
+                <RiGlobalLine className="text-subMain w-4 h-4" />
+                <span className="text-sm font-medium">
+                  {show.country}
+                </span>
+              </div>
+              <div className="flex-2 w-1/5 flex items-center gap-2">
+                <FaRegCalendar className="text-subMain w-3 h-3" />
+                <span className="text-sm font-medium">
+                  {show.release_date}
+                </span>
+              </div>
+              <div className="flex-2 w-2/5 flex items-center gap-2">
+                <IoTimeOutline className="text-subMain w-3 h-3" />
+                <span className="text-sm font-medium">
+                  {show.runtime} phút
+                </span>
+              </div>
+            </div>
+
+            <hr className="border-t-1 border-gray-300 mb-8" />
+
+<div className="mb-4 flex">
+<span className="font-medium mr-2">Thể loại: </span>
+<span className="font-medium ">
+  {show.genres.join(', ')}
+</span>
+</div>
+
+<p className="mb-10 text-justify">{show?.overview}</p>
+
+        </div>
+        <div className="flex flex-col justify-center mt-10">
+            <div className="flex gap-20 mb-8">
+              <div className="flex gap-3 items-center">
+                <PiShareFat /> <p>Chia sẻ</p>
+              </div>
+              <div className="flex gap-3 items-center">
+                <PiHeart /> <p>Yêu thích</p>
+              </div>
+            </div>
+
+            <div className="flex justify-between">
+              <p className="font-medium mr-2">Season:</p>
+              <p className="font-medium">
+                {show.seasons}
+              </p>
+            </div>
+
+
+            <div className="flex justify-between mt-4">
+              <p className="font-medium">Lượt xem:</p>
+              <p className="font-medium ">
+                100 000 views
+              </p>
+            </div>
+          </div>
+        </div>
+
+       
+
       </div>
 
     </Layout>

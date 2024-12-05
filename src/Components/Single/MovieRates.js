@@ -5,6 +5,9 @@ import { Message, Select } from "../UsedInputs";
 import Rating from "../Stars";
 import { addCommentToMovie, getCommentsForMovie, addReplyToComment, updateLikesDislikes } from "../../firebase";
 import { AiFillLike, AiFillDislike, AiOutlineComment } from "react-icons/ai";
+import CommentLimitPopup from "../../Screens/Popup/CommentLimitPopup";
+
+import { getAuth } from "firebase/auth";
 
 function MovieRates({ movie, user, onAddCompleted }) {
   const Ratings = [
@@ -22,7 +25,21 @@ function MovieRates({ movie, user, onAddCompleted }) {
 //Like và dislike
   const [likeState, setLikeState] = useState({});
   const [commentState, setCommentState] = useState({});
+  const [showPopup, setShowPopup] = useState(false); // Trạng thái hiển thị popup
  
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Kiểm tra trạng thái đăng nhập
+  
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      setIsLoggedIn(true); 
+    } else {
+      setIsLoggedIn(false); 
+    }
+  }, []); 
+
 
   const handleLike = async (id) => {
     const currentState = likeState[id]; // Current state for this comment
@@ -146,6 +163,10 @@ function MovieRates({ movie, user, onAddCompleted }) {
   }, [movie.movieId]);
 
   const handleCommentSubmit = async () => {
+    if (!isLoggedIn) {
+      setShowPopup(true); // Hiển thị popup nếu chưa đăng nhập
+    } else {
+
     if (commentContent.trim()) {
       try {
         await addCommentToMovie(movie.movieId, user.uid, commentContent, rating, user.name, user.avatarUrl);
@@ -161,6 +182,7 @@ function MovieRates({ movie, user, onAddCompleted }) {
     } else {
       alert("Vui lòng nhập nội dung bình luận.");
     }
+  }
   };
 
   return (
@@ -195,6 +217,10 @@ function MovieRates({ movie, user, onAddCompleted }) {
               <Rating value={rating} />
             </div>
           </div>
+
+          {/* Hiển thị popup nếu chưa đăng nhập */}
+      {showPopup && <CommentLimitPopup onClose={() => setShowPopup(false)} />}
+        
         </div>
 
         {/* Hiển thị bình luận */}
