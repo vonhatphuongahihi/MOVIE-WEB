@@ -1,10 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FiFilm, FiTrash, FiPlay, FiStopCircle } from "react-icons/fi";
 import Layout_main from "../Layout/Layout_main";
 import { RecentlyContext } from "../Context/RecentlyContext";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import DeleteHistoryPopup from "./Popup/DeleteHistoryPopup";
+import StopHistoryPopup from "./Popup/StopHistoryPopup"; 
 
 const MovieContainer = styled.div`
   background: #121110;
@@ -48,37 +50,36 @@ const Evaluation = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between; /* Space between buttons */
-  margin-top: 10px; /* Add some space above the buttons */
+  justify-content: space-between;
+  margin-top: 10px;
   gap: 50px;
+   width: 100%; 
 `;
 
 const RemoveButton = styled.button`
-  padding: 10px 20px;
+  padding: 5px 10px;
   display: flex;
   align-items: center;
   border-radius: 8px;
-  gap: 8px;
+  gap: 5px;
   transition: background-color 0.3s, color 0.3s;
-
-  background-color: transparent;
-  background-color: #ffac00;
+  background-color: #ff4d4d;
   color: #ffffff;
   cursor: pointer;
 
   &:hover {
-    background-color: #ffac00;
-    color: #000000;
+    background-color: #d32f2f;
+    color: #ffffff;
   }
 
   @media (max-width: 768px) {
     padding: 8px 17px;
-    font-size: 15px;
+    font-size: 13px;
   }
 
   @media (max-width: 480px) {
     padding: 5px 10px;
-    font-size: 10px;
+    font-size: 9px;
   }
 `;
 
@@ -87,9 +88,8 @@ const WatchButton = styled.button`
   display: flex;
   align-items: center;
   border-radius: 8px;
-  gap: 8px;
+  gap: 5px;
   transition: background-color 0.3s, color 0.3s;
-
   background-color: #28bd11;
   color: #ffffff;
   cursor: pointer;
@@ -101,25 +101,31 @@ const WatchButton = styled.button`
 
   @media (max-width: 768px) {
     padding: 8px 17px;
-    font-size: 15px;
+    font-size: 13px;
   }
 
   @media (max-width: 480px) {
     padding: 5px 10px;
-    font-size: 10px;
+    font-size: 9px;
   }
 `;
+
 const SideButton = styled.button`
   padding: 8px;
   display: flex;
   align-items: center;
+  gap: 8px;
   transition: background-color 0.3s, color 0.3s;
-
   color: #ffffff;
   cursor: pointer;
   height: 50px;
+  font-size: 17px;
   &:hover {
     color: #24a70f;
+  }
+  &:disabled {
+    color: #b0b0b0; 
+    cursor: not-allowed;
   }
 
   @media (max-width: 768px) {
@@ -129,21 +135,51 @@ const SideButton = styled.button`
 
   @media (max-width: 480px) {
     padding: 5px;
-    font-size: 10px;
+    font-size: 13px;
   }
 `;
 
-
 function RecentlyWatch() {
-  const { recently, removeRecently, removeAll, loadRecently } = useContext(RecentlyContext);
+  const { recently, removeRecently, removeAll, loadRecently, stopHistory, toggleHistoryStatus,isHistoryStopped } = useContext(RecentlyContext);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isStopPopupOpen, setIsStopPopupOpen] = useState(false); 
+  const [isHistoryEmpty, setIsHistoryEmpty] = useState(false);
+
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
+
+  const toggleStopPopup = () => {
+    setIsStopPopupOpen(!isStopPopupOpen); 
+  };
+
+  const handleDeleteHistory = () => {
+    removeAll(); 
+    setIsHistoryEmpty(true); 
+    togglePopup(); 
+  };
+  const handleToggleHistoryStatus = () => {
+    const handleToggleHistoryStatus = () => {
+      if (isHistoryStopped) {
+        toggleStopPopup(); // Mở popup để xác nhận
+      } else {
+        toggleHistoryStatus(); // Đổi trạng thái lưu lịch sử
+      }
+    };
+    
+  };
   const navigate = useNavigate();
-  useEffect(()=>{
+  useEffect(() => {
     loadRecently();
-  },[])
+    if (recently.length === 0) {
+      setIsHistoryEmpty(true); 
+    }
+  }, [recently]);
+
   return (
     <Layout_main>
-      <br></br>
-      <br></br>
+      <br />
+      <br />
       <NavLink to="/">
         <img
           src="/images/Back.svg"
@@ -154,16 +190,34 @@ function RecentlyWatch() {
       <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] mb-4 text-subMain ml-10">
         LỊCH SỬ XEM
       </h3>
-      
 
-      <div className="min-h-screen flex flex-col items-center justify-between;">
-    
-        {recently.length === 0 ? (
+      <div className="min-h-screen flex flex-col items-center justify-between">
+      {isHistoryEmpty ? ( 
           <div className="flex justify-center items-center m-20 p-20">
-            <FiFilm className="text-4xl mr-2 text-white" />
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-xl font-semibold text-white">
               Bạn chưa xem phim nào gần đây
             </h2>
+            <div className="absolute mt-10 right-20">
+            <SideButton onClick={togglePopup} disabled={isHistoryEmpty}>
+              <FiTrash />
+              &nbsp;Xóa tất cả lịch sử xem
+            </SideButton>
+            {isPopupOpen && (
+              <DeleteHistoryPopup
+                onClose={togglePopup}
+                onConfirm={handleDeleteHistory}
+              />
+            )}
+            <SideButton onClick={toggleStopPopup}>
+                <FiStopCircle />
+                &nbsp;{isHistoryStopped ? "Bật lưu lịch sử" : "Tạm dừng lưu lịch sử"}
+              </SideButton>
+              {isStopPopupOpen && (
+                <StopHistoryPopup
+                  onClose={toggleStopPopup}
+                  onConfirm={handleToggleHistoryStatus}                 />
+              )}
+          </div>
           </div>
         ) : (
           <div className="flex flex-row justify-between gap-10">
@@ -174,24 +228,21 @@ function RecentlyWatch() {
                 .map((movie, index) => (
                   <MovieContainer key={index}>
                     <ImageContainer>
-                    <Image
-                      src={movie.backdrop_path
-                        ? (!movie.backdrop_path.includes("http") 
+                      <Image
+                        src={movie.backdrop_path
+                          ? (!movie.backdrop_path.includes("http")
                             ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
                             : movie.backdrop_path)
-                        : "/path/to/default-image.jpg"} 
-                      alt={movie.title || "No title available"}
-                    />
+                          : "/path/to/default-image.jpg"}
+                        alt={movie.title || "No title available"}
+                      />
                     </ImageContainer>
-                    <div class="mx-10">
+                    <div className="mx-10">
                       <Title>{movie.title}</Title>
-                      <Evaluation>
-                        <img class="size-5" src="/rate-star.png" alt="star"/>
-                        <p>{movie.vote_average}</p>
-                      </Evaluation>
                       <Evaluation>
                         <p>{movie.runtime} phút</p>
                         <p>|</p>
+                        <p>{movie.country}</p>
                       </Evaluation>
 
                       <ButtonContainer>
@@ -200,15 +251,19 @@ function RecentlyWatch() {
                           aria-label={`Xóa ${movie.title} khỏi danh sách xem gần đây`}
                         >
                           <FiTrash />
-                          &nbsp;Xóa khỏi danh sách
+                          &nbsp;Xóa khỏi lịch sử xem
                         </RemoveButton>
                         <WatchButton
                           aria-label={`Xem ngay ${movie.title}`}
                           onClick={() => {
-                            navigate(`/movie/${movie?.id}`);
+                            if (movie.type === "show") {
+                              navigate(`/truyenhinh/${movie.id}`);
+                            } else {
+                              navigate(`/movie/${movie.id}`);
+                            }
                           }}
                         >
-                          <FiPlay /> Xem Ngay
+                          <FiPlay /> Xem ngay
                         </WatchButton>
                       </ButtonContainer>
                     </div>
@@ -216,14 +271,27 @@ function RecentlyWatch() {
                 ))}
             </div>
             <div className="mt-24">
-              <SideButton onClick={() => removeAll()}>
+            <SideButton onClick={togglePopup} disabled={isHistoryEmpty}>
                 <FiTrash />
-                &nbsp;Xóa tất cả phim xem gần đây
+                &nbsp;Xóa tất cả lịch sử xem
               </SideButton>
-              <SideButton onClick={() => ""}>
+              {isPopupOpen && (
+                <DeleteHistoryPopup
+                  onClose={togglePopup}
+                  onConfirm={handleDeleteHistory}
+                />
+              )}
+
+              <SideButton onClick={toggleStopPopup}>
                 <FiStopCircle />
-                &nbsp;Tạm dừng lưu lịch sử
+                &nbsp;{isHistoryStopped ? "Bật lưu lịch sử" : "Tạm dừng lưu lịch sử"}
               </SideButton>
+              {isStopPopupOpen && (
+                <StopHistoryPopup
+                  onClose={toggleStopPopup}
+                  onConfirm={handleToggleHistoryStatus}
+                />
+              )}
             </div>
           </div>
         )}
@@ -231,4 +299,5 @@ function RecentlyWatch() {
     </Layout_main>
   );
 }
+
 export default RecentlyWatch;

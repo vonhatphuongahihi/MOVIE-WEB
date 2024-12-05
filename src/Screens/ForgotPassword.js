@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { toast } from "react-toastify";
 import { auth } from "../firebase";
 import "./ForgotPassword.css";
 
@@ -18,6 +19,20 @@ function ForgotPassword() {
   // Gửi email reset password
   const handleSendEmail = async () => {
     setLoading(true);
+     // Kiểm tra trường email
+     if (!email) {
+      toast.error("Vui lòng nhập email."); 
+      setLoading(false);
+      return;
+  }
+
+  // Kiểm tra định dạng email (regex cơ bản)
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+      toast.error("Email không hợp lệ. Vui lòng nhập đúng định dạng."); 
+      setLoading(false);
+      return;
+  }
     try {
       await sendPasswordResetEmail(auth, email);
       setForgotState("Trang2"); // Chuyển sang Trang2 sau khi gửi email
@@ -30,7 +45,7 @@ function ForgotPassword() {
 
   return (
     <div className="forgot-password-container">
-      <img className="forgot-password-logo" src="../../images/logo.png" alt="logo Melon" />
+      <img className="forgot-password-logo hidden md:block" src="../../images/logo.png" alt="logo Melon" />
       <div className="forgot-password-box">
         <div className="forgot-password-content">
           <img src="/images/logo.png" alt="Logo" className="form-logo" />

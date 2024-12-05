@@ -11,6 +11,7 @@ import ContactUs from './Screens/ContactUs';
 import FavoriteMovies from "./Screens/FavoriteMovies";
 import ForgotPassword from './Screens/ForgotPassword';
 import HomeScreen from './Screens/HomeScreen';
+import HomeScreenGuest from './Screens/HomeScreenGuest';
 import PhimDienAnh from './Screens/PhimDienAnh';
 import Anime from './Screens/Anime';
 import Anhtraisayhi from './Screens/Anhtraisayhi';
@@ -58,20 +59,21 @@ const GlobalStyle = createGlobalStyle`
 `;
 function App() {
   const [loading, setLoading] = useState(true);
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation(); // Lấy đường dẫn hiện tại
-  const {loadRecently } = useContext(RecentlyContext);  //tải lịch sử xem khi vừa đăng nhập, cho để ké với ạ
+  const location = useLocation(); 
+  const {loadRecently } = useContext(RecentlyContext);  
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log("Đã đăng nhập vào tài khoản")
-        navigate('/');
-        loadRecently();
-
+        console.log("Đã đăng nhập vào tài khoản");
+        setLoggedInUser(user);
+        loadRecently(); 
       } else {
-        console.log("Đăng nhập vào tài khoản không thành công")
-        navigate('/login');
+        console.log("Người dùng chưa đăng nhập");
+        setLoggedInUser(null);
       }
+      setLoading(false); 
     });
   }, []);
 
@@ -81,24 +83,25 @@ function App() {
 
   const handleLoad = () => {
     setLoading(false);
+    setShowSplash(false); 
   };
-
-  // Kiểm tra đường dẫn hiện tại
-  const showSplash = location.pathname === '/';
-
+  const [showSplash, setShowSplash] = useState(true);  
+  if (loading || showSplash) {
+    return <SplashScreen onLoad={handleLoad} />;
+  }
   return (
     <>
       <GlobalStyle />
       <MovieFetcher />  
       <TvShowFetcher />
       <ToastContainer theme="dark" />
-      {showSplash && loading ? ( // Chỉ hiển thị Splash khi ở đường dẫn chính
+      {showSplash && loading ? ( 
         <SplashScreen onLoad={handleLoad} />
       ) : (
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={<HomeScreen />} />
+          <Route path="/" element={loggedInUser ? <HomeScreen /> : <HomeScreenGuest />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/contact-us" element={<ContactUs />} />

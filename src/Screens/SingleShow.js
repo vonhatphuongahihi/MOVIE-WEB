@@ -78,7 +78,16 @@ function SingleShow() {
 
   const handlePlay = () => {
     setPlay(true);
-    addRecently(show); // Thêm vào danh sách đã xem
+    const showToAdd = {
+      id: show.id,
+      title: show.title,
+      overview: show.overview,
+      runtime: show.runtime,
+      country: show.country,
+      backdrop_path: show.backdrop_path,
+      type: "show",
+    };
+    addRecently(showToAdd); 
   };
 
 
@@ -90,7 +99,7 @@ function SingleShow() {
       <br></br>
 
       <div className="flex items-center space-x-4">
-        <NavLink to="/truyenhinh" className="flex items-center text-subMain">
+        <NavLink to="/" className="flex items-center text-subMain">
           <img
             src="/images/Back.svg"
             alt="Back Icon"

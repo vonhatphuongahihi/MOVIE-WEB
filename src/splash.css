@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Revalia&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Josefin+Slab:ital,wght@0,100..700;1,100..700&family=Lobster&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Saira+Stencil+One&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 .splash-screen {
   display: flex;
   flex-direction: column;
@@ -10,12 +10,13 @@
   overflow: hidden;
   position: relative;
   text-align: center;
-  font-family: 'Revalia', cursive; 
-}
+  font-family: "Saira Stencil One", sans-serif;
+  font-weight: 200;
+  font-style: normal;}
 
 /* Logo */
 .logo {
-  max-width: 150px; 
+  max-width: 220px; 
   width: 20vw;
   height: auto;
   margin-bottom: 20px;
@@ -35,7 +36,7 @@
 .text-heder span {
   display: inline-block;
   opacity: 0;
-  animation: fadeInMove 1.5s ease-in-out forwards;
+  animation: fadeInMove 1s ease-in-out forwards;
 }
 
 /* Hiệu ứng fade-in chữ */
@@ -50,20 +51,51 @@
   }
 }
 
-/* Hiệu ứng fade-in logo */
-@keyframes fadeIn {
-  from {
+@keyframes zoomIn {
+  0% {
     opacity: 0;
+    transform: scale(0.5);
   }
-  to {
+  100% {
     opacity: 1;
+    transform: scale(1);
   }
 }
+
+.logo {
+  animation: zoomIn 1.2s ease-out;
+}
+
+
+/* Thêm ánh sáng chữ */
+.text-heder span {
+  animation: fadeInMove 1s ease-in-out forwards, glow 1.5s infinite ease-in-out;
+}
+
+@keyframes glow {
+  0%, 100% {
+    text-shadow: 0 0 5px #fff, 0 0 10px #e8fce5, 0 0 20px #e8fce5;
+  }
+  50% {
+    text-shadow: 0 0 10px #fff, 0 0 20px #e8fce5, 0 0 30px #e8fce5;
+  }
+}
+
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}
+
 
 /* Responsive nhỏ hơn 768px */
 @media (max-width: 768px) {
   .logo {
-    max-width: 120px;
+    max-width: 150px;
     width: 30vw;
   }
 
@@ -77,6 +109,7 @@
   .logo {
     max-width: 100px;
     width: 40vw;
+    margin-bottom: 20px;
   }
 
   .text-heder {

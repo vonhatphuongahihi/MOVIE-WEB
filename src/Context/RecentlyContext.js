@@ -5,6 +5,7 @@ export const RecentlyContext = createContext();
 
 export const RecentlyProvider = ({ children }) => {
   const [recently, setRecently] = useState([]);
+  const [isHistoryStopped, setIsHistoryStopped] = useState(false);
 
   // Tải danh sách Recently từ Firebase
   const loadRecently = async () => {
@@ -17,26 +18,19 @@ export const RecentlyProvider = ({ children }) => {
   };
 
   // Hàm thêm mục vào Recently
-  const addRecently = (item) => {
+  const addRecently = async (item) => {
+    if (isHistoryStopped) return; 
+
     setRecently((prev) => {
-      // Kiểm tra nếu item đã tồn tại trong lịch sử
       if (!prev.some((rec) => rec.id === item.id)) {
-        const MAX_RECENTLY = 10; // Số mục tối đa
+        const MAX_RECENTLY = 10; 
         const updatedHistory = [...prev, item].slice(-MAX_RECENTLY);
-  
-        try {
-          // Cập nhật Firebase
-          updateRecently(updatedHistory);
-        } catch (error) {
-          console.error("Error updating Firebase:", error);
-        }
-  
-        return updatedHistory;
+        updateRecently(updatedHistory);
+        return updatedHistory; 
       }
       return prev;
     });
   };
-  
 
   // Hàm xóa tất cả mục trong Recently
   const removeAll = async () => {
@@ -48,7 +42,10 @@ export const RecentlyProvider = ({ children }) => {
       console.error("Lỗi khi xóa tất cả Recently:", error);
     }
   };
-
+  // Toggle the history saving state
+  const toggleHistoryStatus = () => {
+    setIsHistoryStopped((prev) => !prev); // Toggle between true and false
+  };
   // Hàm xóa một mục trong Recently
   const removeRecently = async (id) => {
     setRecently((prev) => {
@@ -62,15 +59,25 @@ export const RecentlyProvider = ({ children }) => {
       return updatedRecently;
     });
   };
+  // Hàm tạm dừng lưu lịch sử
+  const stopHistory = () => {
+    setIsHistoryStopped(true); // Cập nhật trạng thái tạm dừng
+  };
 
+  // Hàm tiếp tục lưu lịch sử
+  const resumeHistory = () => {
+    setIsHistoryStopped(false); // Tiếp tục lưu lịch sử
+  };
   // Load dữ liệu khi component được mount
   useEffect(() => {
     loadRecently();
+    const status = localStorage.getItem('isHistoryStopped');
+    setIsHistoryStopped(status === 'true'); // Load state from local storage if necessary
   }, []);
 
   return (
     <RecentlyContext.Provider
-      value={{ recently, addRecently, removeRecently, removeAll, loadRecently }}
+      value={{ recently, addRecently, removeRecently, removeAll, loadRecently, stopHistory, resumeHistory, toggleHistoryStatus,isHistoryStopped, }}
     >
       {children}
     </RecentlyContext.Provider>

@@ -95,7 +95,18 @@ function SingleMovie() {
 
   const handlePlay = () => {
     setPlay(true);
-    addRecently(movie); // Thêm vào danh sách đã xem
+  
+    const movieToAdd = {
+      id: movie.movieId,
+      title: movie.title,
+      overview: movie.overview,
+      runtime: movie.runtime,
+      country: movie.country,
+      backdrop_path: movie.backdrop_path || movie.backdropUrl, 
+      type: "movie",
+      ...(isApiMovie ? { vote_average: movie.vote_average, vote_count: movie.vote_count } : {})
+    };
+      addRecently(movieToAdd); 
   };
 
   const teaser = isApiMovie && movie.videos && movie.videos.results

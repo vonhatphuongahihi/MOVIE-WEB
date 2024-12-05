@@ -1,16 +1,16 @@
 import React from "react";
 import Head from "../Components/Head";
-import Layout_2 from "./../Layout/Layout_2";
+import Layout_main from "./../Layout/Layout_main";
 
 function AboutUs() {
   return (
-    <Layout_2>
+    <Layout_main>
       <div className="min-height-screen container mx-auto px-2 my-6">
         {/*Khuyen mai-làm trưng hoi, chứ hổng bấm vô được đâu :)))*/}
         <div className="xl:pt-20 pt-10 px-4">
-          <h3 className="text-xl lg:text-3xl mb-4 font-semibold text-subMain">
-                KHUYẾN MÃI
-          </h3>  
+        <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] mb-4 text-subMain">
+        KHUYẾN MÃI
+      </h3>
           <div className="grid grid-flow-row xl:grid-cols-4 gap-4 xl:gap-10 items-center ">
             <div className="w-full bg-dry items-center rounded-lg p-5">
             <img src="/images/KM1.png" alt="khuyen-mai-1"
@@ -78,9 +78,9 @@ function AboutUs() {
         <div className="xl:py-20 py-10 px-4">
           <div className="grid grid-flow-row xl:grid-cols-2 gap-4 xl:gap-16 items-center">
             <div>
-              <h3 className="text-xl lg:text-3xl mb-4 font-semibold text-subMain">
-                GIỚI THIỆU VỀ MELON
-              </h3>
+            <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] mb-4 text-subMain">
+        GIỚI THIỆU VỀ MELON
+      </h3>
               <div className="mt-3 text-sm leading-8 text-text">
                 <p>
                   MELON là siêu ứng dụng giải trí xem Phim-Show-Bóng đá-Truyền
@@ -167,7 +167,7 @@ function AboutUs() {
           </div>
         </div>
       </div>
-    </Layout_2>
+    </Layout_main>
   );
 }
 

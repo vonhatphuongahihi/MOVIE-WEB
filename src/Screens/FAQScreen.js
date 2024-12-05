@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Layout2 from '../Layout/Layout_2';
+import Layout_main from '../Layout/Layout_main';
 
 const faqData = [
   {
@@ -53,7 +53,7 @@ const FAQItem = ({ question, answer }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="cursor-pointer py-4 px-6 bg-main flex justify-between items-center"
       >
-        <span className="text-xl font-semibold">{question}</span>
+        <span className="font-medium">{question}</span>
         <span className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>
           <svg className="w-5 h-5 text-black-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
@@ -61,9 +61,11 @@ const FAQItem = ({ question, answer }) => {
         </span>
       </div>
       {isOpen && (
-        <div className="px-6 pb-4 text-gray">{answer}</div>
-      )}
-    </div>
+      <div className="px-6 pb-4 text-gray-400" style={{ fontSize: '14px' }}>
+        {answer}
+      </div>
+    )}
+      </div>
   );
 };
 
@@ -81,14 +83,16 @@ const FAQScreen = () => {
   };
 
   return (
-    <Layout2>
+    <Layout_main>
     <div className="min-h-screen bg-main">
         
       <div className="flex justify-center p-6">
         {/* Cột FAQ */}
         <div className="w-full md:w-3/4 bg-main p-6 rounded-lg shadow-md mr-4">
-          <h1 className="text-3xl font-bold text-center text-subMain mb-6">Câu Hỏi Thường Gặp (FAQ)</h1>
-          {faqData.map((faq, index) => (
+        <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] mb-4 text-subMain text-center">
+        CÂU HỎI THƯỜNG GẶP
+      </h3>
+                {faqData.map((faq, index) => (
             <FAQItem key={index} question={faq.question} answer={faq.answer} />
           ))}
         </div>
@@ -139,7 +143,7 @@ const FAQScreen = () => {
         </div>
       </div>
     </div>
-    </Layout2>
+    </Layout_main>
   );
   
 };
