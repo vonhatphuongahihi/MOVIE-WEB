@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FaUserCircle, FaCamera } from "react-icons/fa";
-import { IoCameraOutline } from "react-icons/io5";
+import { IoCameraOutline, IoPencil } from "react-icons/io5";
+import {FaRegEdit} from "react-icons/fa";
 import Layout from "../Layout/Layout";
 import { getUserProfile, updateUserProfile } from "../firebase";
 import { getAuth } from "firebase/auth";
 import DeleteAccountPopup from "./Popup/DeleteAccountPopup";
+import ChangePasswordPopup from "./Popup/ChangePasswordPopup";
 import './Profile.css'
 
 // Function to upload files to Cloudinary
@@ -100,10 +101,15 @@ function Profile() {
     };
   }, [avatarUrl]);
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isChangePasswordPopupOpen, setIsChangePasswordPopupOpen] = useState(false);
+  const [isDeleteAccountPopupOpen, setIsDeleteAccountPopupOpen] = useState(false);
 
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
+  const toggleChangePasswordPopup = () => {
+    setIsChangePasswordPopupOpen(!isChangePasswordPopupOpen);
+  };
+
+  const toggleDeleteAccountPopup = () => {
+    setIsDeleteAccountPopupOpen(!isDeleteAccountPopupOpen);
   };
 
   return (
@@ -176,18 +182,38 @@ function Profile() {
             placeholder="Chọn ngày sinh"
           />
         </div>
+        <div className="mb-6 relative">
+          <label className="block mb-2 text-white" htmlFor="password">Mật khẩu</label>
+          <div className="relative">
+            <input
+              type="password"
+              id="password"
+              value="************"
+              disabled
+              className="w-full px-3 py-3 rounded-[15px] bg-main text-white text-base border border-1 border-gray-500 pr-10" // Add pr-10 for padding
+            />
+            <FaRegEdit color="#28bd11"
+              onClick={toggleChangePasswordPopup}
+              className="absolute top-1/2 right-3 transform -translate-y-1/2 text-white text-xl cursor-pointer"
+            />
+          </div>
+        </div>
+
+
+        {/* Popup đổi mật khẩu */}
+        {isChangePasswordPopupOpen && <ChangePasswordPopup onClose={toggleChangePasswordPopup} />}
 
         <div className="flex justify-between items-center ml-12 mr-12">
           <button
             type="button"
-            onClick={togglePopup}
+            onClick={toggleDeleteAccountPopup}
             className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300 mt-3"
           >
             Xóa tài khoản
           </button>
 
           {/* Hiển thị Popup khi isPopupOpen là true */}
-          {isPopupOpen && <DeleteAccountPopup onClose={() => setIsPopupOpen(false)} />}
+          {isDeleteAccountPopupOpen && <DeleteAccountPopup onClose={toggleDeleteAccountPopup} />}
 
           <button
             type="submit"
