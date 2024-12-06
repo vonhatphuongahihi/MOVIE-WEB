@@ -7,7 +7,7 @@ import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { GoEye } from "react-icons/go";
 
-const Head = "text-xs text-left text-main font-semibold px-6 py-2 uppercase text-white";
+const Head = "text-xs text-left text-main font-semibold px-6 py-2 uppercase text-black";
 const Text = "text-sm text-left leading-6 whitespace-nowrap px-5 py-3 text-white";
 
 // Lấy dữ liệu từ Firebase
@@ -97,11 +97,8 @@ const Rows = (show, i, admin, setShows) => {
       <td className={`${Text} float-right flex-rows gap-2`}>
         {admin ? (
           <>
-            <button className="border border-border bg-dry flex-rows gap-2 text-border rounded py-1 px-2">
-              Edit <FaEdit className="text-green-500" />
-            </button>
             <button
-              onClick={() => deleteShow(show.id, setShows)} // Gọi hàm xóa khi nhấn nút
+              onClick={() => deleteShow(show.id, setShows)} 
               className="bg-subMain text-white rounded flex-colo w-6 h-6"
             >
               <MdDelete />
@@ -144,7 +141,7 @@ function Table3({ admin }) {
     <div className="overflow-x-auto overflow-y-auto relative w-full max-h-screen">
       <table className="w-full table-auto border border-border divide-y divide-border">
         <thead>
-          <tr className="bg-dryGray">
+          <tr className="bg-[#DCECDB] ">
             <th scope="col" className={Head}>Poster</th>
             <th scope="col" className={Head}>Dropback</th>
             <th scope="col" className={Head}>Title</th>
@@ -155,7 +152,7 @@ function Table3({ admin }) {
             <th scope="col" className={Head}>Runtime</th>
             <th scope="col" className={Head}>Vote Average</th>
             <th scope="col" className={Head}>Vote Count</th>
-            <th scope="col" className={`${Head} text-end`}>Actions</th>
+            <th scope="col" className={`${Head} text-end`}>Action</th>
           </tr>
         </thead>
         <tbody className="bg-main divide-y divide-gray-800">

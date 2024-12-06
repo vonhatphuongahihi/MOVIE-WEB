@@ -1,6 +1,7 @@
 import React from "react";
 import Table1 from "../../../Components/Table1";
 import Header from "../SideBar";
+import Footer from "../../../Layout/Footer/Footer";
 
 function MoviesList() {
   return (
@@ -16,6 +17,7 @@ function MoviesList() {
 
         <Table1 admin={true} />
       </div>
+      <Footer />
     </div>
   );
 }

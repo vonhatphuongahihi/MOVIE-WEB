@@ -63,8 +63,10 @@ function SleepTimerPopup({ onClose, uid }) {
     // Lưu thời gian vào Firestore
     try {
       const userRef = doc(db, "users", uid); // 'users' là collection, 'uid' là ID của người dùng
-      await setDoc(userRef, { setTimer: formattedTime }, { merge: true });
-      alert(`Đã lưu thời gian hẹn giờ: ${formattedTime}`);
+      await setDoc(userRef, { 
+        setTimer: formattedTime, 
+        timerClose: false // Đặt trạng thái đóng là false
+      }, { merge: true }); // merge: true giúp không ghi đè dữ liệu khác
       onClose();
     } catch (error) {
       console.error("Lỗi khi lưu thời gian:", error);

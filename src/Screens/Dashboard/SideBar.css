@@ -1,6 +1,6 @@
 /* Global styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto Condensed', sans-serif;
   }
   
   /* Header */
@@ -28,11 +28,13 @@ body {
   .header-logo {
     display: flex;
     align-items: center;
-  }
+    margin-left: -100px;
+    gap: 140px;
+   }
   
   .header-logo img {
-    width: 80px;
-    height: 24px;
+    width: 140px;
+    height: 35px;
     object-fit: contain;
   }
   
@@ -51,12 +53,12 @@ body {
   }
   
   .navbar-item:hover {
-    color: #38b2ac; /* Main hover color */
+    color: #28bd11; 
   }
   
   .navbar-item.active {
-    border-bottom: 2px solid #38b2ac;
-    color: #38b2ac;
+    border-bottom: 2px solid #28bd11;
+    color: #28bd11;
   }
   
   .search-bar {
@@ -104,6 +106,7 @@ body {
     background-color: #ff4d4d;
     color: white;
     padding: 8px 16px;
+    margin-right: -15px;
     border-radius: 4px;
     transition: background-color 0.3s ease;
   }
@@ -113,7 +116,16 @@ body {
   }
   .navbar {
     display: flex;
-    gap: 30px; /* Tăng khoảng cách giữa các mục điều hướng */
+    justify-content: space-between; 
+    align-items: center; 
+    gap: 40px; 
     list-style: none;
+    flex: 1; 
+  }
+  .header-content {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    width: 100%; 
   }
   

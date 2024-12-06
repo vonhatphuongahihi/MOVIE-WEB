@@ -1,6 +1,7 @@
 import React from "react";
 import Table3 from "../../../Components/Table3";
 import Header from "../SideBar";
+import Footer from "../../../Layout/Footer/Footer";
 
 function ShowsList() {
   return (
@@ -16,6 +17,7 @@ function ShowsList() {
 
         <Table3 admin={true} />
       </div>
+      <Footer />
     </div>
   );
 }

@@ -127,7 +127,7 @@ function App() {
           <Route path="/anhtraisayhi" element={<Anhtraisayhi />} />
           <Route path="/2n1d" element={<Haingaymotdem />} />
           <Route path="/thethao" element={<Thethao />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/dashboard" element={<Admin />} />
           <Route path="/admin/movieslist" element={<MoviesList />} />
           <Route path="/admin/showslist" element={<ShowsList />} />
           <Route path="/admin/userslist" element={<UsersList />} />

@@ -4,52 +4,85 @@ import Header from "../SideBar";
 import { HiViewGridAdd } from "react-icons/hi";
 import Table from "../../../Components/Table";
 import { db } from "../../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import Footer from "../../../Layout/Footer/Footer";
 
 function Admin() {
-  const [movies, setMovies] = useState([]); // Lưu trữ danh sách phim
-  const [loading, setLoading] = useState(true); // Quản lý trạng thái tải dữ liệu
+  const [movies, setMovies] = useState([]); 
+  const [shows, setShows] = useState([]); 
+  const [users, setUsers] = useState([]); 
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true); 
+    try {
+      // Lấy danh sách movies
+      const moviesSnapshot = await getDocs(collection(db, "movies"));
+      const moviesList = moviesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMovies(moviesList);
+  
+      // Lấy danh sách shows
+      const showsSnapshot = await getDocs(collection(db, "tvShows"));
+      const showsList = showsSnapshot.docs.map((doc) => doc.data());
+      setShows(showsList);
+  
+      // Lấy danh sách users
+      const usersSnapshot = await getDocs(collection(db, "users"));
+      const usersList = usersSnapshot.docs.map((doc) => doc.data());
+      setUsers(usersList);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // Tắt loading khi đã xong
+    }
+  };
+  
+
+  const handleDeleteMovie = async (movieId) => {
+    try {
+      await deleteDoc(doc(db, "movies", movieId));
+      setMovies((prevMovies) => prevMovies.filter((movie) => movie.id !== movieId));
+      alert("Movie deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting movie:", error);
+      alert("Failed to delete movie.");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const DashboardData = [
     {
       bg: "bg-orange-600",
       icon: FaRegListAlt,
       title: "Total Movies",
-      total: movies.length, // Sử dụng tổng số phim từ Firestore
+      total: movies.length,
     },
     {
       bg: "bg-blue-700",
       icon: HiViewGridAdd,
-      title: "Total Categories",
-      total: 8,
+      title: "Total Shows",
+      total: shows.length,
     },
     {
       bg: "bg-green-600",
       icon: FaUser,
       title: "Total Users",
-      total: 134,
+      total: users.length,
     },
   ];
 
-  // Lấy dữ liệu phim từ Firestore
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const moviesCollection = collection(db, "movies");
-        const querySnapshot = await getDocs(moviesCollection);
-        const moviesList = querySnapshot.docs.map((doc) => doc.data());
-        setMovies(moviesList);
-      } catch (error) {
-        console.error("Error fetching movies:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMovies();
-  }, []);
-
   return (
+    loading ? (
+      <div className="loading bg-black">
+      <img src="/images/spin.gif" alt="Loading..." />
+    </div>
+  ) : (
     <div>
       <Header />
       <div className="p-6 mt-20">
@@ -65,7 +98,7 @@ function Admin() {
               >
                 <data.icon className="text-white" />
               </div>
-              <div className="col-span-3">
+              <div className="col-span-3 text-white">
                 <h2>{data.title}</h2>
                 <p className="mt-2 font-bold">{data.total}</p>
               </div>
@@ -77,10 +110,16 @@ function Admin() {
         {loading ? (
           <p>Loading movies...</p>
         ) : (
-          <Table data={movies.slice(0, 5)} admin={true} />
+          <Table
+            data={movies.slice(0, 5)}
+            admin={true}
+            handleDelete={handleDeleteMovie}
+          />
         )}
       </div>
+      <Footer />
     </div>
+  )
   );
 }
 
