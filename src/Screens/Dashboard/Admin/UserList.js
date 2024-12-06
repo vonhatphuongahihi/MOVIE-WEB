@@ -2,6 +2,7 @@ import React from "react";
 import Table2 from "../../../Components/Table2";
 import Header from "../SideBar";
 import { UsersData } from "../../../Data/MovieData";
+import Footer from "../../../Layout/Footer/Footer";
 
 function UsersList() {
   return (
@@ -12,6 +13,7 @@ function UsersList() {
 
           <Table2 data={UsersData} users={true} />
         </div>
+      <Footer />
     </div>
   );
 }
