@@ -250,10 +250,10 @@ function Thethao() {
       </div>
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCardsShow1 title={"AFC - BÓNG ĐÁ CHÂU Á"} category={"row1"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} /> 
-          <TitleCardsShow1  title={"SAIGON PHANTOM AOV"} category={"row2"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"NGOẠI HẠNG ANH - PREMIER LEAGUE"} category={"row3"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"THỂ THAO SẮP PHÁT SÓNG"} category={"row4"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1 title={"AFC - BÓNG ĐÁ CHÂU Á"} category={"row1"} genres={["Thể thao", "Bóng đá"]} onMovieClick={handleMovieClick} /> 
+          <TitleCardsShow1  title={"SAIGON PHANTOM AOV"} category={"row2"} genres={["Thể thao điện tử"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1  title={"NGOẠI HẠNG ANH - PREMIER LEAGUE"} category={"row3"} genres={["Thể thao", "Bóng đá"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1  title={"THỂ THAO SẮP PHÁT SÓNG"} category={"row4"} genres={["Thể thao"]} onMovieClick={handleMovieClick} />
         </div>
       </div>
 
