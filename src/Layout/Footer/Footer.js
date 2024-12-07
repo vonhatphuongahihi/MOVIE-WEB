@@ -59,32 +59,32 @@ function Footer() {
   return (
     <div className="bg-main py-4 border-t border-gray-400 border-opacity-50" onClick={scrollToTop}>
       <div className="container mx-auto px-2">
-        <div className="grid grid-cols-2 md:grid-cols-7 xl:grid-cols-12 gap-5 sm:gap-9 lg:gap-11 xl:gap-7 py-10 justify-between">
-          <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-3 mx-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-col-7 xl:grid-cols-12 gap-5 sm:gap-9 lg:gap-11 xl:gap-7 py-10 justify-between">
+          <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-3 mx-5 md:mx-10">
             <Link to="/">
               <img
                 src="/images/logo.png"
                 alt="logo"
-                className="w-2/4 object-contain h-15"
+                className="w-4/5 md:w-2/4 object-contain h-15"
               />
             </Link>
 
             <img
               src="/images/Link_2.png"
               alt="logo"
-              className="w-2/4 object-contain h-10 mt-3"
+              className="w-4/5 md:w-2/4 object-contain h-10 mt-3"
             />
             <img
               src="/images/Link.png"
               alt="logo"
-              className="w-2/4 object-contain h-10 mt-3"
+              className="w-4/5 md:w-2/4 object-contain h-10 mt-3"
             />
           </div>
 
           {Links.map((link, index) => (
             <div
               key={index}
-              className="col-span-1 md:col-span-2 lg:col-span-3 pb-3.5 sm:pb-0"
+              className="col-span-1 md:col-span-2 lg:col-span-1 xl:col-span-3 pb-3.5 sm:pb-0 mx-5 md:mx-10"
             >
               <h3 className="text-md lg:leading-7 font-medium mb-4 sm:mb-5 lg:mb-6 pb-0.5 text-subMain">
   {link.title}
@@ -107,7 +107,7 @@ function Footer() {
           ))}
         </div>
 
-        <div className="flex flex-row justify-between">
+        <div className="ml-5 lg:ml-10 flex flex-row justify-between gap-x-5 lg:gap-x-10">
           <p className="leading-7 text-sm text-border mt-3">
             <span>UIT ĐHQG HCM, Đường Hàn Thuyên, khu phố 6 P, Thủ Đức, Hồ Chí Minh, Việt Nam</span>
             <br />
@@ -123,14 +123,14 @@ function Footer() {
               Đầu Tư Thành Phố Hồ Chí Minh cấp ngày 19/05/2017
             </span>
           </p>
-          <div className="mr-40 mt-8 text-subMain">
+          <div className="mr-5 lg:mr-40 mt-8 text-subMain w-3/5 md:w-2/5 lg:w-1/5">
             <p>Liên hệ với chúng tôi</p>
-            <div className="flex flex-row gap-5">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 lg:gap-5">
               <a
                 href="https://www.facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-2/4 object-contain h-10 mt-3"
+                className="w-full object-contain h-10 mt-3"
               >
                 <img src="/images/Facebook.png" alt="logo" />
               </a>
@@ -139,7 +139,7 @@ function Footer() {
                 href="https://www.tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-2/4 object-contain h-10 mt-3"
+                className="w-full object-contain h-10 mt-3"
               >
                 <img src="/images/Tiktok.png" alt="logo" />
               </a>
@@ -148,7 +148,7 @@ function Footer() {
                 href="https://www.instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-2/4 object-contain h-10 mt-3"
+                className="w-full object-contain h-10 mt-3"
               >
                 <img src="/images/Instagram.png" alt="logo" />
               </a>
@@ -156,7 +156,7 @@ function Footer() {
                 href="https://www.youtube.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-2/4 object-contain h-10 mt-3"
+                className="w-full object-contain h-10 mt-3"
               >
                 <img src="/images/Youtube.png" alt="logo" />
               </a>
