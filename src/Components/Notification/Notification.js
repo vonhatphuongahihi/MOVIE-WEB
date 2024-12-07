@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-const Notification = ({ type, title, message, image }) => {
+const Notification = ({ isBold, title, message, image }) => {
     return (
         <div className='flex flex-row justify-center gap-3 items-center bg-notif rounded-lg py-3 px-5 mb-5 text-left'>
             <div className={`w-1/3 rounded-full `}>
@@ -10,8 +10,8 @@ const Notification = ({ type, title, message, image }) => {
             </div>
 
             <div className="w-2/3 ml-1">
-            <h4 className='font-bold mb-1'>{title}</h4>
-            <p className='text-gray-200 font-thin text-wrap text-sm'>{message}</p>
+            <h4 className={`mb-1 ${isBold ? 'font-bold' : ''}`}>{title}</h4>
+            <p className={`text-gray-200 text-wrap text-sm ${isBold ? 'font-bold' : ''}`}>{message}</p>
             
             </div>
         </div>
