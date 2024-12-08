@@ -1,15 +1,22 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, doc, getDoc, getDocs,query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
-import { BiArrowBack } from "react-icons/bi";
+
 import { BsCollectionFill } from "react-icons/bs";
 import { FaPlay, FaRegCalendar } from "react-icons/fa";
-import { IoIosRadioButtonOn } from "react-icons/io";
+
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
 import { RiGlobalLine } from "react-icons/ri";
 import { NavLink, useParams } from "react-router-dom";
-import YouTube from 'react-youtube';
+import YouTube from "react-youtube";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../Components/Movie";
@@ -17,7 +24,7 @@ import MovieCasts from "../Components/Single/MovieCasts";
 import MovieRates from "../Components/Single/MovieRates";
 import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
-import { RecentlyContext } from '../Context/RecentlyContext';
+import { RecentlyContext } from "../Context/RecentlyContext";
 import Layout from "../Layout/Layout";
 // import { addCommentToMovie } from "../firebase";
 import { db } from "../firebase";
@@ -33,8 +40,6 @@ function SingleMovie() {
   const [isApiMovie, setIsApiMovie] = useState(false);
   const [voteCount, setvoteCount] = useState(0);
   const [voteAverage, setvoteAverage] = useState(0);
-  
-
 
   useEffect(() => {
     const auth = getAuth();
@@ -69,7 +74,8 @@ function SingleMovie() {
           method: "GET",
           headers: {
             accept: "application/json",
-            Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmVhMmE0YjRkZDRmZGI2NjE4NzExZTI5MGQyOWFjOCIsIm5iZiI6MTcyODYzNjgzMS44MDAwMjIsInN1YiI6IjY3MDI5YmVkYjE0NjI4MmY3Yjg1OTJmNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7k-J48cvRsIGemMyu6hFgL1yxu8LHluFEho6R6MOnUM", // Thay bằng API key của bạn
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmVhMmE0YjRkZDRmZGI2NjE4NzExZTI5MGQyOWFjOCIsIm5iZiI6MTcyODYzNjgzMS44MDAwMjIsInN1YiI6IjY3MDI5YmVkYjE0NjI4MmY3Yjg1OTJmNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7k-J48cvRsIGemMyu6hFgL1yxu8LHluFEho6R6MOnUM", // Thay bằng API key của bạn
           },
         });
         const apiData = await response.json();
@@ -79,30 +85,31 @@ function SingleMovie() {
       }
 
       // Fetch comments for this movie
-    const commentsSnapshot = await getDocs(
-      query(collection(db, "comments"), where("movieId", "==", id))
-    );
-    const comments = [];
-    let totalRating = 0;
+      const commentsSnapshot = await getDocs(
+        query(collection(db, "comments"), where("movieId", "==", id))
+      );
+      const comments = [];
+      let totalRating = 0;
 
-    commentsSnapshot.forEach((doc) => {
-      const commentData = doc.data();
-      const rating = parseFloat(commentData.rating);
-      
-      if (!isNaN(rating)) { // Kiểm tra rating có phải là số hợp lệ không
-        comments.push(commentData);
-        totalRating += rating; // Cộng điểm rating hợp lệ
-      }
-    });
+      commentsSnapshot.forEach((doc) => {
+        const commentData = doc.data();
+        const rating = parseFloat(commentData.rating);
 
-    const totalComments = comments.length; // Tổng số comment
-    const averageRating = totalComments > 0 ? (totalRating / totalComments).toFixed(1) : 0;
+        if (!isNaN(rating)) {
+          // Kiểm tra rating có phải là số hợp lệ không
+          comments.push(commentData);
+          totalRating += rating; // Cộng điểm rating hợp lệ
+        }
+      });
 
-    // Cập nhật state
-    setvoteCount(totalComments);
-    setvoteAverage(averageRating);
+      const totalComments = comments.length; // Tổng số comment
+      const averageRating =
+        totalComments > 0 ? (totalRating / totalComments).toFixed(1) : 0;
+
+      // Cập nhật state
+      setvoteCount(totalComments);
+      setvoteAverage(averageRating);
       console.log("Comments:", comments);
-    
 
       // Fetch recommendations
       const recommendationsSnapshot = await getDocs(collection(db, "movies"));
@@ -113,7 +120,6 @@ function SingleMovie() {
         }
       });
       setRecommendations(recommendationsData);
-
     } catch (error) {
       console.error("Error fetching movie data:", error);
     }
@@ -125,23 +131,28 @@ function SingleMovie() {
 
   const handlePlay = () => {
     setPlay(true);
-  
+
     const movieToAdd = {
       id: movie.movieId,
       title: movie.title,
       overview: movie.overview,
       runtime: movie.runtime,
       country: movie.country,
-      backdrop_path: movie.backdrop_path || movie.backdropUrl, 
+      backdrop_path: movie.backdrop_path || movie.backdropUrl,
       type: "movie",
-      ...(isApiMovie ? { vote_average: movie.vote_average, vote_count: movie.vote_count } : {})
+      ...(isApiMovie
+        ? { vote_average: movie.vote_average, vote_count: movie.vote_count }
+        : {}),
     };
-      addRecently(movieToAdd); 
+    addRecently(movieToAdd);
   };
 
-  const teaser = isApiMovie && movie.videos && movie.videos.results
-    ? movie.videos.results.find(video => video.type === "Teaser" || video.type === "Trailer")
-    : null;
+  const teaser =
+    isApiMovie && movie.videos && movie.videos.results
+      ? movie.videos.results.find(
+          (video) => video.type === "Teaser" || video.type === "Trailer"
+        )
+      : null;
 
   return (
     <Layout>
@@ -152,26 +163,23 @@ function SingleMovie() {
 
       <div className="flex items-center space-x-4">
         <NavLink to="/">
-          <img
-            src="/images/Back.svg"
-            className="w-12 h-12"
-          />
+          <img src="/images/Back.svg" className="w-12 h-12" />
         </NavLink>
-        <p className="text-2xl text-[20px] mb-0 text-subMain">
-          {movie?.title}
-        </p>
+        <p className="text-2xl text-[20px] mb-0 text-subMain">{movie?.title}</p>
       </div>
- 
+
       <div id="Watch">
         <div className="container mx-auto bg-main p-6">
           {play ? (
             isApiMovie ? (
               <YouTube
                 videoId={teaser?.key}
-                opts={{ height: '620', width: '100%' }}
+                opts={{ height: "620", width: "100%" }}
                 onReady={(event) => {
                   // Seek to the saved progress if present
-                  const savedTime = localStorage.getItem(`movie-progress-${id}`);
+                  const savedTime = localStorage.getItem(
+                    `movie-progress-${id}`
+                  );
                   if (savedTime) {
                     event.target.seekTo(Number(savedTime), true);
                   }
@@ -208,9 +216,11 @@ function SingleMovie() {
                 </button>
               </div>
               <img
-                src={isApiMovie 
-                  ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` 
-                  : movie.backdrop_path} // URL nền cho phim do người dùng tải lên
+                src={
+                  isApiMovie
+                    ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
+                    : movie.backdrop_path
+                } // URL nền cho phim do người dùng tải lên
                 alt={movie?.title}
                 className="w-full h-full object-cover rounded-lg"
               />
@@ -220,12 +230,22 @@ function SingleMovie() {
 
         <div className="flex justify-between mx-20">
           <div className="flex flex-col w-1/2 mb-15">
-          <h1 className="font-bold mb-10 text-3xl text-left">{movie?.title}</h1>
+            <h1 className="font-bold mb-10 text-3xl text-left">
+              {movie?.title}
+            </h1>
             <div className="flex items-center gap-6">
               <div className="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
-                <img className="size-6" src="/rate-star.png" alt="Star Rating" />
-                <p className="font-bold text-xl">{isApiMovie ? movie.vote_average : voteAverage}</p>
-                <p className="size-6 text-gray-500">({isApiMovie ? movie.vote_count : voteCount})</p>
+                <img
+                  className="size-6"
+                  src="/rate-star.png"
+                  alt="Star Rating"
+                />
+                <p className="font-bold text-xl">
+                  {isApiMovie ? movie.vote_average : voteAverage}
+                </p>
+                <p className="size-6 text-gray-500">
+                  ({isApiMovie ? movie.vote_count : voteCount})
+                </p>
               </div>
               <div className="flex text-lg gap-2 items-center text-star">
                 <Rating value={isApiMovie ? movie.vote_average : voteAverage} />
@@ -237,13 +257,17 @@ function SingleMovie() {
               <div className="flex-2 w-2/5 flex items-center gap-2">
                 <RiGlobalLine className="text-subMain w-4 h-4" />
                 <span className="text-sm font-medium">
-                  {isApiMovie ? movie.production_countries[0]?.name : movie.country || "N/A"}
+                  {isApiMovie
+                    ? movie.production_countries[0]?.name
+                    : movie.country || "N/A"}
                 </span>
               </div>
               <div className="flex-2 w-1/5 flex items-center gap-2">
                 <FaRegCalendar className="text-subMain w-3 h-3" />
                 <span className="text-sm font-medium">
-                  {isApiMovie ? movie.release_date: movie.release_date || "N/A"}
+                  {isApiMovie
+                    ? movie.release_date
+                    : movie.release_date || "N/A"}
                 </span>
               </div>
               <div className="flex-2 w-2/5 flex items-center gap-2">
@@ -257,10 +281,12 @@ function SingleMovie() {
             <hr className="border-t-1 border-gray-300 mb-8" />
 
             <div className="mb-4 flex">
-            <span className="font-medium mr-2">Thể loại: </span>
-            <span className="font-medium ">
-              {isApiMovie ? movie.genres.map(genre => genre.name).join(', ') : movie.genres.join(', ')}
-            </span>
+              <span className="font-medium mr-2">Thể loại: </span>
+              <span className="font-medium ">
+                {isApiMovie
+                  ? movie.genres.map((genre) => genre.name).join(", ")
+                  : movie.genres.join(", ")}
+              </span>
             </div>
 
             <p className="mb-10 text-justify">{movie?.overview}</p>
@@ -279,18 +305,26 @@ function SingleMovie() {
             <div className="flex justify-between">
               <p className="font-medium mr-2">Diễn viên:</p>
               <p className="font-medium">
-                {isApiMovie 
-                  ? movie.casts.cast.slice(0, 2).map(actor => actor.name).join(', ') || "Không có thông tin"
-                  : movie.cast ? movie.cast.slice(0, 2).map(actor => actor.name).join(', ') || "Không có thông tin" 
+                {isApiMovie
+                  ? movie.casts.cast
+                      .slice(0, 2)
+                      .map((actor) => actor.name)
+                      .join(", ") || "Không có thông tin"
+                  : movie.cast
+                  ? movie.cast
+                      .slice(0, 2)
+                      .map((actor) => actor.name)
+                      .join(", ") || "Không có thông tin"
                   : "Không có thông tin"}
               </p>
             </div>
 
-
             <div className="flex justify-between mt-4">
               <p className="font-medium">Lượt xem:</p>
               <p className="font-medium ">
-                {isApiMovie ? `${movie.popularity} views` : `${movie.views} views`}
+                {isApiMovie
+                  ? `${movie.popularity} views`
+                  : `${movie.views} views`}
               </p>
             </div>
           </div>
