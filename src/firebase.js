@@ -95,6 +95,7 @@ const addCommentToMovie = async (movieId, userId, commentContent, rating, userNa
     }
 };
 
+
 const getCommentsForMovie = async (movieId) => {
     try {
         const commentsRef = collection(db, "comments");
