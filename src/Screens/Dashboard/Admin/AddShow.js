@@ -3,6 +3,8 @@ import { MdDelete } from "react-icons/md";
 import Header from "../SideBar";
 import { db } from "../../../firebase";
 import { collection, addDoc, updateDoc } from "firebase/firestore";
+import Footer from "../../../Layout/Footer/Footer";
+
 
 function AddShow() {
   const [showTitle, setShowTitle] = useState('');
@@ -123,7 +125,7 @@ function AddShow() {
             <label className="block text-sm font-semibold text-border">Show Title</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-              placeholder="Game of Thrones"
+              placeholder="Anh Trai Say Hi"
               type="text"
               value={showTitle}
               onChange={(e) => setShowTitle(e.target.value)}
@@ -141,20 +143,20 @@ function AddShow() {
           </div>
         </div>
 
-        {/* Language and Year of Release */}
+        {/* Language and Release Date */}
         <div className="w-full grid md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-semibold text-border">Language Used</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-              placeholder="English"
+              placeholder="Tiếng Việt"
               type="text"
               value={showLanguage}
               onChange={(e) => setShowLanguage(e.target.value)}
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-border">Year of Release</label>
+            <label className="block text-sm font-semibold text-border">Release Date</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
               type="date"
@@ -184,7 +186,7 @@ function AddShow() {
             <label className="block text-sm font-semibold text-border">Country</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-              placeholder="Country"
+              placeholder="Việt Nam"
               type="text"
               value={showCountry}
               onChange={(e) => setShowCountry(e.target.value)}
@@ -196,7 +198,7 @@ function AddShow() {
           <input
             type="text"
             className="w-full p-3 bg-black border border-gray-300 rounded-lg text-white"
-            placeholder="Add a genre and press Enter"
+            placeholder="Thêm thể loại và nhấn Enter"
             value={currentGenre}
             onChange={(e) => setCurrentGenre(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAddGenre()}
@@ -242,7 +244,7 @@ function AddShow() {
 
         {/* Show Images */}
         <div className="w-full grid md:grid-cols-2 gap-6">
-          {/* Image without title */}
+          {/* Backdrop */}
           <div className="flex flex-col gap-2">
             <p className="text-border font-semibold text-sm">Backdrop</p>
             <input
@@ -253,7 +255,7 @@ function AddShow() {
             />
           </div>
 
-          {/* Image with title */}
+          {/* Poster */}
           <div className="flex flex-col gap-2">
             <p className="text-border font-semibold text-sm">Poster</p>
             <input
@@ -279,7 +281,7 @@ function AddShow() {
           <label className="text-border font-semibold text-sm">Video Link</label>
           <input
             type="text"
-            placeholder="Paste your video link here"
+            placeholder="Dán link video"
             value={videoLink}
             onChange={(e) => setVideoLink(e.target.value)}
             className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
@@ -290,7 +292,7 @@ function AddShow() {
           <label className="block text-sm font-semibold text-border">Show Description</label>
           <textarea
             className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-            placeholder="Show Description"
+            placeholder="Đây là show giải trí siêu hot"
             value={showOverview}
             onChange={(e) => setShowOverview(e.target.value)}
           />
@@ -307,6 +309,7 @@ function AddShow() {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

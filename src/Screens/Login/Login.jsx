@@ -43,7 +43,7 @@ const Login = () => {
     
                 if (userRole === "admin") {
                     toast.success("Đăng nhập thành công với quyền admin.");
-                    navigate('/admin');
+                    navigate('/admin/dashboard');
                 } else {
                     toast.success("Đăng nhập thành công.");
                     navigate('/');
@@ -58,7 +58,7 @@ const Login = () => {
 
     return (
         loading ? (
-            <div className="loading">
+            <div className="loading bg-black">
                 <img src="./images/spin.gif" alt="" />
             </div>
         ) : (

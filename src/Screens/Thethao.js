@@ -208,7 +208,7 @@ function Thethao() {
       <div className="home">
         <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <video
-            src="./videos/teaser_atsh.mp4"
+            src="./videos/Sport intro.mp4"
             autoPlay
             loop
             muted
@@ -230,7 +230,7 @@ function Thethao() {
                 marginBottom: '35px',
               }}
             >
-              { "Quy tụ 30 nam ca sĩ trẻ tượng trưng cho thế hệ mới, mang trông mình tuổi trẻ tươi nguyên, khát vọng đột phá và giấc mơ rạng danh văn hóa bản địa."}
+              { "Melon cung cấp thông tin, tin tức nóng hổi, kết quả trực tiếp, và video nổi bật từ các giải đấu hàng đầu thế giới. Hãy cùng khám phá đam mê thể thao bất tận!."}
             </p>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
             <BannerButton

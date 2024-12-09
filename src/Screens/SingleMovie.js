@@ -3,11 +3,12 @@ import { collection, doc, getDoc, getDocs, query, where } from "firebase/firesto
 import React, { useContext, useEffect, useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
 import { FaPlay, FaRegCalendar } from "react-icons/fa";
+
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
 import { RiGlobalLine } from "react-icons/ri";
 import { NavLink, useParams } from "react-router-dom";
-import YouTube from 'react-youtube';
+import YouTube from "react-youtube";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../Components/Movie";
@@ -15,7 +16,7 @@ import MovieCasts from "../Components/Single/MovieCasts";
 import MovieRates from "../Components/Single/MovieRates";
 import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
-import { RecentlyContext } from '../Context/RecentlyContext';
+import { RecentlyContext } from "../Context/RecentlyContext";
 import Layout from "../Layout/Layout";
 // import { addCommentToMovie } from "../firebase";
 import { db } from "../firebase";
@@ -31,8 +32,6 @@ function SingleMovie() {
   const [isApiMovie, setIsApiMovie] = useState(false);
   const [voteCount, setvoteCount] = useState(0);
   const [voteAverage, setvoteAverage] = useState(0);
-  
-
 
   useEffect(() => {
     const auth = getAuth();
@@ -69,7 +68,8 @@ function SingleMovie() {
           method: "GET",
           headers: {
             accept: "application/json",
-            Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmVhMmE0YjRkZDRmZGI2NjE4NzExZTI5MGQyOWFjOCIsIm5iZiI6MTcyODYzNjgzMS44MDAwMjIsInN1YiI6IjY3MDI5YmVkYjE0NjI4MmY3Yjg1OTJmNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7k-J48cvRsIGemMyu6hFgL1yxu8LHluFEho6R6MOnUM", // Thay bằng API key của bạn
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzMmVhMmE0YjRkZDRmZGI2NjE4NzExZTI5MGQyOWFjOCIsIm5iZiI6MTcyODYzNjgzMS44MDAwMjIsInN1YiI6IjY3MDI5YmVkYjE0NjI4MmY3Yjg1OTJmNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7k-J48cvRsIGemMyu6hFgL1yxu8LHluFEho6R6MOnUM", // Thay bằng API key của bạn
           },
         });
         const apiData = await response.json();
@@ -89,21 +89,22 @@ function SingleMovie() {
       commentsSnapshot.forEach((doc) => {
         const commentData = doc.data();
         const rating = parseFloat(commentData.rating);
-        
-        if (!isNaN(rating)) { // Kiểm tra rating có phải là số hợp lệ không
+
+        if (!isNaN(rating)) {
+          // Kiểm tra rating có phải là số hợp lệ không
           comments.push(commentData);
           totalRating += rating; // Cộng điểm rating hợp lệ
         }
       });
 
       const totalComments = comments.length; // Tổng số comment
-      const averageRating = totalComments > 0 ? (totalRating / totalComments).toFixed(1) : 0;
+      const averageRating =
+        totalComments > 0 ? (totalRating / totalComments).toFixed(1) : 0;
 
       // Cập nhật state
       setvoteCount(totalComments);
       setvoteAverage(averageRating);
       console.log("Comments:", comments);
-    
 
       // Fetch recommendations
       const recommendationsSnapshot = await getDocs(collection(db, "movies"));
@@ -124,7 +125,6 @@ function SingleMovie() {
       });
 
       setRecommendations(recommendationsData);
-
     } catch (error) {
       console.error("Error fetching movie data:", error);
     }
@@ -136,23 +136,28 @@ function SingleMovie() {
 
   const handlePlay = () => {
     setPlay(true);
-  
+
     const movieToAdd = {
       id: movie.movieId,
       title: movie.title,
       overview: movie.overview,
       runtime: movie.runtime,
       country: movie.country,
-      backdrop_path: movie.backdrop_path || movie.backdropUrl, 
+      backdrop_path: movie.backdrop_path || movie.backdropUrl,
       type: "movie",
-      ...(isApiMovie ? { vote_average: movie.vote_average, vote_count: movie.vote_count } : {})
+      ...(isApiMovie
+        ? { vote_average: movie.vote_average, vote_count: movie.vote_count }
+        : {}),
     };
-      addRecently(movieToAdd); 
+    addRecently(movieToAdd);
   };
 
-  const teaser = isApiMovie && movie.videos && movie.videos.results
-    ? movie.videos.results.find(video => video.type === "Teaser" || video.type === "Trailer")
-    : null;
+  const teaser =
+    isApiMovie && movie.videos && movie.videos.results
+      ? movie.videos.results.find(
+          (video) => video.type === "Teaser" || video.type === "Trailer"
+        )
+      : null;
 
   return (
     <Layout>
@@ -173,7 +178,7 @@ function SingleMovie() {
           {movie?.title}
         </p>
       </div>
- 
+
       <div id="Watch">
         <div className="container mx-auto bg-main lg:p-6 px-4 py-2 mb-4">
           {play ? (
@@ -184,7 +189,9 @@ function SingleMovie() {
                 className="lg:h-[620px] md:h-[387px] h-[188px]"
                 onReady={(event) => {
                   // Seek to the saved progress if present
-                  const savedTime = localStorage.getItem(`movie-progress-${id}`);
+                  const savedTime = localStorage.getItem(
+                    `movie-progress-${id}`
+                  );
                   if (savedTime) {
                     event.target.seekTo(Number(savedTime), true);
                   }
@@ -223,9 +230,11 @@ function SingleMovie() {
                 </button>
               </div>
               <img
-                src={isApiMovie 
-                  ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` 
-                  : movie.backdrop_path} // URL nền cho phim do người dùng tải lên
+                src={
+                  isApiMovie
+                    ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`
+                    : movie.backdrop_path
+                } // URL nền cho phim do người dùng tải lên
                 alt={movie?.title}
                 className="w-full h-full object-cover rounded-lg"
               />
@@ -241,6 +250,7 @@ function SingleMovie() {
                 <img className="lg:size-6 md:size-5 size-6" src="/rate-star.png" alt="Star Rating" />
                 <p className="font-bold lg:text-xl">{isApiMovie ? movie.vote_average : voteAverage}</p>
                 <p className="size-6 text-gray-500">({isApiMovie ? movie.vote_count : voteCount})</p>
+
               </div>
               <div className="flex lg:text-lg gap-2 items-center text-star">
                 <Rating value={isApiMovie ? movie.vote_average : voteAverage} />
@@ -287,13 +297,19 @@ function SingleMovie() {
             <div className="flex">
               <p className="font-medium md:w-20 lg:w-auto lg:mr-2 md:mr-0 mr-2">Diễn viên:</p>
               <p className="font-medium">
-                {isApiMovie 
-                  ? movie.casts.cast.slice(0, 2).map(actor => actor.name).join(', ') || "Không có thông tin"
-                  : movie.cast ? movie.cast.slice(0, 2).map(actor => actor.name).join(', ') || "Không có thông tin" 
+                {isApiMovie
+                  ? movie.casts.cast
+                      .slice(0, 2)
+                      .map((actor) => actor.name)
+                      .join(", ") || "Không có thông tin"
+                  : movie.cast
+                  ? movie.cast
+                      .slice(0, 2)
+                      .map((actor) => actor.name)
+                      .join(", ") || "Không có thông tin"
                   : "Không có thông tin"}
               </p>
             </div>
-
 
             <div className="flex lg:mt-4 mt-2">
               <p className="font-medium md:w-20 lg:w-auto lg:mr-2 md:mr-0 mr-2">Thể loại: </p>

@@ -14,6 +14,12 @@ import MovieRates from "../Components/Single/MovieRates";
 import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
+import ShowRates from "../Components/Single/ShowRates";
+import Layout from "../Layout/Layout";
+
+
+
+
 import { db } from "../firebase";
 import Layout from "../Layout/Layout";
 
@@ -55,8 +61,7 @@ function SingleShow() {
         const showData = showDoc.data();
         setShow(showData);
         currentGenres = showData.genres || [];
-        setVideos(showData.video); 
-        
+        setVideos(showData.video);
       } else {
         console.error("Show not found");
       }
@@ -85,7 +90,7 @@ function SingleShow() {
       setvoteCount(totalComments);
       setvoteAverage(averageRating);
       console.log("Comments:", comments);
-
+      
       // Fetch recommendations
       const recommendationsSnapshot = await getDocs(collection(db, "tvShows"));
       const recommendationsData = [];
@@ -111,13 +116,12 @@ function SingleShow() {
       alert("Đã xảy ra lỗi khi lấy dữ liệu.");
     }
   };
-  
-  console.log("Show đang xem:", show); 
+
+  console.log("Show đang xem:", show);
   useEffect(() => {
     console.log("Fetched id:", id);
     fetchShowData();
   }, [id]);
-  
 
   if (!show) {
     return <div>Loading...</div>;
@@ -134,9 +138,8 @@ function SingleShow() {
       backdrop_path: show.backdrop_path,
       type: "show",
     };
-    addRecently(showToAdd); 
+    addRecently(showToAdd);
   };
-
 
   return (
     <Layout>
@@ -147,17 +150,14 @@ function SingleShow() {
 
       <div className="flex items-center lg:space-x-4">
         <NavLink to="/" className="flex items-center text-subMain">
-          <img
-            src="/images/Back.svg"
-            alt="Back Icon"
-            className="w-12 h-12"
-          />
+          <img src="/images/Back.svg" alt="Back Icon" className="w-12 h-12" />
         </NavLink>
+    
         <p className="lg:text-xl mb-0 text-subMain">
           {show?.title}
         </p>
       </div>
- 
+
       <div id="Watch">
         <div className="container mx-auto bg-main lg:p-6 px-4 py-2 mb-4">
           {play ? (
@@ -294,7 +294,8 @@ function SingleShow() {
         </div>
       </div>
       
-      <MovieRates movie={show} user={user} onAddCompleted={fetchShowData} />
+      <MovieRates movie={show} user={user} onAddCompleted={fetchShowData} />   
+//       <ShowRates show={show} user={user} onAddCompleted={fetchShowData} />
     </Layout>
   );
 }

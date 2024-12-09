@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { db } from "../../../firebase";
 import Header from "../SideBar";
+import Footer from "../../../Layout/Footer/Footer";
+
 
 function AddMovie() {
   const [newCast, setNewCast] = useState({ name: "", character: "", profile_path: null });
@@ -167,17 +169,17 @@ function AddMovie() {
             <label className="block text-sm font-semibold text-border">Movie Title</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-              placeholder="Game of Thrones"
+              placeholder="Hôn Lễ Của Em"
               type="text"
               value={movieTitle}
               onChange={(e) => setMovieTitle(e.target.value)}
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-border">Hours</label>
+            <label className="block text-sm font-semibold text-border">Runtime</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-              placeholder="2hr"
+              placeholder="115"
               type="text"
               value={movieHours}
               onChange={(e) => setMovieHours(e.target.value)}
@@ -191,14 +193,14 @@ function AddMovie() {
             <label className="block text-sm font-semibold text-border">Language Used</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-              placeholder="English"
+              placeholder="Tiếng Trung"
               type="text"
               value={movieLanguage}
               onChange={(e) => setMovieLanguage(e.target.value)}
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-border">Year of Release</label>
+            <label className="block text-sm font-semibold text-border">Release Date</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
               type="date"
@@ -214,7 +216,7 @@ function AddMovie() {
             <label className="block text-sm font-semibold text-border">Country</label>
             <input
               className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-              placeholder="Country"
+              placeholder="Trung Quốc"
               type="text"
               value={movieCountry}
               onChange={(e) => setMovieCountry(e.target.value)}
@@ -226,7 +228,7 @@ function AddMovie() {
           <input
             type="text"
             className="w-full p-3 bg-black border border-gray-300 rounded-lg text-white"
-            placeholder="Add a genre and press Enter"
+            placeholder="Thêm thể loại và nhấn Enter"
             value={currentGenre}
             onChange={(e) => setCurrentGenre(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAddGenre()}
@@ -271,9 +273,9 @@ function AddMovie() {
 
         {/* Movie Images */}
         <div className="w-full grid md:grid-cols-2 gap-6">
-          {/* Image without title */}
+          {/* Backdrop */}
           <div className="flex flex-col gap-2">
-            <p className="text-border font-semibold text-sm">Image without Title</p>
+            <p className="text-border font-semibold text-sm">Backdrop</p>
             <input
               type="file"
               accept="image/*"
@@ -282,9 +284,9 @@ function AddMovie() {
             />
           </div>
 
-          {/* Image with title */}
+          {/* Poster */}
           <div className="flex flex-col gap-2">
-            <p className="text-border font-semibold text-sm">Image with Title</p>
+            <p className="text-border font-semibold text-sm">Poster</p>
             <input
               type="file"
               accept="image/*"
@@ -308,7 +310,7 @@ function AddMovie() {
           <label className="text-border font-semibold text-sm">Video Link</label>
           <input
             type="text"
-            placeholder="Paste your video link here"
+            placeholder="Dán link video"
             value={videoLink}
             onChange={(e) => setVideoLink(e.target.value)}
             className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
@@ -319,7 +321,7 @@ function AddMovie() {
           <label className="block text-sm font-semibold text-border">Movie Description</label>
           <textarea
             className="w-full p-3 mt-2 bg-black border border-gray-300 rounded-lg shadow-sm text-white"
-            placeholder="Movie Description"
+            placeholder="Thời trung học, vận động viên bơi lội Châu Tiêu Tề đã yêu một nữ sinh mới chuyển trường đến - Vưu Vịnh Từ ngay từ cái nhìn đầu tiên. Cuộc sống sau đó, 15 năm tình yêu dài dằng dặc, tình yêu trong sáng của thời niên thiếu và khờ khạo, chàng trai âm thầm bảo vệ, che chở nhưng cô gái lại bỏ đi không một lời từ biệt. Cuối cùng, hôn lễ của em, cũng là lúc trưởng thành của anh."
             value={movieOverview}
             onChange={(e) => setMovieOverview(e.target.value)}
           />
@@ -350,7 +352,7 @@ function AddMovie() {
           <input
             type="text"
             name="name"
-            placeholder="Cast Name"
+            placeholder="Tên diễn viên"
             value={newCast.name}
             onChange={handleCastInputChange}
             className="w-full p-2 mt-2 bg-black border border-gray-300 rounded-lg text-white"
@@ -358,7 +360,7 @@ function AddMovie() {
           <input
             type="text"
             name="character"
-            placeholder="Character Name"
+            placeholder="Tên nhân vật"
             value={newCast.character}
             onChange={handleCastInputChange}
             className="w-full p-2 mt-2 bg-black border border-gray-300 rounded-lg text-white"
@@ -384,6 +386,7 @@ function AddMovie() {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

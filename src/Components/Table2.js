@@ -4,7 +4,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const Head = "text-xs text-left text-main font-semibold px-6 py-2 uppercase text-white";
+const Head = "text-xs text-left text-main font-semibold px-6 py-2 uppercase text-black";
 const Text = "text-sm text-left leading-6 whitespace-nowrap px-5 py-3 text-white";
 
 const fetchUsers = async () => {
@@ -24,7 +24,7 @@ const Rows = (data, i, users, OnEditFunction) => {
             <div className="w-12 p-1 bg-dry border border-border h-12 rounded overflow-hidden">
               <img
                 className="h-full w-full object-cover"
-                src={`/images/${data.image ? data.image : "user.png"}`}
+                src={data.avatarUrl || "/images/user.png"}  
                 alt={data?.fullName}
               />
             </div>
@@ -33,11 +33,7 @@ const Rows = (data, i, users, OnEditFunction) => {
           <td className={`${Text}`}>{data.name}</td>
           <td className={`${Text}`}>{data.email}</td>
           <td className={`${Text}`}>{data.birthdate}</td>
-          <td className={`${Text} float-right flex-rows gap-2`}>
-            <button className="bg-subMain text-white rounded flex-colo w-6 h-6">
-              <MdDelete />
-            </button>
-          </td>
+          <td className={`${Text}`}>{data.vip ? "VIP" : "Regular"}</td>
         </>
       ) : (
         <td className={`${Text} font-bold`}>N/A</td>
@@ -65,10 +61,10 @@ function Table2({ users, OnEditFunction }) {
     <div className="overflow-x-scroll overflow-hidden relative w-full">
       <table className="w-full table-auto border border-border divide-y divide-border mt-5">
         <thead>
-          <tr className="bg-dryGray">
+          <tr className="bg-[#DCECDB] ">
             {users && (
               <>
-                <th scope="col" className={`${Head}`}>
+                <th scope="col" className={`${Head}` }>
                   Image
                 </th>
                 <th scope="col" className={`${Head}`}>
@@ -83,11 +79,11 @@ function Table2({ users, OnEditFunction }) {
                 <th scope="col" className={`${Head}`}>
                   Birthdate
                 </th>
+                <th scope="col" className={`${Head}`}>
+                  VIP Status
+                </th>
               </>
             )}
-            <th scope="col" className={`${Head} text-end`}>
-              Actions
-            </th>
           </tr>
         </thead>
         <tbody className="bg-main divide-y divide-gray-800">
