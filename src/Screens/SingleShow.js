@@ -10,18 +10,12 @@ import { NavLink, useParams } from "react-router-dom";
 import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Show from "../Components/Show";
-import MovieRates from "../Components/Single/MovieRates";
+import ShowRates from "../Components/Single/ShowRates";
 import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
-import ShowRates from "../Components/Single/ShowRates";
 import Layout from "../Layout/Layout";
-
-
-
-
 import { db } from "../firebase";
-import Layout from "../Layout/Layout";
 
 function SingleShow() {
   const { id } = useParams();
@@ -293,9 +287,8 @@ function SingleShow() {
           </Swiper>
         </div>
       </div>
-      
-      <MovieRates movie={show} user={user} onAddCompleted={fetchShowData} />   
-//       <ShowRates show={show} user={user} onAddCompleted={fetchShowData} />
+
+      <ShowRates show={show} user={user} onAddCompleted={fetchShowData} />
     </Layout>
   );
 }
