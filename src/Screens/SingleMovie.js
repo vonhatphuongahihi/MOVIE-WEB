@@ -1,14 +1,6 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
-
 import { BsCollectionFill } from "react-icons/bs";
 import { FaPlay, FaRegCalendar } from "react-icons/fa";
 
@@ -63,10 +55,12 @@ function SingleMovie() {
     try {
       const movieDoc = await getDoc(doc(db, "movies", id));
 
+      let currentGenres = [];
       if (movieDoc.exists()) {
         const movieData = movieDoc.data();
         setMovie(movieData);
         setIsApiMovie(false); // Phim do người dùng tải lên
+        currentGenres = movieData.genres || [];
         console.log("Movie from Firestore:", movieData);
       } else {
         const movieUrl = `https://api.themoviedb.org/3/movie/${id}?append_to_response=casts&language=vi-VN`;
@@ -81,6 +75,7 @@ function SingleMovie() {
         const apiData = await response.json();
         setMovie(apiData);
         setIsApiMovie(true); // Phim từ TMDB API
+        currentGenres = apiData.genres?.map((genre) => genre.id) || [];
         console.log("Movie from TMDB:", apiData);
       }
 
@@ -114,11 +109,21 @@ function SingleMovie() {
       // Fetch recommendations
       const recommendationsSnapshot = await getDocs(collection(db, "movies"));
       const recommendationsData = [];
+
       recommendationsSnapshot.forEach((doc) => {
         if (doc.id !== id) {
-          recommendationsData.push({ movieId: doc.id, ...doc.data() });
+          const movieData = doc.data();
+          const movieGenres = movieData.genres || [];
+          const hasCommonGenre = currentGenres.some((genre) =>
+            movieGenres.includes(genre)
+          );
+
+          if (hasCommonGenre) {
+            recommendationsData.push({ movieId: doc.id, ...movieData });
+          }
         }
       });
+
       setRecommendations(recommendationsData);
     } catch (error) {
       console.error("Error fetching movie data:", error);
@@ -161,20 +166,27 @@ function SingleMovie() {
       <br></br>
       <br></br>
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center lg:space-x-4">
         <NavLink to="/">
-          <img src="/images/Back.svg" className="w-12 h-12" />
+          <img
+            src="/images/Back.svg"
+            className="w-12 h-12"
+            alt="Back Icon"
+          />
         </NavLink>
-        <p className="text-2xl text-[20px] mb-0 text-subMain">{movie?.title}</p>
+        <p className="lg:text-xl mb-0 text-subMain">
+          {movie?.title}
+        </p>
       </div>
 
       <div id="Watch">
-        <div className="container mx-auto bg-main p-6">
+        <div className="container mx-auto bg-main lg:p-6 px-4 py-2 mb-4">
           {play ? (
             isApiMovie ? (
               <YouTube
                 videoId={teaser?.key}
-                opts={{ height: "620", width: "100%" }}
+                opts={{ height: '620', width: '100%' }}
+                className="lg:h-[620px] md:h-[387px] h-[188px]"
                 onReady={(event) => {
                   // Seek to the saved progress if present
                   const savedTime = localStorage.getItem(
@@ -198,21 +210,23 @@ function SingleMovie() {
               />
             ) : (
               <iframe
+                title="Video"
                 width="100%"
-                height="620"
+                // height="387"
                 allowFullScreen
                 src={movie.video} // URL video cho phim do người dùng tải lên
                 autoPlay
+                className="lg:h-[620px] md:h-[387px] h-[188px]"
               />
             )
           ) : (
-            <div className="w-full h-screen rounded-lg overflow-hidden relative">
+            <div className="lg:w-full lg:h-screen rounded-lg overflow-hidden relative">
               <div className="absolute top-0 left-0 bottom-0 right-0 bg-main bg-opacity-30 flex-colo">
                 <button
                   onClick={handlePlay}
-                  className="bg-white text-subMain flex-colo border border-subMain rounded-full w-20 h-20 font-medium text-xl"
+                  className="bg-white text-subMain flex-colo border border-subMain rounded-full lg:w-20 lg:h-20 w-10 h-10 font-medium text-xl"
                 >
-                  <FaPlay />
+                  <FaPlay className="lg:w-8 lg:h-8 w-4 h-4"/>
                 </button>
               </div>
               <img
@@ -228,82 +242,60 @@ function SingleMovie() {
           )}
         </div>
 
-        <div className="flex justify-between mx-20">
-          <div className="flex flex-col w-1/2 mb-15">
-            <h1 className="font-bold mb-10 text-3xl text-left">
-              {movie?.title}
-            </h1>
-            <div className="flex items-center gap-6">
-              <div className="w-[166px] h-[54px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
-                <img
-                  className="size-6"
-                  src="/rate-star.png"
-                  alt="Star Rating"
-                />
-                <p className="font-bold text-xl">
-                  {isApiMovie ? movie.vote_average : voteAverage}
-                </p>
-                <p className="size-6 text-gray-500">
-                  ({isApiMovie ? movie.vote_count : voteCount})
-                </p>
+        <div className="md:flex lg:gap-56 md:gap-10 lg:mx-12 mx-4">
+          <div className="flex flex-col md:w-3/5 mb-15">
+            <h1 className="font-bold md:mb-6 mb-4 lg:text-2xl md:text-xl text-2xl text-left">{movie?.title}</h1>
+            <div className="flex items-center gap-6 md:mb-2">
+              <div className="lg:w-[166px] lg:h-[54px] w-[130px] h-[45px] bg-[#2C2C2C] text-white rounded-md flex items-center justify-center gap-3 mb-4">
+                <img className="lg:size-6 md:size-5 size-6" src="/rate-star.png" alt="Star Rating" />
+                <p className="font-bold lg:text-xl">{isApiMovie ? movie.vote_average : voteAverage}</p>
+                <p className="size-6 text-gray-500">({isApiMovie ? movie.vote_count : voteCount})</p>
+
               </div>
-              <div className="flex text-lg gap-2 items-center text-star">
+              <div className="flex lg:text-lg gap-2 items-center text-star">
                 <Rating value={isApiMovie ? movie.vote_average : voteAverage} />
               </div>
             </div>
 
             {/* Info Section */}
-            <div className="flex gap-5 mb-8">
-              <div className="flex-2 w-2/5 flex items-center gap-2">
-                <RiGlobalLine className="text-subMain w-4 h-4" />
-                <span className="text-sm font-medium">
-                  {isApiMovie
-                    ? movie.production_countries[0]?.name
-                    : movie.country || "N/A"}
+            <div className="flex lg:gap-10 md:gap-5 gap-4 md:mb-6 mb-4">
+              <div className="flex-2 flex items-center md:gap-2 gap-1">
+                <RiGlobalLine className="text-subMain w-6 h-6"/>
+                <span className="text-md font-medium">
+                  {isApiMovie ? movie.production_countries[0]?.name : movie.country || "Không có thông tin"}
                 </span>
               </div>
-              <div className="flex-2 w-1/5 flex items-center gap-2">
-                <FaRegCalendar className="text-subMain w-3 h-3" />
-                <span className="text-sm font-medium">
-                  {isApiMovie
-                    ? movie.release_date
-                    : movie.release_date || "N/A"}
+              <div className="flex-2 flex items-center md:gap-2 gap-1">
+                <FaRegCalendar className="text-subMain w-4 h-4" />
+                <span className="text-md font-medium">
+                  {isApiMovie ? movie.release_date: movie.release_date || "Không có thông tin"}
                 </span>
               </div>
-              <div className="flex-2 w-2/5 flex items-center gap-2">
-                <IoTimeOutline className="text-subMain w-3 h-3" />
-                <span className="text-sm font-medium">
-                  {isApiMovie ? movie.runtime : movie.runtime || "N/A"} phút
+              <div className="flex-2 flex items-center md:gap-2 gap-1">
+                <IoTimeOutline className="text-subMain w-5 h-5" />
+                <span className="text-md font-medium">
+                  {isApiMovie ? movie.runtime : movie.runtime || "Không có thông tin"} phút
                 </span>
               </div>
             </div>
 
-            <hr className="border-t-1 border-gray-300 mb-8" />
-
-            <div className="mb-4 flex">
-              <span className="font-medium mr-2">Thể loại: </span>
-              <span className="font-medium ">
-                {isApiMovie
-                  ? movie.genres.map((genre) => genre.name).join(", ")
-                  : movie.genres.join(", ")}
-              </span>
-            </div>
-
-            <p className="mb-10 text-justify">{movie?.overview}</p>
+            <p className="md:mb-10 mb-6 text-justify">{movie?.overview}</p>
           </div>
 
-          <div className="flex flex-col justify-center mt-10">
-            <div className="flex gap-20 mb-8">
+          <div className="flex flex-col md:pt-32">
+            <div className="flex lg:gap-20 md:gap-10 gap-20 lg:mb-8 md:mb-6 mb-6">
               <div className="flex gap-3 items-center">
-                <PiShareFat /> <p>Chia sẻ</p>
+                <PiShareFat className="text-2xl"/>
+                <p className="md:text-lg font-medium">Chia sẻ</p>
               </div>
               <div className="flex gap-3 items-center">
-                <PiHeart /> <p>Yêu thích</p>
+                <PiHeart className="text-2xl"/>
+                <p className="md:text-lg font-medium">Yêu thích</p>
               </div>
             </div>
 
-            <div className="flex justify-between">
-              <p className="font-medium mr-2">Diễn viên:</p>
+            <div className="flex">
+              <p className="font-medium md:w-20 lg:w-auto lg:mr-2 md:mr-0 mr-2">Diễn viên:</p>
               <p className="font-medium">
                 {isApiMovie
                   ? movie.casts.cast
@@ -319,20 +311,20 @@ function SingleMovie() {
               </p>
             </div>
 
-            <div className="flex justify-between mt-4">
-              <p className="font-medium">Lượt xem:</p>
-              <p className="font-medium ">
-                {isApiMovie
-                  ? `${movie.popularity} views`
-                  : `${movie.views} views`}
+            <div className="flex lg:mt-4 mt-2">
+              <p className="font-medium md:w-20 lg:w-auto lg:mr-2 md:mr-0 mr-2">Thể loại: </p>
+              <p className="font-medium">
+                {isApiMovie ? movie.genres.map(genre => genre.name).join(', ') : movie.genres.join(', ')}
               </p>
             </div>
+
           </div>
         </div>
       </div>
 
       <MovieCasts movie={movie} isApiMovie={isApiMovie} />
-      <div className="my-16">
+
+      <div className="lg:my-16 my-6 lg:mx-12 mx-4">
         <Titles title="Nội dung liên quan" Icon={BsCollectionFill} />
         <div className="flex overflow-x-auto mt-6 sm:mt-10 gap-6">
           <Swiper
@@ -345,11 +337,11 @@ function SingleMovie() {
             modules={[Autoplay]}
             spaceBetween={10}
             breakpoints={{
-              0: { slidesPerView: 1 },
+              0: { slidesPerView: 2 },
               400: { slidesPerView: 2 },
               768: { slidesPerView: 3 },
               1024: { slidesPerView: 4 },
-              1280: { slidesPerView: 5, spaceBetween: 30 },
+              1280: { slidesPerView: 4, spaceBetween: 30 },
             }}
           >
             {recommendations.map((recommendedMovie, index) => (

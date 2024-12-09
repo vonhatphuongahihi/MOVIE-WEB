@@ -70,10 +70,10 @@ function SearchResults() {
         }, []);
   
   
-        const filteredResults = uniqueResults.filter((item) =>
+        const filteredResults = query ? uniqueResults.filter((item) =>
           (item.title && item.title.toLowerCase().includes(query.toLowerCase())) || 
           (item.name && item.name.toLowerCase().includes(query.toLowerCase()))
-        );
+        ) : uniqueResults;
   
         setResults(filteredResults);
       } catch (error) {

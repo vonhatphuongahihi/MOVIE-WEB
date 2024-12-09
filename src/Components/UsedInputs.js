@@ -15,7 +15,7 @@ export const Message = ({ label, placeholder }) => {
       <>
         <label className="text-border font-semibold">{label}</label>
         <select
-          className="w-full mt-2 px-6 py-4 text-text bg-main border border-border rounded"
+          className="w-full mt-2 px-4 py-4 text-[16px] text-white bg-[#262626] border border-border rounded"
           onChange={onChange}
         >
           {options.map((o, i) => (
