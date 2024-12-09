@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, setDoc, addDoc, doc, getDoc, getDocs, where, query, updateDoc, deleteDoc} from "firebase/firestore";
+import { getFirestore, setDoc, addDoc, doc, getDoc, getDocs, where, query, updateDoc, deleteDoc, writeBatch} from "firebase/firestore";
 import { toast } from "react-toastify";
 import { collection, arrayUnion } from 'firebase/firestore';
 import { getAuth,deleteUser, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from "firebase/auth";
@@ -95,6 +95,7 @@ const addCommentToMovie = async (movieId, userId, commentContent, rating, userNa
     }
 };
 
+
 const getCommentsForMovie = async (movieId) => {
     try {
         const commentsRef = collection(db, "comments");
@@ -156,7 +157,7 @@ const sendVerificationEmail = async (email) => {
 
 const getNotifications = async () => {
     try {
-        const notificationsRef = collection(db, "notification");
+        const notificationsRef = collection(db, "notifications");
         const querySnapshot = await getDocs(notificationsRef);
 
         const notifications = querySnapshot.docs.map((doc) => ({
@@ -344,4 +345,79 @@ export const updateMovie = async (movieId, updatedData) => {
         return [];
       }
     };
-export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently, updateLikesDislikes, addReplyToComment, updateFavoriteMovies, getFavoriteMovies, updateUserProfile, getUserProfile, deleteUserProfile };
+
+    const addNotificationsForAllUsers = async (notifications) => {
+      try {
+        // Lấy danh sách tất cả người dùng
+        const usersRef = collection(db, "users");
+        const usersSnapshot = await getDocs(usersRef);
+    
+        // Tạo object trạng thái `type: new` cho tất cả user
+        const usersStatus = {};
+        usersSnapshot.docs.forEach((userDoc) => {
+          const userId = userDoc.id;
+          usersStatus[userId] = "new";
+        });
+    
+        // Duyệt qua từng thông báo trong mảng
+        const batch = writeBatch(db); // Sử dụng batch để tối ưu việc ghi dữ liệu
+        notifications.forEach((notification) => {
+          const notificationRef = doc(db, "notifications", notification.id); // Tạo ref cho từng thông báo
+          batch.set(notificationRef, {
+            ...notification,
+            users: usersStatus, // Gán trạng thái cho tất cả user
+            createdAt: new Date().toISOString(),
+          });
+        });
+    
+        // Commit tất cả các thay đổi
+        await batch.commit();
+    
+        console.log("Tất cả thông báo đã được thêm thành công!");
+      } catch (error) {
+        console.error("Lỗi khi thêm thông báo:", error);
+      }
+    };
+
+    const updateAllNotificationsAsRead = async (currentUserId) => {
+      try {
+        const notificationsRef = collection(db, "notifications");
+        const notificationsSnapshot = await getDocs(notificationsRef);
+    
+        // Loop through each notification
+        notificationsSnapshot.forEach(async (notificationDoc) => {
+          const notificationId = notificationDoc.id;
+          const notificationRef = doc(db, "notifications", notificationId);
+    
+          // Get the current users' map and update the status for the current user
+          const users = notificationDoc.data().users;
+          if (users[currentUserId] === "new") {
+            await updateDoc(notificationRef, {
+              [`users.${currentUserId}`]: "seen", // Set the current user's status to "seen"
+            });
+          }
+        });
+    
+        console.log("All notifications have been marked as read for the current user.");
+      } catch (error) {
+        console.error("Error marking notifications as read for the current user:", error);
+      }
+    };
+
+    const saveQuestionToFirestore = async (userId, email, question) => {
+      try {
+        await addDoc(collection(db, "faqQuestions"), {
+          userId,
+          email,
+          question,
+          createdAt: new Date(),
+        });
+        return true; // Thành công
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        throw error; // Ném lỗi để xử lý bên ngoài
+      }
+    };
+    
+
+export { auth, db, signup, login, logout, addCommentToMovie, getCommentsForMovie, sendVerificationEmail, getNotifications, updateRecently, getRecently, updateLikesDislikes, addReplyToComment, updateFavoriteMovies, getFavoriteMovies, updateUserProfile, getUserProfile, deleteUserProfile, addNotificationsForAllUsers, updateAllNotificationsAsRead, saveQuestionToFirestore };

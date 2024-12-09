@@ -208,7 +208,7 @@ function Thethao() {
       <div className="home">
         <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <video
-            src="./videos/teaser_atsh.mp4"
+            src="./videos/Sport intro.mp4"
             autoPlay
             loop
             muted
@@ -230,7 +230,7 @@ function Thethao() {
                 marginBottom: '35px',
               }}
             >
-              { "Quy tụ 30 nam ca sĩ trẻ tượng trưng cho thế hệ mới, mang trông mình tuổi trẻ tươi nguyên, khát vọng đột phá và giấc mơ rạng danh văn hóa bản địa."}
+              { "Melon cung cấp thông tin, tin tức nóng hổi, kết quả trực tiếp, và video nổi bật từ các giải đấu hàng đầu thế giới. Hãy cùng khám phá đam mê thể thao bất tận!."}
             </p>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
             <BannerButton
@@ -250,10 +250,10 @@ function Thethao() {
       </div>
 
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCardsShow1 title={"AFC - BÓNG ĐÁ CHÂU Á"} category={"row1"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} /> 
-          <TitleCardsShow1  title={"SAIGON PHANTOM AOV"} category={"row2"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"NGOẠI HẠNG ANH - PREMIER LEAGUE"} category={"row3"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"THỂ THAO SẮP PHÁT SÓNG"} category={"row4"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1 title={"AFC - BÓNG ĐÁ CHÂU Á"} category={"row1"} genres={["Thể thao", "Bóng đá"]} onMovieClick={handleMovieClick} /> 
+          <TitleCardsShow1  title={"SAIGON PHANTOM AOV"} category={"row2"} genres={["Thể thao điện tử"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1  title={"NGOẠI HẠNG ANH - PREMIER LEAGUE"} category={"row3"} genres={["Thể thao", "Bóng đá"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1  title={"THỂ THAO SẮP PHÁT SÓNG"} category={"row4"} genres={["Thể thao"]} onMovieClick={handleMovieClick} />
         </div>
       </div>
 

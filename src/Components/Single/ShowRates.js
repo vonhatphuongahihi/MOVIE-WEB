@@ -9,7 +9,7 @@ import { Select } from "../UsedInputs";
 
 import { getAuth } from "firebase/auth";
 
-function MovieRates({ movie, user, onAddCompleted }) {
+function ShowRates({ show, user, onAddCompleted }) {
   const Ratings = [
     { title: "Rất kém", value: 0 },
     { title: "Kém", value: 1 },
@@ -153,14 +153,14 @@ function MovieRates({ movie, user, onAddCompleted }) {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const movieComments = await getCommentsForMovie(movie.movieId);
-      setComments(movieComments);
+      const showComments = await getCommentsForMovie(show.id);
+      setComments(showComments);
     };
 
     
 
     fetchComments();
-  }, [movie.movieId]);
+  }, [show.id]);
 
   const handleCommentSubmit = async () => {
     if (!isLoggedIn) {
@@ -169,11 +169,11 @@ function MovieRates({ movie, user, onAddCompleted }) {
 
     if (commentContent.trim()) {
       try {
-        await addCommentToMovie(movie.movieId, user.uid, commentContent, rating, user.name, user.avatarUrl);
+        await addCommentToMovie(show.id, user.uid, commentContent, rating, user.name, user.avatarUrl);
         setCommentContent("");
         setRating(0);
         
-        const updatedComments = await getCommentsForMovie(movie.movieId);
+        const updatedComments = await getCommentsForMovie(show.id);
         setComments(updatedComments);
         onAddCompleted();
       } catch (error) {
@@ -204,7 +204,7 @@ function MovieRates({ movie, user, onAddCompleted }) {
           <div className="w-full">
             <h3 className="lg:text-xl md:text-base text-text mb-2">Đánh giá</h3>
             <Select
-              // label="Đánh giá"
+              //label="Đánh giá"
               options={Ratings}
               onChange={(e) => setRating(e.target.value)}
             />
@@ -311,7 +311,6 @@ function MovieRates({ movie, user, onAddCompleted }) {
                       <span>{comment.replies?.length || 0} phản hồi</span>
                     </div>
                   </div>
-
                 </div>
 
                 {/* Hiển thị danh sách reply */}
@@ -341,4 +340,4 @@ function MovieRates({ movie, user, onAddCompleted }) {
   );
 }
 
-export default MovieRates;
+export default ShowRates;

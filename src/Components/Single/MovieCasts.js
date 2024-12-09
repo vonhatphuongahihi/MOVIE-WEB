@@ -10,7 +10,7 @@ const MovieCasts = ({ movie = {}, isApiMovie = true }) => {
   const renderCasts = (castList = []) => {
     if (!castList.length) {
       return (
-        <div className="w-full text-center italic text-sm text-gray-500">
+        <div className="w-full text-center italic text-md text-gray-500">
           Không có thông tin diễn viên.
         </div>
       );
@@ -18,7 +18,7 @@ const MovieCasts = ({ movie = {}, isApiMovie = true }) => {
 
     return castList.map((actor, index) => (
       <SwiperSlide key={actor.id || index}>
-        <div className="w-full p-3 italic text-xs text-text rounded flex-colo">
+        <div className="w-full italic text-text rounded flex-colo">
         <img
             src={
               actor.profile_path
@@ -28,20 +28,20 @@ const MovieCasts = ({ movie = {}, isApiMovie = true }) => {
                 : "/default-avatar.png"
             }
             alt={actor.name || "Không rõ tên"}
-            className="w-full h-64 object-cover rounded-full mb-4"
+            className="lg:w-full lg:h-64 md:w-40 md:h-40 w-36 h-36 object-cover rounded-full mb-4"
           />
 
-          <p>{actor.name || "Không rõ tên"}</p>
-          {actor.character && <p className="text-gray-400">({actor.character})</p>}
+          <p className="lg:text-[16px] text-sm">{actor.name || "Không rõ tên"}</p>
+          {actor.character && <p className="text-gray-400 lg:text-sm text-xs">({actor.character})</p>}
         </div>
       </SwiperSlide>
     ));
   };
 
   return (
-    <div className="my-12">
+    <div className="lg:my-12 my-6 lg:mx-12 mx-4">
       {/* Tiêu đề */}
-      <Titles title="Diễn Viên" Icon={FaUserFriends} />
+      <Titles title="Diễn viên" Icon={FaUserFriends} className="text-xl"/>
 
       {/* Swiper hiển thị danh sách diễn viên */}
       <div className="mt-10">
@@ -55,9 +55,9 @@ const MovieCasts = ({ movie = {}, isApiMovie = true }) => {
           modules={[Autoplay]}
           spaceBetween={10}
           breakpoints={{
-            0: { slidesPerView: 1 },
+            0: { slidesPerView: 2 },
             400: { slidesPerView: 2 },
-            768: { slidesPerView: 3 },
+            768: { slidesPerView: 4 },
             1024: { slidesPerView: 4 },
             1280: { slidesPerView: 5, spaceBetween: 30 },
           }}

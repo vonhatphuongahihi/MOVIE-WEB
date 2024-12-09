@@ -37,9 +37,9 @@
   position: absolute;
   top: 40px; /* Khoảng cách từ icon thông báo */
   left: 50%; /* Căn giữa theo chiều ngang */
-  transform: translateX(-50%); /* Dịch chuyển về giữa */
+  transform: translateX(-70%); /* Dịch chuyển về giữa */
   max-width: 450px;
-  width: 400px; /* Giới hạn chiều rộng popper */
+  width: 350px; /* Giới hạn chiều rộng popper */
   padding: 25px 0;
   background-color: #000;
   border-radius: 10px;

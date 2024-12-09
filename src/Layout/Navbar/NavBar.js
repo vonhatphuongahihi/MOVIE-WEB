@@ -3,6 +3,7 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { IoFilter, IoListSharp } from "react-icons/io5";
 import { Link, NavLink } from 'react-router-dom';
 import FilterPopup from '../../Components/FilterPopup';
+import SleepTimerPopup from '../../Screens/Popup/SleepTimerPopup';
 import NotificationIcon from '../../Components/Notification/NotificationIcon';
 import SearchForm from '../../Components/SearchForm';
 import { getUserProfile, logout } from "../../firebase";
@@ -21,10 +22,15 @@ function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isFilterPopupOpen, setFilterPopupOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const [uid, setUid] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Thêm trạng thái loading
+
   const toggleDropdown = () => {
     setShowDropdown((prev) => !prev);
   };
+  const [showPopup, setShowPopup] = useState(false);
 
+  const togglePopup = () => setShowPopup(!showPopup);
   const toggleMobileMenu = () => {
     setMobileMenuOpen((prev) => !prev);
   };
@@ -40,10 +46,14 @@ function Navbar() {
       const user = auth.currentUser;
 
       if (user) {
+        setUid(user.uid); // Lưu uid vào state
         const userProfile = await getUserProfile(user.uid); // Hàm lấy dữ liệu từ Firestore
         if (userProfile?.avatarUrl) {
           setAvatarUrl(userProfile.avatarUrl); // Lưu avatar URL vào state
         }
+        setIsLoading(false); // Đánh dấu là đã tải xong
+      } else {
+        setIsLoading(false); // Nếu không có user, cũng đánh dấu đã tải xong
       }
     };
 
@@ -80,6 +90,12 @@ function Navbar() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  if (isLoading) {
+    // Bạn có thể hiển thị một spinner/loading indicator ở đây nếu muốn
+    return <div>Loading...</div>;
+  }
+
 
   return (
     <div>
@@ -211,12 +227,14 @@ function Navbar() {
                     Danh sách yêu thích
                   </NavLink>
                   <NavLink 
-                    to="/recently" 
+                    to="#" 
+                    onClick={togglePopup}
                     className="flex items-center px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
                   >
                     <img src="images/hen_gio_ngu_icon.svg" alt="Hẹn giờ đi ngủ" className="w-4 h-4 mr-2" />
                     Hẹn giờ đi ngủ
                   </NavLink>
+                  {showPopup && uid && <SleepTimerPopup onClose={togglePopup} uid={uid} />}
                   <button
                     onClick={() => {
                       logout();

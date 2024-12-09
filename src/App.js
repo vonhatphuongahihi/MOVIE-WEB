@@ -32,6 +32,7 @@ import SplashScreen from './Splash';
 
 import { createGlobalStyle } from 'styled-components';
 import { RecentlyContext } from "./Context/RecentlyContext";
+import { SleepTimerProvider } from './Context/SleepTimerContext';
 import MovieFetcher from './MovieFetcher';
 import Admin from './Screens/Dashboard/Admin/Admin';
 import MoviesList from './Screens/Dashboard/Admin/MovieList';
@@ -50,6 +51,7 @@ import VipRegistration from './Screens/VipRegistration';
 import TvShowFetcher from './TvShowFetcher';
 
 import RestReminderPopup from "./Screens/Popup/RestReminderPopup";
+import SleepTimerNotification from './Screens/Popup/SleepTimerNotification';
 
 
 const GlobalStyle = createGlobalStyle`
@@ -91,13 +93,17 @@ function App() {
   }
   return (
     <>
+
       <GlobalStyle />
       <MovieFetcher />  
       <TvShowFetcher />
+      
       <ToastContainer theme="dark" />
       {showSplash && loading ? ( 
         <SplashScreen onLoad={handleLoad} />
       ) : (
+        <SleepTimerProvider>
+
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -116,12 +122,12 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/search" element={<SearchResults />} />
-          <Route path="/thieunhi" element={<Thieunhi/>} />
+          <Route path="/thieunhi" element={<Thieunhi />} />
           <Route path="/phimdienanh" element={<PhimDienAnh />} />
           <Route path="/anhtraisayhi" element={<Anhtraisayhi />} />
           <Route path="/2n1d" element={<Haingaymotdem />} />
-          <Route path="/thethao" element={<Thethao />}/>
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/thethao" element={<Thethao />} />
+          <Route path="/admin/dashboard" element={<Admin />} />
           <Route path="/admin/movieslist" element={<MoviesList />} />
           <Route path="/admin/showslist" element={<ShowsList />} />
           <Route path="/admin/userslist" element={<UsersList />} />
@@ -132,14 +138,15 @@ function App() {
           <Route path="/truyenhinh/:id" element={<SingleShow />} />
           <Route path="/phimdienanh/:id" element={<SingleMovie />} />
           <Route path="/anime" element={<Anime />} />
-          <Route path="/dangkyvip" element={< VipRegistration/>} />
-          <Route path="/payment" element={< Payment/>} />
-
+          <Route path="/dangkyvip" element={<VipRegistration />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
+        </SleepTimerProvider>
+
       )}
       <RestReminderPopup />
-    </>
-  );
+      </>
+        );
 }
 
 export default App;

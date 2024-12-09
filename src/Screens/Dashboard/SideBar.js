@@ -1,34 +1,38 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { BsFillGridFill } from "react-icons/bs";
-import { FaListAlt, FaUsers, FaHeart, FaBars } from "react-icons/fa";
-import { RiMovie2Fill, RiLockPasswordLine } from "react-icons/ri";
-import { HiViewGridAdd } from "react-icons/hi";
-import { FiSettings } from "react-icons/fi";
+import { FaUsers } from "react-icons/fa";
+import { RiMovie2Fill} from "react-icons/ri";
+import { MdAssignmentAdd, MdAddToQueue } from "react-icons/md";
+import { BiSolidSlideshow } from "react-icons/bi";
 import { Link, NavLink } from 'react-router-dom';
 import './SideBar.css';
 
 function Header() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const [isLoggingOut, setIsLoggingOut] = useState(false); 
   const SideLinks = [
-    { name: "Dashboard", link: "/admin", icon: BsFillGridFill },
-    { name: "Movies List", link: "/admin/movieslist", icon: FaListAlt },
-    { name: "Shows List", link: "/admin/showslist", icon: RiMovie2Fill },
-    { name: "Add Movies", link: "/admin/addmovie", icon: RiMovie2Fill },
-    { name: "Add Shows", link: "/admin/addshow", icon: RiMovie2Fill },
+    { name: "Dashboard", link: "/admin/dashboard", icon: BsFillGridFill },
+    { name: "Movies List", link: "/admin/movieslist", icon: RiMovie2Fill },
+    { name: "Shows List", link: "/admin/showslist", icon: BiSolidSlideshow },
+    { name: "Add Movies", link: "/admin/addmovie", icon: MdAssignmentAdd },
+    { name: "Add Shows", link: "/admin/addshow", icon: MdAddToQueue },
     { name: "Users List", link: "/admin/userslist", icon: FaUsers },
   ];
 
   const hover = "hover:text-white hover:bg-main transition text-sm";
   const activeClassName = "active navbar-item"; 
+  
 
   const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
 
   const navigate = useNavigate(); 
 
   const handleLogout = () => {
-    navigate("/login"); 
+    setIsLoggingOut(true); 
+    setTimeout(() => {
+      navigate("/login"); 
+    }, 1000); 
   };
   return (
     <div>
@@ -37,7 +41,7 @@ function Header() {
         <div className="header-content">
           {/* Left Side - Logo */}
           <div className="header-logo">
-            <Link to="/" className="mr-2 mb-1">
+            <Link to="/" className="ml-1 mr-2 mb-1">
               <img src="/images/logo.png" alt="logo" />
             </Link>
 
@@ -46,7 +50,10 @@ function Header() {
                 <NavLink
                   key={index}
                   to={link.link}
-                  className={({ isActive }) => isActive ? `${activeClassName} navbar-item` : "navbar-item"}
+                  className={({ isActive }) =>
+                    isActive ? `${activeClassName}` : "navbar-item"
+                  }
+                  
                 >
                   <link.icon className="icon mr-2" />{link.name}
                 </NavLink>
