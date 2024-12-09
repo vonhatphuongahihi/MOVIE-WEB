@@ -17,6 +17,15 @@ const MovieContainer = styled.div`
   width: "auto";
   display: flex;
   flex-direction: row;
+  @media (max-width: 1024px) {
+    gap:20px;    
+  }
+  @media (max-width: 700px) {
+    margin-left:10px;
+    margin-right:0px;
+    gap:10px;
+    flex-direction: column;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -24,6 +33,15 @@ const ImageContainer = styled.div`
   width: 30%;
   height: auto;
   max-width: 370px;
+  align-self: center;
+  @media (max-width: 1024px) {
+    width: 50%;
+  }
+  @media (max-width: 700px) {
+    align-self: flex-start;
+    width:100%;
+    margin-bottom: 10px;
+  }
 `;
 
 const Image = styled.img`
@@ -46,6 +64,11 @@ const Evaluation = styled.div`
   gap: 20px;
   font-size: 14px;
   color: #fff;
+  @media (max-width: 1024px) {
+    margin-top:15px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 700px) {  }
 `;
 
 const ButtonContainer = styled.div`
@@ -54,6 +77,9 @@ const ButtonContainer = styled.div`
   margin-top: 10px;
   gap: 50px;
    width: 100%; 
+ @media (max-width: 1024px) {
+    gap:10px;
+  }
 `;
 
 const RemoveButton = styled.button`
@@ -66,20 +92,20 @@ const RemoveButton = styled.button`
   background-color: #ff4d4d;
   color: #ffffff;
   cursor: pointer;
+  text-wrap: nowrap;
 
   &:hover {
     background-color: #d32f2f;
     color: #ffffff;
   }
 
-  @media (max-width: 768px) {
-    padding: 8px 17px;
-    font-size: 13px;
+  @media (max-width: 1024px) {
+    padding: 5px 15px;
+    font-size: 16px;
   }
 
-  @media (max-width: 480px) {
-    padding: 5px 10px;
-    font-size: 9px;
+  @media (max-width: 500px) {
+    font-size: 12px;
   }
 `;
 
@@ -93,24 +119,23 @@ const WatchButton = styled.button`
   background-color: #28bd11;
   color: #ffffff;
   cursor: pointer;
-
+ text-wrap: nowrap;
   &:hover {
     background-color: #24a70f;
     color: #000000;
   }
 
-  @media (max-width: 768px) {
-    padding: 8px 17px;
-    font-size: 13px;
+  @media (max-width: 1024px) {
+    font-size: 16px;
   }
 
-  @media (max-width: 480px) {
-    padding: 5px 10px;
-    font-size: 9px;
+  @media (max-width: 500px) {
+    font-size: 12px;
   }
 `;
 
 const SideButton = styled.button`
+  margin-bottom:20px;
   padding: 8px;
   display: flex;
   align-items: center;
@@ -128,12 +153,12 @@ const SideButton = styled.button`
     cursor: not-allowed;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     padding: 8px;
     font-size: 15px;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 500px) {
     padding: 5px;
     font-size: 13px;
   }
@@ -197,7 +222,7 @@ function RecentlyWatch() {
             <h2 className="text-xl font-semibold text-white">
               Bạn chưa xem phim nào gần đây
             </h2>
-            <div className="absolute mt-10 right-20">
+            <div className="absolute mt-10 right-3 lg:right-20 w-1/5 lg:w-auto">
             <SideButton onClick={togglePopup} disabled={isHistoryEmpty}>
               <FiTrash />
               &nbsp;Xóa tất cả lịch sử xem
@@ -220,7 +245,7 @@ function RecentlyWatch() {
           </div>
           </div>
         ) : (
-          <div className="flex flex-row justify-between gap-10">
+          <div className="flex flex-row justify-between gap-0 lg:gap-10">
             <div className="flex flex-col justify-between">
               {recently
                 .slice(0)
@@ -237,7 +262,7 @@ function RecentlyWatch() {
                         alt={movie.title || "No title available"}
                       />
                     </ImageContainer>
-                    <div className="mx-10">
+                    <div className="mx-0 lg:mx-10">
                       <Title>{movie.title}</Title>
                       <Evaluation>
                         <p>{movie.runtime} phút</p>

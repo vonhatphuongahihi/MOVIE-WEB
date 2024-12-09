@@ -18,6 +18,9 @@ const MovieContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  @media (max-width: 500px) {
+   justify-self: center;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -193,7 +196,7 @@ function FavoriteMovies() {
       </h3>
       <MoviesGrid>
         {currentMovies.length === 0 ? (
-          <div style={{ color: 'white', textAlign: 'center', gridColumn: '1 / -1' }}>
+          <div style={{ color: 'white', width:"98vw", display:'flex', alignItems:'center', justifyContent:'center', }}>
             <FiFilm className="text-4xl" />
             <p>Bạn chưa chọn thích phim nào</p>
           </div>

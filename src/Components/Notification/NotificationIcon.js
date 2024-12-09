@@ -97,6 +97,7 @@ const NotificationIcon = () => {
       )}
 
       <button className={cx("notification-btn")} onClick={toggleNotifications}>
+
         <IoMdNotificationsOutline className="w-7 h-7 text-subMain cursor-pointer mr-2" />
         {newNotificationsCount > 0 && (
           <div className={cx("quantity")}>
