@@ -1,4 +1,4 @@
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
@@ -14,6 +14,7 @@ import MovieInfo from "../Components/Single/MovieInfo";
 import MovieRatesPhim from "../Components/Single/MovieRatesPhim";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
+import { FavoritesContext } from '../Context/FavoritesContext';
 import Layout from "../Layout/Layout";
 import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
 import Rating from "../Components/Stars";
@@ -24,21 +25,20 @@ import { IoIosRadioButtonOn } from "react-icons/io";
 import { addCommentToMovie } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-
 function SingleMoviePhimTrung() {
   const { movieId } = useParams();
   const [user, setUser] = useState(null);
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [comments, setComments] = useState([]);
-  
+  const [isFavorite, setIsFavorite] = useState(false); // Trạng thái yêu thích
   const { addRecently } = useContext(RecentlyContext);
   const [play, setPlay] = useState(false);
 
+  // Lấy thông tin người dùng hiện tại
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      console.log("User state changed:", currentUser);
       if (currentUser) {
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
         if (userDoc.exists()) {
@@ -48,12 +48,52 @@ function SingleMoviePhimTrung() {
         setUser(null);
       }
     });
-  
     return () => unsubscribe();
   }, []);
+
+  // Kiểm tra xem phim hiện tại có trong danh sách yêu thích không
   useEffect(() => {
-    console.log("Thông tin người dùng:", user); // Kiểm tra thông tin user
-  }, [user]);
+    const checkFavoriteStatus = async () => {
+      if (user) {
+        const favoriteDoc = await getDoc(doc(db, `users/${user.uid}/favorites`, movieId));
+        setIsFavorite(favoriteDoc.exists());
+      }
+    };
+    if (movieId && user) {
+      checkFavoriteStatus();
+    }
+  }, [movieId, user]);
+
+  // Hàm xử lý thêm vào yêu thích
+  const handleAddToFavorites = async () => {
+    if (user) {
+      try {
+        await setDoc(doc(db, `users/${user.uid}/favorites`, movieId), {
+          movieId,
+          title: movie?.title,
+          backdropUrl: movie?.backdropUrl,
+          voteAverage: movie?.voteAverage,
+        });
+        setIsFavorite(true);
+      } catch (error) {
+        console.error("Lỗi khi thêm vào yêu thích:", error);
+      }
+    }
+  };
+
+  // Hàm xử lý xóa khỏi yêu thích
+  const handleRemoveFromFavorites = async () => {
+    if (user) {
+      try {
+        await deleteDoc(doc(db, `users/${user.uid}/favorites`, movieId));
+        setIsFavorite(false);
+      } catch (error) {
+        console.error("Lỗi khi xóa khỏi yêu thích:", error);
+      }
+    }
+  };
+
+  // Fetch dữ liệu phim
   useEffect(() => {
     const fetchMovieData = async () => {
       try {
@@ -61,7 +101,6 @@ function SingleMoviePhimTrung() {
         const movieDoc = await getDoc(doc(db, "movies", movieId));
         if (movieDoc.exists()) {
           setMovie(movieDoc.data());
-
           addRecently(movieDoc.data()); // Add to recently watched
         }
 
@@ -88,7 +127,6 @@ function SingleMoviePhimTrung() {
     };
 
     fetchMovieData();
-
   }, [movieId]);
 
   if (!movie) {
@@ -168,8 +206,7 @@ function SingleMoviePhimTrung() {
             <div className="mb-4 flex">
               <IoIosRadioButtonOn />
               <span className="text-sm font-medium "> {movie.genres.map(genre => genre.name).join(', ')}</span>
-
-              </div>
+            </div>
 
             <p className="mb-10">{movie.overview}</p>
           </div>
@@ -179,54 +216,43 @@ function SingleMoviePhimTrung() {
               <div className="flex gap-3 items-center">
                 <PiShareFat /> <p>Chia sẻ</p>
               </div>
-              <div className="flex gap-3 items-center">
-                <PiHeart /> <p>Yêu thích</p>
+              <div
+                className="flex gap-3 items-center cursor-pointer"
+                onClick={isFavorite ? handleRemoveFromFavorites : handleAddToFavorites}
+              >
+                {isFavorite ? (
+                  <>
+                    <FaHeart className="text-red-500" /> <p>Đã yêu thích</p>
+                  </>
+                ) : (
+                  <>
+                    <PiHeart /> <p>Yêu thích</p>
+                  </>
+                )}
               </div>
-            </div>
-            <div className="flex justify-between">
-                <p className="font-medium">Diễn Viên: </p>
-                <p className="font-medium">
-                    {movie.cast?.[0]?.name || 'Diễn viên không rõ'} <br />
-                    {movie.cast?.[1]?.name || 'Diễn viên không rõ'}
-                </p>
             </div>
           </div>
         </div>
       </div>
 
-      <MovieCastsPhimTrung movie={movie} />
+      {/* Recommended Movies */}
+      <Titles title="Phim liên quan" />
+      <Swiper
+        grabCursor={true}
+        spaceBetween={20}
+        slidesPerView={"auto"}
+        modules={[Autoplay]}
+        className="mySwiper mb-10"
+      >
+        {recommendations.map((recommendation) => (
+          <SwiperSlide key={recommendation.movieId}>
+            <Movie movie={recommendation} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-      <MovieRatesPhim movie={movie} comments={comments} />
-
-      {/* Recommendations Section */}
-      <div className="my-16">
-        <Titles title="Nội dung liên quan" Icon={BsCollectionFill} />
-        <div className="flex overflow-x-auto mt-6 sm:mt-10 gap-6">
-          <Swiper
-            autoplay={{
-              delay: 1000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            speed={1000}
-            modules={[Autoplay]}
-            spaceBetween={10}
-            breakpoints={{
-              0: { slidesPerView: 1 },
-              400: { slidesPerView: 2 },
-              768: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
-              1280: { slidesPerView: 5, spaceBetween: 30 },
-            }}
-          >
-            {recommendations.map((movie) => (
-              <SwiperSlide key={movie.id}>
-                <Movie movie={movie} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </div>
+      {/* Movie Comments */}
+      <MovieRatesPhim comments={comments} movieId={movieId} />
     </Layout>
   );
 }
