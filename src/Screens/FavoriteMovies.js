@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FiFilm, FiPlay } from "react-icons/fi"; 
 import { FaHeart } from "react-icons/fa";
-import Layout_main from "../Layout/Layout_main";
 import { FavoritesContext } from '../Context/FavoritesContext'; // Import context
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
 import { updateFavoriteMovies, getFavoriteMovies } from "../firebase";
 import { NavLink } from "react-router-dom";
+import LayoutGuest from '../Layout/LayoutGuest';
+import Layout from "../Layout/Layout";
+import { UserContext } from '../Context/UserContext';
 
 const MovieContainer = styled.div`
   border-radius: 8px;
@@ -166,6 +168,7 @@ const PageButton = styled.button`
 
 
 function FavoriteMovies() {
+  const { isLoggedIn } = useContext(UserContext);
   const { favorites, setFavorites, removeFavorite } = useContext(FavoritesContext); // Make sure `removeFavorite` is in context
 
   // Thêm các state để quản lý phân trang
@@ -179,9 +182,9 @@ function FavoriteMovies() {
 
   // Hàm thay đổi trang
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
   return (
-    <Layout_main>
+    <LayoutComponent>
       <br />
       <br />
       <NavLink to="/">
@@ -244,7 +247,7 @@ function FavoriteMovies() {
           </PageButton>
         ))}
       </Pagination>
-    </Layout_main>
+    </LayoutComponent>
   );
 }
 

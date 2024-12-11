@@ -9,6 +9,7 @@ import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFir
 
 import TitleCardsShow1 from '../Components/Home/TitleCards/TitleCardsShow1';
 import Layout from '../Layout/Layout';
+import LayoutGuest from '../Layout/LayoutGuest';
 import ChatbotPopup from './Popup/Chatbot_popup';
 import ShowDetail from './ShowDetail';
 
@@ -102,6 +103,7 @@ const SwiperControls = styled.div`
 `;
 
 function Haingaymotdem() {
+  const { isLoggedIn }  = useContext(UserContext);
   const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -202,8 +204,7 @@ function Haingaymotdem() {
     alignItems: 'flex-start', 
   };
 
-  return (
-    <Layout>
+const HaingaymotdemContent = () => (
       <div className="home">
         <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <video
@@ -254,7 +255,6 @@ function Haingaymotdem() {
           <TitleCardsShow1  title={"HẬU TRƯỜNG 2 NGÀY 1 ĐÊM MÙA 2"} category={"row4"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
           <TitleCardsShow1  title={"2 NGÀY 1 ĐÊM MÙA LỄ HỖI"} category={"row5"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
         </div>
-      </div>
 
       {!isPopupOpen && (
         <ChatbotIconWrapper onClick={openPopup}>
@@ -266,8 +266,12 @@ function Haingaymotdem() {
       {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+      </div>
+  );
+  return (
+    <>
+      {isLoggedIn ? <Layout>{HaingaymotdemContent()}</Layout> : <LayoutGuest>{HaingaymotdemContent()}</LayoutGuest>}
+    </>
   );
 }
-
 export default Haingaymotdem;

@@ -16,8 +16,12 @@ import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
 import Layout from "../Layout/Layout";
 import { db } from "../firebase";
+import LayoutGuest from '../Layout/LayoutGuest';
+import { UserContext } from '../Context/UserContext';
+
 
 function SingleShow() {
+  const { isLoggedIn } = useContext(UserContext);
   const { id } = useParams();
   const { addRecently } = useContext(RecentlyContext);
   const [user, setUser] = useState(null);
@@ -135,8 +139,9 @@ function SingleShow() {
     addRecently(showToAdd);
   };
 
+  const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
   return (
-    <Layout>
+    <LayoutComponent>
       <br></br>
       <br></br>
       <br></br>
@@ -289,7 +294,7 @@ function SingleShow() {
       </div>
 
       <ShowRates show={show} user={user} onAddCompleted={fetchShowData} />
-    </Layout>
+    </LayoutComponent>
   );
 }
 

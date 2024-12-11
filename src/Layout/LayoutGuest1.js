@@ -1,12 +1,12 @@
 import React from 'react'
 import Footer from './Footer/Footer'
-import NavbarMain from './Navbar/NavBar_main'
+import NavbarGuest1 from './Navbar/NavBarGuest1'
 
-function LayoutMain({children}) {
+function LayoutGuest1({children}) {
   return (
    <>
     <div className='min-h-screen flex flex-col bg-main text-white'>
-        <NavbarMain />
+        <NavbarGuest1 />
         {children}
         <Footer />
     </div>
@@ -14,4 +14,4 @@ function LayoutMain({children}) {
   )
 }
 
-export default LayoutMain
+export default LayoutGuest1

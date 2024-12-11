@@ -17,6 +17,7 @@ import ChatbotPopup from './Popup/Chatbot_popup';
 import { useContext } from 'react';
 import { RecentlyContext } from '../Context/RecentlyContext';
 import { UserContext } from '../Context/UserContext';
+import LayoutGuest from '../Layout/LayoutGuest';
 import VipPopup from './Popup/VipLimitPopup';
 
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -105,6 +106,7 @@ const SwiperControls = styled.div`
 `;
 
 function Anime() {
+  const { isLoggedIn }  = useContext(UserContext);
   const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -213,9 +215,8 @@ function Anime() {
     alignItems: 'flex-start', 
   };
 
-  return (
-    <Layout>
-      <div className="home">
+const AnimeContent = () => (
+    <div className="home">
       <Swiper
         spaceBetween={0}
         slidesPerView={1}
@@ -289,7 +290,7 @@ function Anime() {
           <TitleCards1 title={"THẾ GIỚI PHÉP THUẬT"} genres={["Anime", "Phép thuật"]}  onMovieClick={handleMovieClick} />
           <TitleCards1 title={"SIÊU ANH HÙNG"} genres={["Anime", "Anh hùng"]} onMovieClick={handleMovieClick} />
         </div>
-      </div>
+      
 
       {!isPopupOpen && (
         <ChatbotIconWrapper onClick={openPopup}>
@@ -301,7 +302,13 @@ function Anime() {
       {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+    </div>
+  );
+    
+      return (
+    <>
+      {isLoggedIn ? <Layout>{AnimeContent()}</Layout> : <LayoutGuest>{AnimeContent()}</LayoutGuest>}
+    </>
   );
 }
 

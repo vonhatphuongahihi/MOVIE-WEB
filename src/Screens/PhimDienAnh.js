@@ -9,6 +9,7 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFirebase';
 import TitleCards1 from '../Components/Home/TitleCards/TitleCards1';
 import Layout from '../Layout/Layout';
+import LayoutGuest from '../Layout/LayoutGuest';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
 
@@ -104,6 +105,8 @@ const SwiperControls = styled.div`
 `;
 
 function PhimDienAnh() {
+  const { isLoggedIn }  = useContext(UserContext);
+  console.log("Is Logged In:", isLoggedIn);
   const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -213,8 +216,7 @@ function PhimDienAnh() {
     alignItems: 'flex-start', 
   };
 
-  return (
-    <Layout>
+const PhimDienAnhContent = () => (
       <div className="home">
       <Swiper
         spaceBetween={0}
@@ -291,8 +293,6 @@ function PhimDienAnh() {
           <TitleCards1 title={"PHIM ĐIỆN ẢNH TRUNG QUỐC"} country={"Trung Quốc"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
           <TitleCards1 title={"PHIM ĐIỆN ẢNH HOLLYWOOD"} country={"Mỹ"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
         </div>
-      </div>
-
       {!isPopupOpen && (
         <ChatbotIconWrapper onClick={openPopup}>
           <IoIosChatbubbles />
@@ -303,7 +303,12 @@ function PhimDienAnh() {
       {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+      </div>
+        );
+  return (
+    <>
+      {isLoggedIn ? <Layout>{PhimDienAnhContent()}</Layout> : <LayoutGuest>{PhimDienAnhContent()}</LayoutGuest>}
+    </>
   );
 }
 

@@ -1,11 +1,15 @@
 import React from "react";
 import { FiPhoneCall, FiMapPin, FiMail } from "react-icons/fi";
-import Layout_main from "../Layout/Layout_main";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
-
+import Layout1 from "../Layout/Layout1";
+import { useContext } from "react";
+import LayoutGuest1 from '../Layout/LayoutGuest1';
+import { UserContext } from '../Context/UserContext';
 
 function ContactUs() {
+  const { isLoggedIn } = useContext(UserContext);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -40,8 +44,9 @@ function ContactUs() {
     { name: 'Hoàng Gia Minh', picture: '/images/minh.jpg' },
     { name: 'Lê Thiên Phúc', picture: '/images/phuc.jpg' },
   ];
+  const LayoutComponent = isLoggedIn ? Layout1 : LayoutGuest1;
   return (
-    <Layout_main>
+    <LayoutComponent>
       <div className="min-height-screen container mx-auto px-2 my-6 text-center">
       <h3 style={{ fontWeight: 500, fontSize: '20px' }} className="text-2xl text-[20px] mb-4 mt-6 text-subMain text-center">
         LIÊN HỆ
@@ -206,7 +211,7 @@ function ContactUs() {
 
       </div>
       
-    </Layout_main>
+    </LayoutComponent>
   );
 }
 
