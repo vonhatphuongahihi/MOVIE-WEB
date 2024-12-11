@@ -271,6 +271,7 @@ function HomeScreen() {
           <TitleCards title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
           <TitleCards title={"MỚI NHẤT"} category={"now_playing"} onMovieClick={handleMovieClick} />
           <TitleCards title={"SẮP PHÁT SÓNG"} category={"upcoming"} onMovieClick={handleMovieClick} />
+          <TitleCards title="PHIM VIP" isVip={true} onMovieClick={handleMovieClick} />
         </div>
         <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
           <TitleCards title={"PHIM TÌNH CẢM"} genres={["Tình cảm"]} onMovieClick={handleMovieClick} />
@@ -283,6 +284,7 @@ function HomeScreen() {
           <TitleCards title={"PHIM VIỆT"} country={"Việt Nam"} onMovieClick={handleMovieClick} />
           <TitleCards title={"PHIM HÀN"} country={"Hàn Quốc"} onMovieClick={handleMovieClick} />
           <TitleCards title={"PHIM THÁI"} country={"Thái Lan"} onMovieClick={handleMovieClick} />
+          <TitleCards title={"PHIM NHẬT"} country={"Nhật Bản"} onMovieClick={handleMovieClick} />
         </div>
       </div>
 

@@ -4,8 +4,7 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
-import LayoutMain from "../Layout/Layout_main";
-
+import Layout1 from "../Layout/Layout1";
 function Payment() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -79,7 +78,7 @@ function Payment() {
     };
 
     return (
-        <LayoutMain>
+        <Layout1>
         <div className="container bg-white text-black mx-auto p-5 pt-16">
             <button
             onClick={() => navigate(-1)} // Điều hướng quay lại trang trước
@@ -139,7 +138,7 @@ function Payment() {
                 </div>       
             </div>
 
-        </LayoutMain>
+        </Layout1>
     );
 }
 

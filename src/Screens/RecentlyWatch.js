@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FiFilm, FiTrash, FiPlay, FiStopCircle } from "react-icons/fi";
-import Layout_main from "../Layout/Layout_main";
-import { RecentlyContext } from "../Context/RecentlyContext";
+import LayoutGuest from '../Layout/LayoutGuest';
+import Layout from "../Layout/Layout";
+import { UserContext } from '../Context/UserContext';import { RecentlyContext } from "../Context/RecentlyContext";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -165,6 +166,7 @@ const SideButton = styled.button`
 `;
 
 function RecentlyWatch() {
+  const { isLoggedIn } = useContext(UserContext);
   const { recently, removeRecently, removeAll, loadRecently, stopHistory, toggleHistoryStatus,isHistoryStopped } = useContext(RecentlyContext);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isStopPopupOpen, setIsStopPopupOpen] = useState(false); 
@@ -201,8 +203,9 @@ function RecentlyWatch() {
     }
   }, [recently]);
 
+  const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
   return (
-    <Layout_main>
+    <LayoutComponent>
       <br />
       <br />
       <NavLink to="/">
@@ -321,7 +324,7 @@ function RecentlyWatch() {
           </div>
         )}
       </div>
-    </Layout_main>
+    </LayoutComponent>
   );
 }
 

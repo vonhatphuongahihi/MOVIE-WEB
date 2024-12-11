@@ -18,9 +18,13 @@ import Titles from "../Components/Titles";
 import { RecentlyContext } from "../Context/RecentlyContext";
 import { FavoritesContext } from '../Context/FavoritesContext';
 import Layout from "../Layout/Layout";
+import LayoutGuest from '../Layout/LayoutGuest';
+import { UserContext } from '../Context/UserContext';
+// import { addCommentToMovie } from "../firebase";
 import { db } from "../firebase";
 
 function SingleMovie() {
+  const { isLoggedIn } = useContext(UserContext);
   const { id } = useParams();
   const { addRecently } = useContext(RecentlyContext);
   const { addFavorite, removeFavorite, favorites } = useContext(FavoritesContext);
@@ -202,9 +206,9 @@ function SingleMovie() {
           (video) => video.type === "Teaser" || video.type === "Trailer"
         )
       : null;
-
+  const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
   return (
-    <Layout>
+    <LayoutComponent>
       <br></br>
       <br></br>
       <br></br>
@@ -396,7 +400,7 @@ function SingleMovie() {
       </div>
 
       <MovieRates movie={movie} user={user} onAddCompleted={fetchMovieData} />
-    </Layout>
+    </LayoutComponent>
   );
 }
 

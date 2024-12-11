@@ -6,11 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFirebase';
-
+import { GrNext, GrPrevious } from "react-icons/gr";
 import TitleCardsShow1 from '../Components/Home/TitleCards/TitleCardsShow1';
 import Layout from '../Layout/Layout';
+import LayoutGuest from '../Layout/LayoutGuest';
 import ChatbotPopup from './Popup/Chatbot_popup';
 import ShowDetail from './ShowDetail';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 
 import { useContext } from 'react';
 import { RecentlyContext } from '../Context/RecentlyContext';
@@ -23,6 +25,9 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+
 import { db } from '../firebase';
 
 const ChatbotIconWrapper = styled.div`
@@ -102,6 +107,7 @@ const SwiperControls = styled.div`
 `;
 
 function Thethao() {
+  const { isLoggedIn }  = useContext(UserContext);
   const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -113,11 +119,10 @@ function Thethao() {
 
   // Tạo một tham chiếu đến Swiper
   const swiperRef = useRef(null);
-
   useEffect(() => {
     const fetchMovieById = async () => {
       try {
-        const movieDoc = await getDoc(doc(db, "tvShows", "St9wjDjv95pryg4N180w"));
+        const movieDoc = await getDoc(doc(db, "tvShows", "KWiW9woHMzHT0uhAYUbY"));
         if (movieDoc.exists()) {
           setBannerMovies(movieDoc.data());
         } else {
@@ -130,7 +135,6 @@ function Thethao() {
   
     fetchMovieById();
   }, []);
-  
   
 
   const openPopup = () => {
@@ -203,10 +207,9 @@ function Thethao() {
     alignItems: 'flex-start', 
   };
 
-  return (
-    <Layout>
+const ThethaoContent = () => (
       <div className="home">
-        <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
+       <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <video
             src="./videos/Sport intro.mp4"
             autoPlay
@@ -255,8 +258,6 @@ function Thethao() {
           <TitleCardsShow1  title={"NGOẠI HẠNG ANH - PREMIER LEAGUE"} category={"row3"} genres={["Thể thao", "Bóng đá"]} onMovieClick={handleMovieClick} />
           <TitleCardsShow1  title={"THỂ THAO SẮP PHÁT SÓNG"} category={"row4"} genres={["Thể thao"]} onMovieClick={handleMovieClick} />
         </div>
-      </div>
-
       {!isPopupOpen && (
         <ChatbotIconWrapper onClick={openPopup}>
           <IoIosChatbubbles />
@@ -267,7 +268,16 @@ function Thethao() {
       {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+      </div>
+  );
+  return (
+    <>
+      {isLoggedIn ? (
+        <Layout>{ThethaoContent()}</Layout>
+      ) : (
+        <LayoutGuest>{ThethaoContent()}</LayoutGuest>
+      )}
+    </>
   );
 }
 

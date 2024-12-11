@@ -11,6 +11,7 @@ import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFir
 
 import TitleCards1 from '../Components/Home/TitleCards/TitleCards1';
 import Layout from '../Layout/Layout';
+import LayoutGuest from '../Layout/LayoutGuest';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
 
@@ -105,6 +106,7 @@ const SwiperControls = styled.div`
 `;
 
 function Thieunhi() {
+  const { isLoggedIn }  = useContext(UserContext);
   const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -214,8 +216,7 @@ function Thieunhi() {
     alignItems: 'flex-start', 
   };
 
-  return (
-    <Layout>
+const ThieunhiContent = () => (
       <div className="home">
       <Swiper
         spaceBetween={0}
@@ -286,7 +287,6 @@ function Thieunhi() {
           <TitleCards1 title={"PHIM HOẠT HÌNH TUỔI THƠ"}  genres={["Hoạt hình","Tuổi thơ"]} onMovieClick={handleMovieClick} />
           <TitleCards1 title={"HOẠT HÌNH DISNEY"}  genres={["Hoạt hình","Disney"]} onMovieClick={handleMovieClick} />
         </div>
-      </div>
 
       {!isPopupOpen && (
         <ChatbotIconWrapper onClick={openPopup}>
@@ -298,7 +298,16 @@ function Thieunhi() {
       {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+      </div>
+  );
+  return (
+    <>
+      {isLoggedIn ? (
+        <Layout>{ThieunhiContent()}</Layout>
+      ) : (
+        <LayoutGuest>{ThieunhiContent()}</LayoutGuest>
+      )}
+    </>
   );
 }
 

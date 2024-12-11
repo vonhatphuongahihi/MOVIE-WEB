@@ -9,7 +9,7 @@ import { getUserProfile, logout } from "../../firebase";
 import { getAuth } from "firebase/auth";
 import './NavBar.css';
 
-function NavbarGuest() {
+function NavbarGuest1() {
   const navigate = useNavigate();
   const hover = "hover:text-subMain transition text-subMain";
   const activeClassName = "relative text-subMain border-b-2 border-green-500";
@@ -204,23 +204,6 @@ function NavbarGuest() {
             </div>
           </div>
         </div>
-          
-        {/* Secondary NavBar */}
-      <div  className={`${
-          isScrolled
-            ? 'bg-main bg-opacity-90'
-            : 'bg-main bg-opacity-50'
-        } shadow-md fixed  left-0 border-t border-gray-400 border-opacity-50 right-0 z-10 block transition-all duration-300 `}>
-         <div className="container mx-auto py-1 px-2 flex gap-4 justify-center items-center text-center text-wrap text-xs sm:text-sm lg:text-base">
-          <NavLink to="/phimdienanh" className={getNavLinkClass} style={{ fontSize: '14px' }}>Phim Điện Ảnh</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/anime" className={getNavLinkClass} style={{ fontSize: '14px' }}>Anime</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/2n1d" className={getNavLinkClass} style={{ fontSize: '14px' }}>2N1D</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/anhtraisayhi" className={getNavLinkClass} style={{ fontSize: '14px' }}>Anh Trai Say Hi</NavLink>
-        </div>
-      </div>
 
         {/* Filter Popup */}
         {isFilterPopupOpen && (
@@ -233,4 +216,4 @@ function NavbarGuest() {
   );
 }
 
-export default NavbarGuest;
+export default NavbarGuest1;

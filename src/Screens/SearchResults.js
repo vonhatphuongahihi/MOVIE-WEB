@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import { FaRegCalendar } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import LayoutMain from "../Layout/Layout_main";
-
+import LayoutGuest1 from '../Layout/LayoutGuest1';
+import Layout1 from "../Layout/Layout1";
+import { useContext } from 'react';
+import { UserContext } from '../Context/UserContext';
 function SearchResults() {
+  const isLoggedIn = useContext(UserContext).isLoggedIn;
   const location = useLocation();
   const navigate = useNavigate();
   const query = new URLSearchParams(location.search).get("query");
@@ -85,9 +88,9 @@ function SearchResults() {
     fetchSearchResults();
   }, [query, releaseDateFrom, releaseDateTo, duration, language, genre]);
   
-
+  const LayoutComponent = isLoggedIn ? Layout1 : LayoutGuest1;
   return (
-    <LayoutMain>
+    <LayoutComponent>
       {loading ? (
         <div className="loading">
           <img src="./images/spin.gif" alt="Loading" />
@@ -142,7 +145,7 @@ function SearchResults() {
           </div>
         </div>
       )}
-    </LayoutMain>
+    </LayoutComponent>
   );
 }
 

@@ -9,6 +9,7 @@ import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFir
 
 import TitleCardsShow1 from '../Components/Home/TitleCards/TitleCardsShow1';
 import Layout from '../Layout/Layout';
+import LayoutGuest from '../Layout/LayoutGuest';
 import ChatbotPopup from './Popup/Chatbot_popup';
 import ShowDetail from './ShowDetail';
 
@@ -102,6 +103,7 @@ const SwiperControls = styled.div`
 `;
 
 function Anhtraisayhi() {
+  const { isLoggedIn }  = useContext(UserContext);
   const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -203,8 +205,7 @@ function Anhtraisayhi() {
     alignItems: 'flex-start', 
   };
 
-  return (
-    <Layout>
+const AnhtraisayhiContent = () => (
       <div className="home">
         <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
         <video
@@ -256,7 +257,7 @@ function Anhtraisayhi() {
           <TitleCardsShow1  title={"HẬU TRƯỜNG 30 ANH TRAI"} category={"row4"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
           <TitleCardsShow1  title={"FOCUS CAM 30 ANH TRAI"} category={"row5"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
         </div>
-      </div>
+
 
       {!isPopupOpen && (
         <ChatbotIconWrapper onClick={openPopup}>
@@ -268,7 +269,12 @@ function Anhtraisayhi() {
       {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+    </div>
+  );
+  return (
+    <>
+      {isLoggedIn ? <Layout>{AnhtraisayhiContent()}</Layout> : <LayoutGuest>{AnhtraisayhiContent()}</LayoutGuest>}
+    </>
   );
 }
 

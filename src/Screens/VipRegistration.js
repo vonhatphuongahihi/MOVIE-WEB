@@ -2,9 +2,13 @@ import React from "react";
 import { FaCheckCircle, FaStar } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import LayoutMain from "../Layout/Layout_main";
+import { useContext } from 'react';
+import LayoutGuest1 from '../Layout/LayoutGuest1';
+import Layout1 from "../Layout/Layout1";
+import { UserContext } from '../Context/UserContext';
 
 function VipRegistration() {
+  const { isLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
   const vipPackages = [
@@ -16,9 +20,10 @@ function VipRegistration() {
   const handleChooseVip = (price, name) => {
     navigate("/payment", { state: { amount: price, packageName: name } });
   };
-
+  
+  const LayoutComponent = isLoggedIn ? Layout1 : LayoutGuest1;
   return (
-    <LayoutMain>
+    <LayoutComponent>
       <div className="container bg-white text-black mx-auto p-5 pt-16">
         <button
           onClick={() => navigate(-1)} // Điều hướng quay lại trang trước
@@ -60,7 +65,7 @@ function VipRegistration() {
         </div>
 
       </div>
-    </LayoutMain>
+    </LayoutComponent>
   );
 }
 

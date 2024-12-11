@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from './firebase';
 import AboutUs from './Screens/AboutUs';
+import { UserContext } from './Context/UserContext';
 import ChangePassword from './Screens/ChangePassword';
 import ContactUs from './Screens/ContactUs';
 import FavoriteMovies from "./Screens/FavoriteMovies";
@@ -61,23 +62,21 @@ const GlobalStyle = createGlobalStyle`
 `;
 function App() {
   const [loading, setLoading] = useState(true);
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const navigate = useNavigate();
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);  const navigate = useNavigate();
   const location = useLocation(); 
   const {loadRecently } = useContext(RecentlyContext);  
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Đã đăng nhập vào tài khoản");
-        setLoggedInUser(user);
-        loadRecently(); 
+        setIsLoggedIn(true);  // Set isLoggedIn to true when user is logged in
       } else {
         console.log("Người dùng chưa đăng nhập");
-        setLoggedInUser(null);
+        setIsLoggedIn(false); // Set isLoggedIn to false when user is not logged in
       }
-      setLoading(false); 
+      setLoading(false);
     });
-  }, []);
+  }, [setIsLoggedIn]);
 
   useEffect(() => {
     Aos.init();
@@ -107,7 +106,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={loggedInUser ? <HomeScreen /> : <HomeScreenGuest />} />
+          <Route path="/" element={isLoggedIn ? <HomeScreen /> : <HomeScreenGuest />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/contact-us" element={<ContactUs />} />
