@@ -417,7 +417,6 @@ function SingleMovie() {
             : null}
           shareLink={shareLink} 
       />
-      const backdropUrl = 
     </LayoutComponent>
   );
 }

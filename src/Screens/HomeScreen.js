@@ -169,15 +169,6 @@ function HomeScreen() {
           ))}
       </Swiper>
 
-        <div className="swiper-controls">
-          <button onClick={() => swiperRef.current?.slidePrev()}>
-            <GrPrevious />
-          </button>
-          <button onClick={() => swiperRef.current?.slideNext()}>
-            <GrNext />
-          </button>
-        </div>
-
         <div className="more-card">
           <TitleCards title={"THỊNH HÀNH"} category={"popular"} onMovieClick={handleMovieClick} />
           <TitleCards title={"PHIM HAY MỖI NGÀY"} category={"top_rated"} onMovieClick={handleMovieClick} />
