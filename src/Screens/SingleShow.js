@@ -2,7 +2,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, query, where, setDoc, deleteDoc, updateDoc, arrayUnion, arrayRemove, } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
-import { FaPlay, FaRegCalendar } from "react-icons/fa";
+import { FaHeart, FaPlay, FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
 import { RiGlobalLine } from "react-icons/ri";
@@ -16,6 +16,7 @@ import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
 import { FavoritesContext } from '../Context/FavoritesContext';
 import Layout from "../Layout/Layout";
+import SharePopup from "../Screens/Popup/SharePopup";
 import { db } from "../firebase";
 import LayoutGuest from '../Layout/LayoutGuest';
 import { UserContext } from '../Context/UserContext';
@@ -34,6 +35,8 @@ function SingleShow() {
   const [recommendations, setRecommendations] = useState([]);
   const [voteCount, setvoteCount] = useState(0);
   const [voteAverage, setvoteAverage] = useState(0);
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const shareLink = `https://melon-movie.vercel.app/truyenhinh/${id}`; 
 
   useEffect(() => {
     const auth = getAuth();
@@ -209,6 +212,9 @@ function SingleShow() {
     };
     addRecently(showToAdd);
   };
+  const handleSharePopupToggle = () => {
+    setShowSharePopup((prev) => !prev);
+};
 
   const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
   return (
@@ -307,12 +313,12 @@ function SingleShow() {
 
         <div className="flex flex-col md:pt-32">
           <div className="flex lg:gap-20 md:gap-10 gap-20 lg:mb-8 md:mb-6 mb-6">
-            <div className="flex gap-3 items-center">
-              <PiShareFat className="text-2xl"/>
+          <div className="flex gap-3 items-center cursor-pointer" onClick={handleSharePopupToggle}>
+              <PiShareFat className="text-2xl" />
               <p className="md:text-lg font-medium">Chia sẻ</p>
-            </div>
+          </div>
             <div className="flex gap-3 items-center cursor-pointer">
-              <PiHeart
+            <FaHeart
                 className={`text-2xl ${isFavorite ? "text-red-500" : ""}`}
                 onClick={toggleFavorite}
               />
@@ -370,6 +376,13 @@ function SingleShow() {
       </div>
 
       <ShowRates show={show} user={user} onAddCompleted={fetchShowData} />
+      <SharePopup 
+          show={showSharePopup} 
+          onClose={() => setShowSharePopup(false)} 
+          videoTitle={show?.title || ''} 
+          videoImage={show.backdrop_path} 
+          shareLink={shareLink} 
+      />
     </LayoutComponent>
   );
 }

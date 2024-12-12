@@ -1,0 +1,39 @@
+/* ContactUs.css */
+
+.intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 205px;
+}
+
+.intro img {
+  flex: 1;
+  max-width: 300px; 
+}
+
+.intro p {
+  flex: 3;
+  margin-left: 20px;
+  text-align: justify;
+}
+.picture1 {
+  display: block; 
+  margin: 0 auto; 
+  max-width: 1300px;
+  padding: 0 105px;
+}
+.camket {
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 305px;
+  text-align: justify;
+}
+.mongmuon {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 305px;
+  text-align: justify;
+}
