@@ -14,7 +14,6 @@ import ChatbotPopup from './Popup/Chatbot_popup';
 import ShowDetail from './ShowDetail';
 
 import { useContext } from 'react';
-import { RecentlyContext } from '../Context/RecentlyContext';
 import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
 
@@ -42,69 +41,8 @@ const ChatbotIconWrapper = styled.div`
   }
 `;
 
-const BannerButton = styled.button`
-  padding: 10px 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s, color 0.3s;
-
-  &.btn-watch {
-    background-color: #28BD11;
-    color: #ffffff;
-
-    &:hover {
-      background-color: #24a70f;
-      color: #000000;
-    }
-  }
-
-  &.btn-detail {
-    background-color: #fff;
-    color: #000;
-
-    &:hover {
-      background-color: #8E8D8D;
-      color: #ffffff;
-    }
-  }
-`;
-
-// Style cho các nút điều khiển swiper
-const SwiperControls = styled.div`
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  padding: 0 20px;
-  z-index: 2;
-
-  button {
-    background-color: rgba(0, 0, 0, 0.5); 
-    color: #28BD11; 
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-
-    &:hover {
-      background-color: #28BD11;
-      color: #ffffff; 
-      transform: scale(1.1); 
-    }
-
-    svg {
-      font-size: 24px; 
-    }
-  }
-`;
-
 function Anhtraisayhi() {
   const { isLoggedIn }  = useContext(UserContext);
-  const { addRecently } = useContext(RecentlyContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -179,7 +117,6 @@ function Anhtraisayhi() {
     if (isItemVip === true && isUserVip === false) {
       openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
-      addRecently(tvShow);
       navigate(`/truyenhinh/${tvShowId}`);
     }
   };
@@ -194,34 +131,16 @@ function Anhtraisayhi() {
     setVipPopupOpen(false);
   };
 
-  const bannerCaptionStyle = {
-    position: 'absolute',
-    width: '100%',
-    paddingLeft: '6%',
-    bottom: 0,
-    textAlign: 'left',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start', 
-  };
-
 const AnhtraisayhiContent = () => (
       <div className="home">
-        <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
+        <div className="banner">
         <video
             src="./videos/teaser_atsh.mp4"
             autoPlay
             loop
             muted
-            style={{
-              width: '100%',
-              height: '100vh',
-              objectFit: 'cover',
-              maskImage: 'linear-gradient(to right, transparent, black 75%)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent, black 75%)',
-            }}
           />
-          <div className="banner-caption" style={bannerCaptionStyle}>
+          <div className="banner-caption">
             <p
               className="text-white"
               style={{
@@ -234,23 +153,17 @@ const AnhtraisayhiContent = () => (
               { "Quy tụ 30 nam ca sĩ trẻ tượng trưng cho thế hệ mới, mang trông mình tuổi trẻ tươi nguyên, khát vọng đột phá và giấc mơ rạng danh văn hóa bản địa."}
             </p>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
-            <BannerButton
-              className="btn-watch"
-              onClick={() => handleWatchNowClick(bannerMovies?.id, bannerMovies?.vip)}
-            >
+            <button className="banner-button btn-watch" onClick={() => handleWatchNowClick(bannerMovies?.id, bannerMovies?.vip)}>
               <FaPlay /> Xem ngay
-            </BannerButton>
-            <BannerButton
-              className="btn-detail"
-              onClick={() => handleMovieClick(bannerMovies)}
-            >
-              <IoInformationCircleOutline /> Thông tin
-            </BannerButton>
+              </button>
+                <button className="banner-button btn-detail" onClick={() => handleMovieClick(bannerMovies)}>
+                <IoInformationCircleOutline /> Chi tiết
+              </button>
           </div>
         </div>
       </div>
 
-        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
+        <div className="more-card">
           <TitleCardsShow1 title={"MÀN TRÌNH DIỄN ĐẶC SẮC 30 ANH TRAI"} category={"row1"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
           <TitleCardsShow1  title={"ANH TRAI SAY HI TRỌN BỘ"} category={"row2"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
           <TitleCardsShow1  title={"BEST MOMENT 30 ANH TRAI"} category={"row3"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
@@ -260,7 +173,7 @@ const AnhtraisayhiContent = () => (
 
 
       {!isPopupOpen && (
-        <ChatbotIconWrapper onClick={openPopup}>
+        <ChatbotIconWrapper onClick={openPopup} style={{ zIndex: 1000 }}>
           <IoIosChatbubbles />
         </ChatbotIconWrapper>
       )}

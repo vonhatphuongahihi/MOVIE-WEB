@@ -207,7 +207,7 @@ function Profile() {
           <button
             type="button"
             onClick={toggleDeleteAccountPopup}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300 mt-3"
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300 mt-3 sm:text-sm"
           >
             Xóa tài khoản
           </button>
@@ -218,7 +218,7 @@ function Profile() {
           <button
             type="submit"
             onClick={handleUpdate}
-            className="bg-[#23bf0e] text-white px-4 py-2 rounded hover:bg-[#1a9d0b] text-base mt-3"          >
+            className="bg-[#23bf0e] text-white px-4 py-2 rounded hover:bg-[#1a9d0b]  transition duration-300 mt-3 sm:text-sm"          >
             Cập nhật
           </button>
         </div>

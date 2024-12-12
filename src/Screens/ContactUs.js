@@ -48,7 +48,8 @@ function ContactUs() {
         <div className="mt-4">
           <img
             className="picture1"
-            src="/images/phuonghihi.png"
+            src="/images/phuongahihi.png"
+            width={1200}
             alt="Phương"
           />
         </div>

@@ -112,13 +112,13 @@ const SharePopup = ({ show, onClose, videoTitle, videoImage, shareLink }) => {
             src={videoImage}
             alt={videoTitle}
             style={{
-              width: "120px",
-              height: "80px",
+              width: "160px",
+              height: "120px",
               borderRadius: "5px",
-              marginRight: "10px",
+              marginRight: "15px",
             }}
           />
-          <QRCodeCanvas value={shareLink} size={80} />
+          <QRCodeCanvas value={shareLink} size={120} />
         </div>
         <p style={{ textAlign: "center", marginTop: "10px" }}>
           Quét mã để mở trên điện thoại

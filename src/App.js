@@ -43,16 +43,11 @@ import AddMovie from './Screens/Dashboard/Admin/AddMovie';
 import AddShow from './Screens/Dashboard/Admin/AddShow';
 import SingleShow from './Screens/SingleShow';
 import FAQScreen from './Screens/FAQScreen';
-
-import Movie1 from './Screens/Movie1';
 import Payment from './Screens/Payment';
 import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
 import Thieunhi from './Screens/Thieunhi';
 import VipRegistration from './Screens/VipRegistration';
 import TvShowFetcher from './TvShowFetcher';
-
-import SleepTimerNotification from './Screens/Popup/SleepTimerNotification';
-
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -68,10 +63,10 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log("Đã đăng nhập vào tài khoản");
-        setIsLoggedIn(true);  // Set isLoggedIn to true when user is logged in
+        setIsLoggedIn(true);  
       } else {
         console.log("Người dùng chưa đăng nhập");
-        setIsLoggedIn(false); // Set isLoggedIn to false when user is not logged in
+        setIsLoggedIn(false); 
       }
       setLoading(false);
     });

@@ -410,9 +410,14 @@ function SingleMovie() {
           show={showSharePopup} 
           onClose={() => setShowSharePopup(false)} 
           videoTitle={movie?.title || ''} 
-          videoImage={isApiMovie ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : movie.backdrop_path} 
+          videoImage={movie.backdrop_path
+            ? (movie.type === "tmdb" && !movie.backdrop_path.includes("http")
+                ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+                : movie.backdrop_path)
+            : null}
           shareLink={shareLink} 
       />
+      const backdropUrl = 
     </LayoutComponent>
   );
 }
