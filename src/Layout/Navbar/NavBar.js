@@ -91,11 +91,6 @@ function Navbar() {
     };
   }, []);
 
-  if (isLoading) {
-    // Bạn có thể hiển thị một spinner/loading indicator ở đây nếu muốn
-    return <div>Loading...</div>;
-  }
-
 
   return (
     <div>

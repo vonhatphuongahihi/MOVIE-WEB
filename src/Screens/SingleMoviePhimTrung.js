@@ -129,9 +129,6 @@ function SingleMoviePhimTrung() {
     fetchMovieData();
   }, [movieId]);
 
-  if (!movie) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <Layout>

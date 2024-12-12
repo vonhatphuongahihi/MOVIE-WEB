@@ -208,10 +208,7 @@ function ShowDetail({ movie, onClose }) {
     setIsFavorite(checkIfFavorite());
   }, [favorites, movie.id]);
 
-  if (!movie) {
-    return <p>Loading...</p>;
-  }
-
+ 
   const handleWatchNowClick = (tvShowId, isItemVip) => {
     addRecently(movie);
     if (isItemVip === true && isUserVip === false) {
