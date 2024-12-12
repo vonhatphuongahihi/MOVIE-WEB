@@ -140,7 +140,7 @@ function SearchForm() {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute top-10 left-0 w-48 md:w-full bg-white border rounded shadow-lg p-2"
+          className="absolute top-10 left-0 w-full bg-white border rounded shadow-lg p-2"
         >
           {/* Lịch sử tìm kiếm */}
           <h4
@@ -175,7 +175,7 @@ function SearchForm() {
           >
             Xu hướng gần đây
           </h4>
-          <ul className="mt-3 ml-3.5 mr-3.5">
+          <ul className="mt-3 mx-0 md:mx-3.5">
             {trendingContent.map((item, index) => (
               <li
                 key={item.movieId || index}
