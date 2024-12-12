@@ -1,12 +1,12 @@
 import React from "react";
 import Head from "../Components/Head";
-import LayoutGuest from '../Layout/LayoutGuest';
-import Layout from "../Layout/Layout";
+import LayoutGuest1 from '../Layout/LayoutGuest1';
+import Layout1 from "../Layout/Layout1";
 import { UserContext } from '../Context/UserContext';
 import { useContext } from "react";
 function AboutUs() {
   const { isLoggedIn } = useContext(UserContext);
-  const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
+  const LayoutComponent = isLoggedIn ? Layout1 : LayoutGuest1;
   return (
     <LayoutComponent>
       <div className="min-height-screen container mx-auto px-2 my-6">
