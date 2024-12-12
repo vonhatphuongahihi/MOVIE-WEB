@@ -51,7 +51,6 @@ import Thieunhi from './Screens/Thieunhi';
 import VipRegistration from './Screens/VipRegistration';
 import TvShowFetcher from './TvShowFetcher';
 
-import RestReminderPopup from "./Screens/Popup/RestReminderPopup";
 import SleepTimerNotification from './Screens/Popup/SleepTimerNotification';
 
 
@@ -143,7 +142,6 @@ function App() {
         </SleepTimerProvider>
 
       )}
-      <RestReminderPopup />
       </>
         );
 }

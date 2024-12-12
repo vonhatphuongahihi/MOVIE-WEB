@@ -5,6 +5,7 @@ import { BsCollectionFill } from "react-icons/bs";
 import { FaPlay, FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
+import { FaHeart } from "react-icons/fa";
 import { RiGlobalLine } from "react-icons/ri";
 import { NavLink, useParams } from "react-router-dom";
 import YouTube from "react-youtube";
@@ -19,6 +20,7 @@ import { RecentlyContext } from "../Context/RecentlyContext";
 import { FavoritesContext } from '../Context/FavoritesContext';
 import Layout from "../Layout/Layout";
 import LayoutGuest from '../Layout/LayoutGuest';
+import SharePopup from "../Screens/Popup/SharePopup";
 import { UserContext } from '../Context/UserContext';
 // import { addCommentToMovie } from "../firebase";
 import { db } from "../firebase";
@@ -37,6 +39,8 @@ function SingleMovie() {
   const [voteCount, setvoteCount] = useState(0);
   const [voteAverage, setvoteAverage] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const shareLink = `https://melon-movie.vercel.app/movie/${id}`; 
 
   useEffect(() => {
     const auth = getAuth();
@@ -75,7 +79,9 @@ function SingleMovie() {
   
     fetchFavoriteStatus();
   }, [id, user]);
-  
+  const handleSharePopupToggle = () => {
+    setShowSharePopup((prev) => !prev);
+};
   const fetchMovieData = async () => {
     try {
       const movieDoc = await getDoc(doc(db, "movies", id));
@@ -327,12 +333,12 @@ function SingleMovie() {
         </div>
         <div className="flex flex-col md:pt-32">
           <div className="flex lg:gap-20 md:gap-10 gap-20 lg:mb-8 md:mb-6 mb-6">
-            <div className="flex gap-3 items-center">
+          <div className="flex gap-3 items-center cursor-pointer" onClick={handleSharePopupToggle}>
               <PiShareFat className="text-2xl" />
               <p className="md:text-lg font-medium">Chia sẻ</p>
-            </div>
+          </div>
             <div className="flex gap-3 items-center cursor-pointer">
-              <PiHeart
+              <FaHeart
                 className={`text-2xl ${isFavorite ? "text-red-500" : ""}`}
                 onClick={toggleFavorite}
               />
@@ -400,6 +406,13 @@ function SingleMovie() {
       </div>
 
       <MovieRates movie={movie} user={user} onAddCompleted={fetchMovieData} />
+      <SharePopup 
+          show={showSharePopup} 
+          onClose={() => setShowSharePopup(false)} 
+          videoTitle={movie?.title || ''} 
+          videoImage={isApiMovie ? `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` : movie.backdrop_path} 
+          shareLink={shareLink} 
+      />
     </LayoutComponent>
   );
 }

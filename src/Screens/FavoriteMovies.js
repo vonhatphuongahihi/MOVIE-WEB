@@ -205,6 +205,7 @@ function FavoriteMovies() {
           </div>
         ) : (
           currentMovies.map((movie, index) => {
+            console.log("Movie Type:", movie.type);  
             const backdropUrl = movie.backdrop_path
             ? ((["tmdb", "tvshow"].includes(movie.type) && !movie.backdrop_path.includes("http"))
                 ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
