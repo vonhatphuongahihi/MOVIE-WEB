@@ -140,7 +140,7 @@ function SearchForm() {
       {showDropdown && (
         <div
           ref={dropdownRef}
-          className="absolute top-10 left-0 w-full bg-white border rounded shadow-lg p-2"
+          className="absolute top-10 left-0 w-48 md:w-full bg-white border rounded shadow-lg p-2"
         >
           {/* Lịch sử tìm kiếm */}
           <h4
@@ -185,9 +185,9 @@ function SearchForm() {
                 <img
                   src={item.type === 'tmdb' ? `https://image.tmdb.org/t/p/w500${item.backdrop_path}` : item.backdrop_path}
                   alt={item.title || item.name}
-                  className="w-44 h-26 rounded mr-6"
+                  className="w-16 md:w-22 lg:w-44 lg:h-26 rounded mr-1 md:mr-6"
                 />
-                <span>{item.title || item.name}</span>
+                <span className="text-xs md:text-sm lg:text-base">{item.title || item.name}</span>
               </li>
             ))}
           </ul>
