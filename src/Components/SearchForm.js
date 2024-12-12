@@ -175,7 +175,7 @@ function SearchForm() {
           >
             Xu hướng gần đây
           </h4>
-          <ul className="mt-3 ml-3.5 mr-3.5">
+          <ul className="mt-3 mx-0 md:mx-3.5">
             {trendingContent.map((item, index) => (
               <li
                 key={item.movieId || index}
@@ -185,9 +185,9 @@ function SearchForm() {
                 <img
                   src={item.type === 'tmdb' ? `https://image.tmdb.org/t/p/w500${item.backdrop_path}` : item.backdrop_path}
                   alt={item.title || item.name}
-                  className="w-44 h-26 rounded mr-6"
+                  className="w-16 md:w-22 lg:w-44 lg:h-26 rounded mr-1 md:mr-6"
                 />
-                <span>{item.title || item.name}</span>
+                <span className="text-xs md:text-sm lg:text-base">{item.title || item.name}</span>
               </li>
             ))}
           </ul>

@@ -27,6 +27,7 @@ const MovieContainer = styled.div`
   @media (max-width: 700px) {
     flex-direction: column;
     gap: 10px;
+    margin: 8px;
   }
 `;
 
@@ -53,10 +54,14 @@ const Image = styled.img`
 `;
 
 const Title = styled.div`
+  width: auto,
   color: #fff;
   font-size: 20px;
   font-weight: bold;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
 `;
 
 const Evaluation = styled.div`
@@ -70,13 +75,13 @@ const Evaluation = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 50px;
   width: 100%;
 `;
 
 const RemoveButton = styled.button`
-  padding: 5px 10px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   border-radius: 8px;
@@ -117,7 +122,7 @@ const SideButton = styled.button`
   gap: 8px;
   color: #ffffff;
   cursor: pointer;
-  font-size: 17px;
+  font-size:18px;
 
   &:hover {
     color: #24a70f;
@@ -126,6 +131,12 @@ const SideButton = styled.button`
   &:disabled {
     color: #b0b0b0;
     cursor: not-allowed;
+  }
+  @media (max-width: 700px) {
+    font-size:16px;
+  }
+  @media (max-width: 500px) {
+    font-size:12px;
   }
 `;
 
@@ -174,18 +185,11 @@ function RecentlyWatch() {
 
       <div className="min-h-screen flex flex-col items-center justify-between">
         {isHistoryEmpty ? (
-          <div className="flex justify-center items-center m-20 p-20">
+          <div className="flex justify-center items-center my-20 py-20 w-full">
             <h2 className="text-xl font-semibold text-white">Bạn chưa xem phim nào gần đây</h2>
-            <div className="absolute mt-10 right-3 lg:right-20 w-1/5 lg:w-auto">
-              <SideButton onClick={togglePopup} disabled={isHistoryEmpty}>
-                <FiTrash />
-                &nbsp;Xóa tất cả lịch sử xem
-              </SideButton>
-              {isPopupOpen && <DeleteHistoryPopup onClose={togglePopup} onConfirm={handleDeleteHistory} />}
-            </div>
           </div>
         ) : (
-          <div className="flex flex-row justify-between gap-10">
+          <div className="flex flex-row justify-between gap-1 lg:gap-10">
             <div className="flex flex-col justify-between">
             {recently.slice(0).reverse().map((movie, index) => {
   
@@ -197,19 +201,21 @@ function RecentlyWatch() {
                         alt={movie.title || "No title available"}
                       />
                     </ImageContainer>
-                    <div className="mx-10">
+                    <div className="mx-1 lg:mx-10">
                       <Title>{movie.title}</Title>
                       <Evaluation>
-                        <p>{movie.runtime} phút</p>
+                        <p className="text-nowrap">{movie.runtime} phút</p>
                         <p>|</p>
-                        <p>{movie.country}</p>
+                        <p className="text-nowrap">{movie.country}</p>
                       </Evaluation>
                       <ButtonContainer>
                         <RemoveButton onClick={() => removeRecently(movie.id)}>
-                          <FiTrash /> Xóa khỏi lịch sử xem
+                          <FiTrash/> 
+                          <p className="hidden lg:flex">Xóa khỏi danh sách</p>                          
                         </RemoveButton>
                         <WatchButton onClick={() => navigate(movie.type === "tvupload" ? `/truyenhinh/${movie.id}` : `/movie/${movie.id}`)}>
-                          <FiPlay /> Xem ngay
+                          <FiPlay /> 
+                          <p className="hidden lg:flex">Xem ngay</p>   
                         </WatchButton>
                       </ButtonContainer>
                     </div>
@@ -218,9 +224,9 @@ function RecentlyWatch() {
               })}
 
             </div>
-            <div className="mt-24">
+            <div className="mt-24 mr-3 md:mr-10">
               <SideButton onClick={togglePopup} disabled={isHistoryEmpty}>
-                <FiTrash />
+                <FiTrash className="text-2xl"/>
                 &nbsp;Xóa tất cả lịch sử xem
               </SideButton>
               {isPopupOpen && <DeleteHistoryPopup onClose={togglePopup} onConfirm={handleDeleteHistory} />}

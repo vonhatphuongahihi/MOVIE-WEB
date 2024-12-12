@@ -155,6 +155,12 @@ function Navbar() {
                     <img src="/images/thieu_nhi_icon.svg" alt="TV Show Icon" className="w-5  h-5 inline-block mr-2 mb-1 text-subMain" />
                     Thiếu nhi
                   </NavLink>
+                  <NavLink 
+                    to="/dangkyvip" 
+                    className="flex items-center px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
+                  >
+                    <img src="/images/dang_ky_goi_vip.png" alt="TV Show Icon" className="w-15 h-6 inline-block mr-2 mb-1 text-subMain" />
+                  </NavLink>
               </div>
             )}
             </div>
@@ -178,7 +184,7 @@ function Navbar() {
           </div>
 
           {/* Search Form */}
-          <div className="flex items-center space-x-1 w-1/3 z-20">
+          <div className="flex items-center space-x-1 w-1/2 lg:w-1/3 z-20">
             <SearchForm />
             <button onClick={toggleFilterPopup} className="block">
               <IoFilter className="w-5 h-5 text-subMain cursor-pointer block" />
@@ -186,9 +192,9 @@ function Navbar() {
           </div>
 
           {/* Right Side */}
-          <div className="flex items-center space-x-1 lg:space-x-6">
+          <div className="flex items-center space-x-2 lg:space-x-6">
             <NavLink to="/dangkyvip" className={getNavLinkClass}>
-              <img src="/images/dang_ky_goi_vip.png" alt="VIP" className="w-15 lg:w-20 h-6 object-contain" />
+              <img src="/images/dang_ky_goi_vip.png" alt="VIP" className="w-15 lg:w-20 h-6 object-contain hidden lg:flex" />
             </NavLink>
             <NotificationIcon />
             <div className="relative dropdown-container">
