@@ -1,0 +1,149 @@
+/* ContactUs.css */
+
+.intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 205px;
+}
+
+.intro img {
+  flex: 1;
+  max-width: 300px; 
+}
+
+.intro p {
+  flex: 3;
+  margin-left: 20px;
+  text-align: justify;
+}
+.picture1 {
+  display: block; 
+  margin: 0 auto; 
+  max-width: 1500px;
+  padding: 0 105px;
+}
+.camket {
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 305px;
+  text-align: justify;
+}
+.mongmuon {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 305px;
+  text-align: justify;
+}
+/* Responsive for iPad Mini (768px) */
+@media (max-width: 1024px) {
+  .intro {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 40px;
+  }
+
+  .intro img {
+    max-width: 250px;
+    margin-bottom: 20px;
+  }
+
+  .intro p {
+    flex: none;
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .picture1 {
+    max-width: 1200px;
+    padding: 0 40px;
+  }
+
+  .camket, .mongmuon {
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 40px;
+  }
+
+  .camket {
+    margin-top: 40px;
+  }
+
+  .mongmuon {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .intro {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .intro img {
+    max-width: 200px;
+    margin-bottom: 15px;
+  }
+
+  .intro p {
+    flex: none;
+    margin-left: 0;
+    text-align: center;
+    font-size: 16px; 
+  }
+
+  .picture1 {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  .camket, .mongmuon {
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 20px;
+  }
+
+  .camket {
+    margin-top: 30px;
+  }
+
+  .mongmuon {
+    margin-top: 15px;
+  }
+}
+
+/* Mobile view for smaller devices */
+@media (max-width: 480px) {
+  .intro img {
+    max-width: 180px;
+    margin-bottom: 10px;
+  }
+
+  .intro p {
+    font-size: 14px;
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  .picture1 {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .camket, .mongmuon {
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10px;
+  }
+
+  .camket {
+    margin-top: 20px;
+  }
+
+  .mongmuon {
+    margin-top: 10px;
+  }
+}

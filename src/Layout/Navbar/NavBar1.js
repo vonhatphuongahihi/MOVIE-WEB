@@ -3,13 +3,14 @@ import { FaRegUserCircle } from 'react-icons/fa';
 import { IoFilter, IoListSharp } from "react-icons/io5";
 import { Link, NavLink } from 'react-router-dom';
 import FilterPopup from '../../Components/FilterPopup';
+import SleepTimerPopup from '../../Screens/Popup/SleepTimerPopup';
 import NotificationIcon from '../../Components/Notification/NotificationIcon';
 import SearchForm from '../../Components/SearchForm';
 import { getUserProfile, logout } from "../../firebase";
 import { getAuth } from "firebase/auth";
 import './NavBar.css';
 
-function Navbar_main() {
+function Navbar1() {
   const hover = "hover:text-subMain transition text-subMain";
   const activeClassName = "relative text-subMain border-b-2 border-green-500";
   
@@ -21,10 +22,15 @@ function Navbar_main() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isFilterPopupOpen, setFilterPopupOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const [uid, setUid] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Thêm trạng thái loading
+
   const toggleDropdown = () => {
     setShowDropdown((prev) => !prev);
   };
+  const [showPopup, setShowPopup] = useState(false);
 
+  const togglePopup = () => setShowPopup(!showPopup);
   const toggleMobileMenu = () => {
     setMobileMenuOpen((prev) => !prev);
   };
@@ -40,10 +46,14 @@ function Navbar_main() {
       const user = auth.currentUser;
 
       if (user) {
+        setUid(user.uid); // Lưu uid vào state
         const userProfile = await getUserProfile(user.uid); // Hàm lấy dữ liệu từ Firestore
         if (userProfile?.avatarUrl) {
           setAvatarUrl(userProfile.avatarUrl); // Lưu avatar URL vào state
         }
+        setIsLoading(false); // Đánh dấu là đã tải xong
+      } else {
+        setIsLoading(false); // Nếu không có user, cũng đánh dấu đã tải xong
       }
     };
 
@@ -80,6 +90,7 @@ function Navbar_main() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
 
   return (
     <div>
@@ -217,12 +228,14 @@ function Navbar_main() {
                     Danh sách yêu thích
                   </NavLink>
                   <NavLink 
-                    to="/recently" 
+                    to="#" 
+                    onClick={togglePopup}
                     className="flex items-center px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
                   >
                     <img src="images/hen_gio_ngu_icon.svg" alt="Hẹn giờ đi ngủ" className="w-4 h-4 mr-2" />
                     Hẹn giờ đi ngủ
                   </NavLink>
+                  {showPopup && uid && <SleepTimerPopup onClose={togglePopup} uid={uid} />}
                   <button
                     onClick={() => {
                       logout();
@@ -238,23 +251,6 @@ function Navbar_main() {
             </div>
           </div>
         </div>
-          
-        {/* Secondary NavBar */}
-      <div  className={`${
-          isScrolled
-            ? 'bg-main bg-opacity-90'
-            : 'bg-main bg-opacity-50'
-        } shadow-md fixed left-0  border-t border-gray-400 border-opacity-50 right-0 z-10 block transition-all duration-300 hidden lg:block`}>
-        <div className="container mx-auto py-1 px-2 flex gap-4 justify-center items-center text-center text-wrap text-xs sm:text-sm lg:text-base">
-          <NavLink to="/phimdienanh" className={getNavLinkClass} style={{ fontSize: '14px' }}>Phim Điện Ảnh</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/anime" className={getNavLinkClass} style={{ fontSize: '14px' }}>Anime</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/2n1d" className={getNavLinkClass} style={{ fontSize: '14px' }}>2N1D</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/anhtraisayhi" className={getNavLinkClass} style={{ fontSize: '14px' }}>Anh Trai Say Hi</NavLink>
-        </div>
-      </div>
 
         {/* Filter Popup */}
         {isFilterPopupOpen && (
@@ -267,4 +263,4 @@ function Navbar_main() {
   );
 }
 
-export default Navbar_main;
+export default Navbar1;

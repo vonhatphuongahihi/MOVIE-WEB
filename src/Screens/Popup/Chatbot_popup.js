@@ -49,7 +49,6 @@ const ChatbotPopup = ({ closePopup }) => {
     if (e.key === 'Enter') handleSendMessage();
   };
 
-  // Hàm xóa lịch sử tin nhắn
   const handleClearHistory = () => {
     localStorage.removeItem('chatMessages');
     setMessages([]);
@@ -85,10 +84,18 @@ const ChatbotPopup = ({ closePopup }) => {
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
           />
-          <button className="chatbox__send--footer send__button" onClick={handleSendMessage}><LuSendHorizonal />
+        <button 
+            className="chatbox__send--footer send__button bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+            onClick={handleSendMessage}
+          >
+            <LuSendHorizonal />
           </button>
-          {/* Nút để xóa lịch sử tin nhắn */}
-          <button className="chatbox__clear--footer" onClick={handleClearHistory}><AiOutlineDelete />
+
+          <button 
+            className="chatbox__clear--footer bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+            onClick={handleClearHistory}
+          >
+            <AiOutlineDelete />
           </button>
         </div>
       </div>

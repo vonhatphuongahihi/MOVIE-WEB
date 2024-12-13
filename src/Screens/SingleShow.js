@@ -1,8 +1,8 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where, setDoc, deleteDoc, updateDoc, arrayUnion, arrayRemove, } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
-import { FaPlay, FaRegCalendar } from "react-icons/fa";
+import { FaHeart, FaPlay, FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
 import { RiGlobalLine } from "react-icons/ri";
@@ -14,19 +14,29 @@ import ShowRates from "../Components/Single/ShowRates";
 import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from '../Context/RecentlyContext';
+import { FavoritesContext } from '../Context/FavoritesContext';
 import Layout from "../Layout/Layout";
+import SharePopup from "../Screens/Popup/SharePopup";
 import { db } from "../firebase";
+import LayoutGuest from '../Layout/LayoutGuest';
+import { UserContext } from '../Context/UserContext';
+
 
 function SingleShow() {
+  const { isLoggedIn } = useContext(UserContext);
   const { id } = useParams();
   const { addRecently } = useContext(RecentlyContext);
+  const { addFavorite, removeFavorite, favorites } = useContext(FavoritesContext);
   const [user, setUser] = useState(null);
   const [play, setPlay] = useState(false);
   const [show, setShow] = useState(null);
   const [videos, setVideos] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
   const [voteCount, setvoteCount] = useState(0);
   const [voteAverage, setvoteAverage] = useState(0);
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const shareLink = `https://melon-movie.vercel.app/truyenhinh/${id}`; 
 
   useEffect(() => {
     const auth = getAuth();
@@ -45,6 +55,45 @@ function SingleShow() {
 
     return () => unsubscribe();
   }, [id]);
+
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (user) {
+        const favoriteDoc = await getDoc(doc(db, `users/${user.uid}/favorites`, id));
+        setIsFavorite(favoriteDoc.exists());
+      }
+    };
+    if (id && user) {
+      checkFavoriteStatus();
+    }
+  }, [id, user]);
+
+  const handleAddToFavorites = async () => {
+    if (user) {
+      try {
+        await setDoc(doc(db, `users/${user.uid}/favorites`, id), {
+          id,
+          title: show?.title,
+          backdropUrl: show?.backdropUrl,
+          voteAverage: show?.voteAverage,
+        });
+        setIsFavorite(true);
+      } catch (error) {
+        console.error("Lỗi khi thêm vào yêu thích:", error);
+      }
+    }
+  };
+
+  const handleRemoveFromFavorites = async () => {
+    if (user) {
+      try {
+        await deleteDoc(doc(db, `users/${user.uid}/favorites`, id));
+        setIsFavorite(false);
+      } catch (error) {
+        console.error("Lỗi khi xóa khỏi yêu thích:", error);
+      }
+    }
+  };
 
   const fetchShowData = async () => {
     try {
@@ -116,6 +165,35 @@ function SingleShow() {
     }
   };
 
+  const toggleFavorite = async () => {
+    if (!user) {
+      alert("Bạn cần đăng nhập để yêu thích phim!");
+      return;
+    }
+  
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+  
+      if (isFavorite) {
+        // Gỡ bỏ phim khỏi danh sách yêu thích
+        await updateDoc(userDocRef, {
+          favoriteMovies: arrayRemove(id),
+        });
+        removeFavorite(id);
+      } else {
+        // Thêm phim vào danh sách yêu thích
+        await updateDoc(userDocRef, {
+          favoriteMovies: arrayUnion(id),
+        });
+        addFavorite(show);
+      }
+  
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái yêu thích:", error);
+    }
+  };
+
   console.log("Show đang xem:", show);
   useEffect(() => {
     console.log("Fetched id:", id);
@@ -139,9 +217,13 @@ function SingleShow() {
     };
     addRecently(showToAdd);
   };
+  const handleSharePopupToggle = () => {
+    setShowSharePopup((prev) => !prev);
+};
 
+  const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
   return (
-    <Layout>
+    <LayoutComponent>
       <br></br>
       <br></br>
       <br></br>
@@ -236,13 +318,18 @@ function SingleShow() {
 
         <div className="flex flex-col md:pt-32">
           <div className="flex lg:gap-20 md:gap-10 gap-20 lg:mb-8 md:mb-6 mb-6">
-            <div className="flex gap-3 items-center">
-              <PiShareFat className="text-2xl"/>
+          <div className="flex gap-3 items-center cursor-pointer" onClick={handleSharePopupToggle}>
+              <PiShareFat className="text-2xl" />
               <p className="md:text-lg font-medium">Chia sẻ</p>
-            </div>
-            <div className="flex gap-3 items-center">
-              <PiHeart className="text-2xl"/>
-              <p className="md:text-lg font-medium">Yêu thích</p>
+          </div>
+            <div className="flex gap-3 items-center cursor-pointer">
+            <FaHeart
+                className={`text-2xl ${isFavorite ? "text-red-500" : ""}`}
+                onClick={toggleFavorite}
+              />
+              <p className="md:text-lg font-medium">
+                {isFavorite ? "Đã thích" : "Yêu thích"}
+              </p>
             </div>
           </div>
 
@@ -294,7 +381,14 @@ function SingleShow() {
       </div>
 
       <ShowRates show={show} user={user} onAddCompleted={fetchShowData} />
-    </Layout>
+      <SharePopup 
+          show={showSharePopup} 
+          onClose={() => setShowSharePopup(false)} 
+          videoTitle={show?.title || ''} 
+          videoImage={show.backdrop_path} 
+          shareLink={shareLink} 
+      />
+    </LayoutComponent>
   );
 }
 

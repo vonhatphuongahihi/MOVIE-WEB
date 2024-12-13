@@ -9,7 +9,6 @@ import { UserContext } from '../Context/UserContext';
 import { auth } from '../firebase';
 import './MovieDetail/MovieDetail.css';
 import VipPopup from './Popup/VipLimitPopup';
-import { RecentlyContext } from '../Context/RecentlyContext';
 
 
 const Backdrop = styled.div`
@@ -144,7 +143,6 @@ const Content = styled.div`
 `;
 
 function MovieDetail({ movie, onClose, type = "tmdb" }) {
-  const { addRecently } = useContext(RecentlyContext);
   const { isUserVip } = useContext(UserContext); // Lấy trạng thái VIP từ Context
   const navigate = useNavigate();
   const [isVipPopupOpen, setVipPopupOpen] = useState(false);
@@ -194,12 +192,8 @@ function MovieDetail({ movie, onClose, type = "tmdb" }) {
     setIsFavorite(checkIfFavorite());
   }, [favorites, movie.movieId]);
 
-  if (!movie) {
-    return <p>Loading...</p>;
-  }
 
   const handleWatchNowClick = (movieId, isItemVip) => {
-    addRecently(movie);
     if (isItemVip === true && isUserVip === false) {
       openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {

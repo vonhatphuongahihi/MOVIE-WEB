@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Layout_main from "../Layout/Layout_main";
 import { getAuth } from "firebase/auth";
+import Layout1 from "../Layout/Layout1";
+import { useContext } from "react";
+import LayoutGuest1 from '../Layout/LayoutGuest1';
+import { UserContext } from '../Context/UserContext';
+
 import { saveQuestionToFirestore } from "../firebase";
 
 const faqData = [
@@ -58,7 +62,6 @@ const faqData = [
 
 const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
-  
 
   return (
     <div className="border-b border-gray-200">
@@ -98,6 +101,7 @@ const FAQItem = ({ question, answer }) => {
 };
 
 const FAQScreen = () => {
+  const { isLoggedIn } = useContext(UserContext);
   const [newQuestion, setNewQuestion] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -126,9 +130,9 @@ const FAQScreen = () => {
     }
   };
   
-
+  const LayoutComponent = isLoggedIn ? Layout1 : LayoutGuest1;
   return (
-    <Layout_main>
+    <LayoutComponent>
       <div className="min-h-screen bg-main">
         <div className="flex justify-center p-6">
           {/* Cột FAQ */}
@@ -207,7 +211,7 @@ const FAQScreen = () => {
           </div>
         </div>
       </div>
-    </Layout_main>
+    </LayoutComponent>
   );
 };
 

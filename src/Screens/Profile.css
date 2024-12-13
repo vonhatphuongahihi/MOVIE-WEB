@@ -3,3 +3,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: white; 
   filter: invert(1); 
 }
+/* CSS cho thiết bị di động */
+@media (max-width: 640px) {
+  .sm\:text-sm {
+    font-size: 14px; /* Điều chỉnh kích thước chữ cho nút nhỏ */
+  }
+}

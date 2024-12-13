@@ -9,11 +9,11 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import { GetMovieInfoFromFirebase } from '../Components/Home/GetMovieInfoFromFirebase';
 import TitleCards1 from '../Components/Home/TitleCards/TitleCards1';
 import Layout from '../Layout/Layout';
+import LayoutGuest from '../Layout/LayoutGuest';
 import MovieDetail from './MovieDetail';
 import ChatbotPopup from './Popup/Chatbot_popup';
 
 import { useContext } from 'react';
-import { RecentlyContext } from '../Context/RecentlyContext';
 import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
 
@@ -43,68 +43,10 @@ const ChatbotIconWrapper = styled.div`
   }
 `;
 
-const BannerButton = styled.button`
-  padding: 10px 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s, color 0.3s;
-
-  &.btn-watch {
-    background-color: #28BD11;
-    color: #ffffff;
-
-    &:hover {
-      background-color: #24a70f;
-      color: #000000;
-    }
-  }
-
-  &.btn-detail {
-    background-color: #fff;
-    color: #000;
-
-    &:hover {
-      background-color: #8E8D8D;
-      color: #ffffff;
-    }
-  }
-`;
-
-// Style cho các nút điều khiển swiper
-const SwiperControls = styled.div`
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  padding: 0 20px;
-  z-index: 2;
-
-  button {
-    background-color: rgba(0, 0, 0, 0.5); 
-    color: #28BD11; 
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-
-    &:hover {
-      background-color: #28BD11;
-      color: #ffffff; 
-      transform: scale(1.1); 
-    }
-
-    svg {
-      font-size: 24px; 
-    }
-  }
-`;
 
 function PhimDienAnh() {
-  const { addRecently } = useContext(RecentlyContext);
+  const { isLoggedIn }  = useContext(UserContext);
+  console.log("Is Logged In:", isLoggedIn);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -187,7 +129,6 @@ function PhimDienAnh() {
     if (isItemVip === true && isUserVip === false) {
       openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
-      addRecently(movie);
       navigate(`/movie/${movieId}`);
     }
   };
@@ -202,19 +143,8 @@ function PhimDienAnh() {
     setVipPopupOpen(false);
   };
 
-  const bannerCaptionStyle = {
-    position: 'absolute',
-    width: '100%',
-    paddingLeft: '6%',
-    bottom: 0,
-    textAlign: 'left',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start', 
-  };
 
-  return (
-    <Layout>
+const PhimDienAnhContent = () => (
       <div className="home">
       <Swiper
         spaceBetween={0}
@@ -230,42 +160,24 @@ function PhimDienAnh() {
           .filter((movie) => movie !== null && movie !== undefined)
           .map((movie) => (
             <SwiperSlide key={movie.movieId}>
-              <div className="banner" style={{ height: '100vh', position: 'relative' }}>
+              <div className="banner">
                 <img
                   src={movie.backdrop_path || "/default-banner.jpg"}
                   alt={movie.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    transition: 'opacity 0.5s ease-in-out',
-                  }}
                 />
-                <div className="banner-caption" style={bannerCaptionStyle}>
+                <div className="banner-caption" >
                   <p
                     className="text-white"
-                    style={{
-                      maxWidth: '700px',
-                      fontSize: '15px',
-                      marginTop: '90px',
-                      marginBottom: '15px',
-                    }}
                   >
                     {movie.overview || "Không có mô tả cho phim này."}
                   </p>
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
-                    <BannerButton
-                      className="btn-watch"
-                      onClick={() => handleWatchNowClick(movie.movieId, movie.vip)}
-                      >
-                      <FaPlay /> Xem ngay
-                    </BannerButton>
-                    <BannerButton
-                      className="btn-detail"
-                      onClick={() => handleMovieClick(movie)}
-                    >
-                      <IoInformationCircleOutline /> Thông tin phim
-                    </BannerButton>
+                   <button className="banner-button btn-watch" onClick={() => handleWatchNowClick(movie.movieId, movie.vip)}>
+                     <FaPlay /> Xem ngay
+                   </button>
+                   <button className="banner-button btn-detail" onClick={() => handleMovieClick(movie)}>
+                     <IoInformationCircleOutline /> Chi tiết
+                   </button>
                   </div>
                 </div>
               </div>
@@ -273,28 +185,28 @@ function PhimDienAnh() {
           ))}
       </Swiper>
 
-        <SwiperControls>
-          <button onClick={() => swiperRef.current?.slidePrev()}><GrPrevious />
-          </button>
-          <button onClick={() => swiperRef.current?.slideNext()}><GrNext />
-          </button>
-        </SwiperControls>
+         <div className="swiper-controls">
+           <button onClick={() => swiperRef.current?.slidePrev()}>
+             <GrPrevious />
+           </button>
+           <button onClick={() => swiperRef.current?.slideNext()}>
+             <GrNext />
+           </button>
+         </div>
 
-        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
+        <div className="more-card">
 
           <TitleCards1 title={"THỊNH HÀNH"} category={"popular"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
           <TitleCards1 title={"MỚI NHẤT"} category={"upcoming"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
 
         </div>
-        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
+        <div className="more-card">
           <TitleCards1 title={"PHIM ĐIỆN ẢNH VIỆT NAM"} country={"Việt Nam"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
           <TitleCards1 title={"PHIM ĐIỆN ẢNH TRUNG QUỐC"} country={"Trung Quốc"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
           <TitleCards1 title={"PHIM ĐIỆN ẢNH HOLLYWOOD"} country={"Mỹ"} genres={["Điện ảnh"]} onMovieClick={handleMovieClick} />
         </div>
-      </div>
-
       {!isPopupOpen && (
-        <ChatbotIconWrapper onClick={openPopup}>
+        <ChatbotIconWrapper onClick={openPopup} style={{ zIndex: 1000 }}>
           <IoIosChatbubbles />
         </ChatbotIconWrapper>
       )}
@@ -303,7 +215,12 @@ function PhimDienAnh() {
       {selectedMovie && <MovieDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+      </div>
+        );
+  return (
+    <>
+      {isLoggedIn ? <Layout>{PhimDienAnhContent()}</Layout> : <LayoutGuest>{PhimDienAnhContent()}</LayoutGuest>}
+    </>
   );
 }
 

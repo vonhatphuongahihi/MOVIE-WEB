@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { IoFilter, IoListSharp } from "react-icons/io5";
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate} from 'react-router-dom';
 import FilterPopup from '../../Components/FilterPopup';
 import NotificationIcon from '../../Components/Notification/NotificationIcon';
 import SearchForm from '../../Components/SearchForm';
@@ -9,7 +9,8 @@ import { getUserProfile, logout } from "../../firebase";
 import { getAuth } from "firebase/auth";
 import './NavBar.css';
 
-function Navbar_main() {
+function NavbarGuest1() {
+  const navigate = useNavigate();
   const hover = "hover:text-subMain transition text-subMain";
   const activeClassName = "relative text-subMain border-b-2 border-green-500";
   
@@ -84,8 +85,8 @@ function Navbar_main() {
   return (
     <div>
       {/* Main NavBar */}
-      <div className="bg-main shadow-md fixed top-0 left-0 right-0 z-20 border-b border-gray-300 text-nowrap text-center text-base xl:text-base text-subMain fixed-font">
-        <div div className="container mx-auto px-1 md:px-4 flex items-center justify-between">
+      <div className="bg-main shadow-md fixed top-0 left-0 right-0 z-20 border-b border-gray-300 text-nowrap text-center text-sm xl:text-base text-subMain">
+      <div div className="container mx-auto px-1 md:px-4 flex items-center justify-between">
           {/* Left Side - Logo */}
           <div className="flex items-center space-x-1 lg:space-x-4 text-subMain">
             <div className='block lg:hidden dropdown-menu'>
@@ -139,12 +140,6 @@ function Navbar_main() {
                     <img src="/images/thieu_nhi_icon.svg" alt="TV Show Icon" className="w-5  h-5 inline-block mr-2 mb-1 text-subMain" />
                     Thiếu nhi
                   </NavLink>
-                  <NavLink 
-                    to="/dangkyvip" 
-                    className="flex items-center px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
-                  >
-                    <img src="/images/dang_ky_goi_vip.png" alt="TV Show Icon" className="w-15 h-6 inline-block mr-2 mb-1 text-subMain" />
-                  </NavLink>
               </div>
             )}
             </div>
@@ -168,21 +163,18 @@ function Navbar_main() {
           </div>
 
           {/* Search Form */}
-          <div className="flex items-center space-x-1 w-1/2 lg:w-1/3 z-20">
+          <div className="flex items-center space-x-2 w-1/3 z-20">
             <SearchForm />
             <button onClick={toggleFilterPopup} className="block">
-              <IoFilter className="w-5 h-5 text-subMain cursor-pointer block" />
+              <IoFilter className="w-5 h-5 text-subMain cursor-pointer hidden lg:block" />
             </button>
           </div>
 
           {/* Right Side */}
-          <div className="flex items-center space-x-2 lg:space-x-6">
-            <NavLink to="/dangkyvip" className={getNavLinkClass}>
-              <img src="/images/dang_ky_goi_vip.png" alt="VIP" className="w-15 lg:w-20 h-6 object-contain hidden lg:flex" />
-            </NavLink>
+          <div className="flex items-center space-x-6">
             <NotificationIcon />
             <div className="relative dropdown-container">
-              <button onClick={toggleDropdown} className="mx-0 lg:mx-4 mt-1">
+              <button onClick={toggleDropdown} className="mx-4">
                 {avatarUrl ? (
                     <img
                       src={avatarUrl}
@@ -190,71 +182,28 @@ function Navbar_main() {
                       className="w-6 h-6 rounded-full object-cover cursor-pointer"
                     />
                   ) : (
-                    <FaRegUserCircle className="w-6 h-6 text-subMain cursor-pointer" />
+                    <FaRegUserCircle className="w-6 h-6 mt-1 text-subMain cursor-pointer" />
                   )}
               </button>
               {showDropdown && (
-                <div className="absolute right-0 mt-2 bg-[#8B8B8B] shadow-lg rounded-lg w-40 py-1 z-20">
-                  <NavLink 
-                    to="/profile" 
-                    className="flex items-center px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
-                  >
-                    <img src="images/ho_so_icon.svg" alt="Hồ sơ" className="w-4 h-4 mr-2" />
-                    Hồ sơ
-                  </NavLink>
-                  <NavLink 
-                    to="/recently" 
-                    className="flex items-center px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
-                  >
-                    <img src="images/lich_su_xem_icon.svg" alt="Lịch sử xem" className="w-4 h-4 mr-2" />
-                    Lịch sử xem
-                  </NavLink>
-                  <NavLink 
-                    to="/phimyeuthich" 
-                    className="flex items-center px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
-                  >
-                    <img src="images/yeu_thich_icon.svg" alt="Phim yêu thích" className="w-4 h-4 mr-2" />
-                    Danh sách yêu thích
-                  </NavLink>
-                  <NavLink 
-                    to="/recently" 
-                    className="flex items-center px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
-                  >
-                    <img src="images/hen_gio_ngu_icon.svg" alt="Hẹn giờ đi ngủ" className="w-4 h-4 mr-2" />
-                    Hẹn giờ đi ngủ
-                  </NavLink>
+                <div className="absolute right-0 mt-2 bg-[#8B8B8B] shadow-lg rounded-lg w-40 z-20">
                   <button
                     onClick={() => {
-                      logout();
+                      navigate('/login'); 
                       setShowDropdown(false);
                     }}
-                    className="flex items-center w-full px-3 py-1.5 mt-1 hover:bg-[#545454] text-white text-sm"
+                    className="flex items-center w-full px-3 py-2 hover:bg-[#545454] text-white text-sm"
                   >
                     <img src="images/dang_xuat_icon.svg" alt="Đăng xuất" className="w-4 h-4 mr-2" />
-                    Đăng xuất
+                    Đăng nhập
                   </button>
                 </div>
               )}
+
+
             </div>
           </div>
         </div>
-          
-        {/* Secondary NavBar */}
-      <div  className={`${
-          isScrolled
-            ? 'bg-main bg-opacity-90'
-            : 'bg-main bg-opacity-50'
-        } shadow-md fixed left-0  border-t border-gray-400 border-opacity-50 right-0 z-10 block transition-all duration-300 hidden lg:block`}>
-        <div className="container mx-auto py-1 px-2 flex gap-4 justify-center items-center text-center text-wrap text-xs sm:text-sm lg:text-base">
-          <NavLink to="/phimdienanh" className={getNavLinkClass} style={{ fontSize: '14px' }}>Phim Điện Ảnh</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/anime" className={getNavLinkClass} style={{ fontSize: '14px' }}>Anime</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/2n1d" className={getNavLinkClass} style={{ fontSize: '14px' }}>2N1D</NavLink>
-          <img src="/images/divider.svg" alt="Line" className="w-1 h-4" />
-          <NavLink to="/anhtraisayhi" className={getNavLinkClass} style={{ fontSize: '14px' }}>Anh Trai Say Hi</NavLink>
-        </div>
-      </div>
 
         {/* Filter Popup */}
         {isFilterPopupOpen && (
@@ -267,4 +216,4 @@ function Navbar_main() {
   );
 }
 
-export default Navbar_main;
+export default NavbarGuest1;

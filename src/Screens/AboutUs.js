@@ -1,10 +1,14 @@
 import React from "react";
 import Head from "../Components/Head";
-import Layout_main from "./../Layout/Layout_main";
-
+import LayoutGuest1 from '../Layout/LayoutGuest1';
+import Layout1 from "../Layout/Layout1";
+import { UserContext } from '../Context/UserContext';
+import { useContext } from "react";
 function AboutUs() {
+  const { isLoggedIn } = useContext(UserContext);
+  const LayoutComponent = isLoggedIn ? Layout1 : LayoutGuest1;
   return (
-    <Layout_main>
+    <LayoutComponent>
       <div className="min-height-screen container mx-auto px-2 my-6">
         {/*Khuyen mai-làm trưng hoi, chứ hổng bấm vô được đâu :)))*/}
         <div className="xl:pt-20 pt-10 px-4">
@@ -167,7 +171,7 @@ function AboutUs() {
           </div>
         </div>
       </div>
-    </Layout_main>
+    </LayoutComponent>
   );
 }
 

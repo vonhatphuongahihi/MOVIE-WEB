@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import './titleCards.css';
 import { db } from '../../../firebase'; 
 
-const TitleCards = ({ title, category, genres, country, onMovieClick }) => {
+const TitleCards = ({ title, category, genres, country, isVip, onMovieClick }) => {
   const [firebaseData, setFirebaseData] = useState([]);
   const cardsRef = useRef();
 
@@ -11,24 +11,26 @@ const TitleCards = ({ title, category, genres, country, onMovieClick }) => {
     if (cardsRef.current) {  
       cardsRef.current.scrollLeft += event.deltaY;
     }
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const moviesRef = collection(db, "movies");
         let q;
-        if (genres?.length) {
+
+        if (isVip) {
+          q = query(moviesRef, where("vip", "==", true));
+        } else if (genres?.length) {
           q = query(moviesRef, where("genres", "array-contains-any", genres));
         } else if (category) {
           q = query(moviesRef, where("category", "==", category));
         } else if (country) {
           q = query(moviesRef, where("country", "==", country));
         } else {
-          console.warn("Cần truyền vào ít nhất category, genres hoặc country để lấy dữ liệu.");
+          console.warn("Cần truyền vào ít nhất category, genres, country hoặc isVip để lấy dữ liệu.");
           return;
         }
-  
 
         const querySnapshot = await getDocs(q);
         const movies = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -49,7 +51,7 @@ const TitleCards = ({ title, category, genres, country, onMovieClick }) => {
         cardsRef.current.removeEventListener('wheel', handleWheel);
       }
     };
-  }, [category]);
+  }, [category, genres, country, isVip]);
 
   return (
     <div className='title-cards'>
@@ -67,5 +69,6 @@ const TitleCards = ({ title, category, genres, country, onMovieClick }) => {
       </div>
     </div>
   );
-}
+};
+
 export default TitleCards;

@@ -9,18 +9,18 @@ import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFir
 
 import TitleCardsShow1 from '../Components/Home/TitleCards/TitleCardsShow1';
 import Layout from '../Layout/Layout';
+import LayoutGuest from '../Layout/LayoutGuest';
 import ChatbotPopup from './Popup/Chatbot_popup';
 import ShowDetail from './ShowDetail';
 
 import { useContext } from 'react';
-import { RecentlyContext } from '../Context/RecentlyContext';
 import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
 
 import { doc, getDoc } from "firebase/firestore";
 import "swiper/css";
 import "swiper/css/autoplay";
-import "swiper/css/effect-fade"; // CSS cho hiệu ứng fade
+import "swiper/css/effect-fade"; 
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { db } from '../firebase';
@@ -41,68 +41,8 @@ const ChatbotIconWrapper = styled.div`
   }
 `;
 
-const BannerButton = styled.button`
-  padding: 10px 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s, color 0.3s;
-
-  &.btn-watch {
-    background-color: #28BD11;
-    color: #ffffff;
-
-    &:hover {
-      background-color: #24a70f;
-      color: #000000;
-    }
-  }
-
-  &.btn-detail {
-    background-color: #fff;
-    color: #000;
-
-    &:hover {
-      background-color: #8E8D8D;
-      color: #ffffff;
-    }
-  }
-`;
-
-// Style cho các nút điều khiển swiper
-const SwiperControls = styled.div`
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  padding: 0 20px;
-  z-index: 2;
-
-  button {
-    background-color: rgba(0, 0, 0, 0.5); 
-    color: #28BD11; 
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-
-    &:hover {
-      background-color: #28BD11;
-      color: #ffffff; 
-      transform: scale(1.1); 
-    }
-
-    svg {
-      font-size: 24px; 
-    }
-  }
-`;
-
 function Haingaymotdem() {
-  const { addRecently } = useContext(RecentlyContext);
+  const { isLoggedIn }  = useContext(UserContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -176,7 +116,6 @@ function Haingaymotdem() {
     if (isItemVip === true && isUserVip === false) {
       openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
-      addRecently(tvShow);
       navigate(`/truyenhinh/${tvShowId}`);
     }
   };
@@ -191,73 +130,41 @@ function Haingaymotdem() {
     setVipPopupOpen(false);
   };
 
-  const bannerCaptionStyle = {
-    position: 'absolute',
-    width: '100%',
-    paddingLeft: '6%',
-    bottom: 0,
-    textAlign: 'left',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start', 
-  };
-
-  return (
-    <Layout>
+const HaingaymotdemContent = () => (
       <div className="home">
-        <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
+        <div className="banner">
         <video
             src="./videos/teaser_2n1d.mp4"
             autoPlay
             loop
             muted
-            style={{
-              width: '100%',
-              height: '100vh',
-              objectFit: 'cover',
-              maskImage: 'linear-gradient(to right, transparent, black 75%)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent, black 75%)',
-            }}
           />
-          <div className="banner-caption" style={bannerCaptionStyle}>
+          <div className="banner-caption">
             <p
               className="text-white"
-              style={{
-                maxWidth: '700px',
-                fontSize: '15px',
-                marginTop: '90px',
-                marginBottom: '35px',
-              }}
             >
               { "2 Ngày 1 Đêm là chương trình truyền hình thực tế – nơi các nghệ sĩ có những chuyến đi trong vòng #2Ngay1Dem đến nhiều vùng miền khác nhau, khám phá những cảnh đẹp hùng vĩ, những nét văn hóa độc đáo và những con người thân thiện của Việt Nam. Các thành viên phải hoàn thành nhiều nhiệm vụ và thử thách khác nhau để nhận những phần thưởng/hình phạt thú vị."}
             </p>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
-            <BannerButton
-              className="btn-watch"
-              onClick={() => handleWatchNowClick(bannerMovies?.id, bannerMovies?.vip)}
-            >
+            <button className="banner-button btn-watch" onClick={() => handleWatchNowClick(bannerMovies?.id, bannerMovies?.vip)}>
               <FaPlay /> Xem ngay
-            </BannerButton>
-            <BannerButton
-              className="btn-detail"
-              onClick={() => handleMovieClick(bannerMovies)}
-            >
-              <IoInformationCircleOutline /> Thông tin
-            </BannerButton>
+              </button>
+                <button className="banner-button btn-detail" onClick={() => handleMovieClick(bannerMovies)}>
+                <IoInformationCircleOutline /> Chi tiết
+              </button>
           </div>
         </div>
       </div>
-        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}> 
+        <div className="more-card"> 
           <TitleCardsShow1 title={"2 NGÀY 1 ĐÊM MÙA 3 - SHOW HOT NHẤT 2024"} category={"row1"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
           <TitleCardsShow1  title={"CHƠI KHÔNG GIỚI HẠN - CƯỜI NGHIÊNG NGẢ"} category={"row2"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
           <TitleCardsShow1  title={"2 NGÀY 1 ĐÊM MÙA 2"} category={"row3"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
           <TitleCardsShow1  title={"HẬU TRƯỜNG 2 NGÀY 1 ĐÊM MÙA 2"} category={"row4"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
           <TitleCardsShow1  title={"2 NGÀY 1 ĐÊM MÙA LỄ HỖI"} category={"row5"} genres={["2N1D"]} onMovieClick={handleMovieClick} /> 
         </div>
-      </div>
 
       {!isPopupOpen && (
-        <ChatbotIconWrapper onClick={openPopup}>
+        <ChatbotIconWrapper onClick={openPopup} style={{ zIndex: 1000 }}>
           <IoIosChatbubbles />
         </ChatbotIconWrapper>
       )}
@@ -266,8 +173,12 @@ function Haingaymotdem() {
       {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+      </div>
+  );
+  return (
+    <>
+      {isLoggedIn ? <Layout>{HaingaymotdemContent()}</Layout> : <LayoutGuest>{HaingaymotdemContent()}</LayoutGuest>}
+    </>
   );
 }
-
 export default Haingaymotdem;

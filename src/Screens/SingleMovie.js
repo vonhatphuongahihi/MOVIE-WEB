@@ -1,11 +1,11 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where, updateDoc, arrayUnion, arrayRemove,} from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
 import { FaPlay, FaRegCalendar } from "react-icons/fa";
-
 import { IoTimeOutline } from "react-icons/io5";
 import { PiHeart, PiShareFat } from "react-icons/pi";
+import { FaHeart } from "react-icons/fa";
 import { RiGlobalLine } from "react-icons/ri";
 import { NavLink, useParams } from "react-router-dom";
 import { Autoplay } from "swiper/modules";
@@ -16,19 +16,28 @@ import MovieRates from "../Components/Single/MovieRates";
 import Rating from "../Components/Stars";
 import Titles from "../Components/Titles";
 import { RecentlyContext } from "../Context/RecentlyContext";
+import { FavoritesContext } from '../Context/FavoritesContext';
 import Layout from "../Layout/Layout";
+import LayoutGuest from '../Layout/LayoutGuest';
+import SharePopup from "../Screens/Popup/SharePopup";
+import { UserContext } from '../Context/UserContext';
 // import { addCommentToMovie } from "../firebase";
 import { db } from "../firebase";
 
 function SingleMovie() {
+  const { isLoggedIn } = useContext(UserContext);
   const { id } = useParams();
   const { addRecently } = useContext(RecentlyContext);
+  const { addFavorite, removeFavorite, favorites } = useContext(FavoritesContext);
   const [user, setUser] = useState(null);
   const [play, setPlay] = useState(false);
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [voteCount, setvoteCount] = useState(0);
   const [voteAverage, setvoteAverage] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const shareLink = `https://melon-movie.vercel.app/movie/${id}`; 
 
   useEffect(() => {
     const auth = getAuth();
@@ -36,7 +45,9 @@ function SingleMovie() {
       if (currentUser) {
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
         if (userDoc.exists()) {
-          setUser(userDoc.data());
+          const userData = userDoc.data();
+          setUser(userData);
+          setIsFavorite(userData.favoriteMovies?.includes(id));
         }
       } else {
         setUser(null);
@@ -48,6 +59,26 @@ function SingleMovie() {
     return () => unsubscribe();
   }, [id]);
 
+  useEffect(() => {
+    const fetchFavoriteStatus = async () => {
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setIsFavorite(userData.favoriteMovies?.includes(id));
+          }
+        } catch (error) {
+          console.error("Lỗi khi tải trạng thái yêu thích:", error);
+        }
+      }
+    };
+  
+    fetchFavoriteStatus();
+  }, [id, user]);
+  const handleSharePopupToggle = () => {
+    setShowSharePopup((prev) => !prev);
+};
   const fetchMovieData = async () => {
     try {
       const movieDoc = await getDoc(doc(db, "movies", id));
@@ -57,6 +88,7 @@ function SingleMovie() {
       if (movieDoc.exists()) {
         const movieData = movieDoc.data();
         setMovie(movieData);
+
         currentGenres = movieData.genres || [];
         currentCountry = movieData.country || "";
         console.log("Movie from Firestore:", movieData);
@@ -64,7 +96,6 @@ function SingleMovie() {
         console.log("Movie not found in Firestore");
       }
 
-      // Fetch comments for this movie
       const commentsSnapshot = await getDocs(
         query(collection(db, "comments"), where("movieId", "==", id))
       );
@@ -76,22 +107,18 @@ function SingleMovie() {
         const rating = parseFloat(commentData.rating);
 
         if (!isNaN(rating)) {
-          // Kiểm tra rating có phải là số hợp lệ không
           comments.push(commentData);
-          totalRating += rating; // Cộng điểm rating hợp lệ
+          totalRating += rating;
         }
       });
 
-      const totalComments = comments.length; // Tổng số comment
+      const totalComments = comments.length;
       const averageRating =
         totalComments > 0 ? (totalRating / totalComments).toFixed(1) : 0;
 
-      // Cập nhật state
       setvoteCount(totalComments);
       setvoteAverage(averageRating);
-      console.log("Comments:", comments);
 
-      // Fetch recommendations
       const recommendationsSnapshot = await getDocs(collection(db, "movies"));
       const recommendationsData = [];
 
@@ -118,6 +145,37 @@ function SingleMovie() {
     }
   };
 
+  const toggleFavorite = async () => {
+    if (!user) {
+      alert("Bạn cần đăng nhập để yêu thích phim!");
+      return;
+    }
+  
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+  
+      if (isFavorite) {
+        // Gỡ bỏ phim khỏi danh sách yêu thích
+        await updateDoc(userDocRef, {
+          favoriteMovies: arrayRemove(id),
+        });
+        removeFavorite(id);
+      } else {
+        // Thêm phim vào danh sách yêu thích
+        await updateDoc(userDocRef, {
+          favoriteMovies: arrayUnion(id),
+        });
+        addFavorite(movie);
+      }
+  
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái yêu thích:", error);
+    }
+  };
+  
+  
+
   if (!movie) {
     return <div>Loading...</div>;
   }
@@ -137,13 +195,14 @@ function SingleMovie() {
     addRecently(movieToAdd);
   };
 
-  return (
-    <Layout>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
 
+  const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
+  return (
+    <LayoutComponent>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
       <div className="flex items-center lg:space-x-4">
         <NavLink to="/">
           <img
@@ -156,7 +215,6 @@ function SingleMovie() {
           {movie?.title}
         </p>
       </div>
-
       <div id="Watch">
         <div className="container mx-auto bg-main lg:p-6 px-4 py-2 mb-4">
           {play ? (
@@ -176,7 +234,7 @@ function SingleMovie() {
                   onClick={handlePlay}
                   className="bg-white text-subMain flex-colo border border-subMain rounded-full lg:w-20 lg:h-20 w-10 h-10 font-medium text-xl"
                 >
-                  <FaPlay className="lg:w-8 lg:h-8 w-4 h-4"/>
+                  <FaPlay className="lg:w-8 lg:h-8 w-4 h-4" />
                 </button>
               </div>
               <img
@@ -230,20 +288,25 @@ function SingleMovie() {
             </div>
 
             <p className="md:mb-10 mb-6 text-justify">{movie?.overview}</p>
+        </div>
+
+        <div className="flex flex-col md:pt-32">
+          <div className="flex lg:gap-20 md:gap-10 gap-20 lg:mb-8 md:mb-6 mb-6">
+          <div className="flex gap-3 items-center cursor-pointer" onClick={handleSharePopupToggle}>
+              <PiShareFat className="text-2xl" />
+              <p className="md:text-lg font-medium">Chia sẻ</p>
           </div>
-
-          <div className="flex flex-col md:pt-32">
-            <div className="flex lg:gap-20 md:gap-10 gap-20 lg:mb-8 md:mb-6 mb-6">
-              <div className="flex gap-3 items-center">
-                <PiShareFat className="text-2xl"/>
-                <p className="md:text-lg font-medium">Chia sẻ</p>
-              </div>
-              <div className="flex gap-3 items-center">
-                <PiHeart className="text-2xl"/>
-                <p className="md:text-lg font-medium">Yêu thích</p>
-              </div>
+            <div className="flex gap-3 items-center cursor-pointer">
+              <FaHeart
+                className={`text-2xl ${isFavorite ? "text-red-500" : ""}`}
+                onClick={toggleFavorite}
+              />
+              <p className="md:text-lg font-medium">
+                {isFavorite ? "Đã thích" : "Yêu thích"}
+              </p>
             </div>
-
+          </div>
+          
             <div className="flex">
               <p className="font-medium md:w-20 lg:w-auto lg:mr-2 md:mr-0 mr-2">Diễn viên:</p>
               <p className="font-medium">
@@ -262,7 +325,7 @@ function SingleMovie() {
                 {movie.genres.join(', ')}
               </p>
             </div>
-
+            
           </div>
         </div>
       </div>
@@ -299,7 +362,18 @@ function SingleMovie() {
       </div>
 
       <MovieRates movie={movie} user={user} onAddCompleted={fetchMovieData} />
-    </Layout>
+      <SharePopup 
+          show={showSharePopup} 
+          onClose={() => setShowSharePopup(false)} 
+          videoTitle={movie?.title || ''} 
+          videoImage={movie.backdrop_path
+            ? (movie.type === "tmdb" && !movie.backdrop_path.includes("http")
+                ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+                : movie.backdrop_path)
+            : null}
+          shareLink={shareLink} 
+      />
+    </LayoutComponent>
   );
 }
 
