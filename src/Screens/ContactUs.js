@@ -1,8 +1,8 @@
 import React from "react";
-import { FiPhoneCall, FiMapPin, FiMail } from "react-icons/fi";
-import Layout_main from "../Layout/Layout_main";
+import { FiMail, FiMapPin, FiPhoneCall } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
+import Layout_main from "../Layout/Layout_main";
 
 
 function ContactUs() {

@@ -51,7 +51,7 @@ function FilterPopup({ onClose }) {
       <div className="absolute top-12 bg-white rounded-lg p-6 pt-5">
 
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-xl font-bold">Lọc phim và show truyền hình</h2>
+          <h2 className="text-xl font-bold">BỘ LỌC</h2>
         </div>
 
         <button onClick={onClose} className="absolute top-3 right-3">
@@ -60,7 +60,7 @@ function FilterPopup({ onClose }) {
 
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-x-8 gap-y-5 ">
           <div>
-            <label className="block text-sm font-medium text-black text-opacity-60 text-left">Thời lượng (đối với phim)</label>
+            <label className="block text-sm font-medium text-black text-opacity-60 text-left">Thời lượng</label>
             <select
               name="duration"
               value={duration}

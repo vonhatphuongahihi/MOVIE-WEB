@@ -233,7 +233,13 @@ function Thieunhi() {
             <SwiperSlide key={movie.movieId}>
               <div className="banner" style={{ height: '100vh', position: 'relative' }}>
                 <img
-                  src={movie.backdrop_path || "/default-banner.jpg"}
+                  src={
+                    movie.backdrop_path
+                    ? (!movie.backdrop_path.includes("http")
+                        ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+                        : movie.backdrop_path)
+                    : "/default-banner.jpg" 
+                  }
                   alt={movie.title}
                   style={{
                     width: '100%',
