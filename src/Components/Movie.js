@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Movie({ movie }) {
   const backdropUrl = movie.backdrop_path
-  ? (movie.type === "tmdb" && !movie.backdrop_path.includes("http") 
+  ? (!movie.backdrop_path.includes("http")
       ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
       : movie.backdrop_path)
   : null;

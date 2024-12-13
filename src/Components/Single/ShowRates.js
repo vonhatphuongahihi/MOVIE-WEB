@@ -191,7 +191,7 @@ function ShowRates({ show, user, onAddCompleted }) {
       <div className="md:grid flex-colo grid-cols-5 lg:gap-16 gap-4 pt-4 pb-10 rounded">
         
         {/* Viết bình luận */}
-        <div className="lg:col-span-2 md:col-span-5 w-full flex flex-col gap-4">
+        <div className="lg:col-span-2 md:col-span-5 w-full flex flex-col gap-4 self-start">
           <div className="lg:mt-8 md:mt-4 mt-2 lg:mb-6 mb-2 relative">
             <h3 className="lg:text-xl md:text-base text-text mb-4">Bình luận</h3>
             <textarea

@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import Titles from "../Titles";
 
-const MovieCasts = ({ movie = {}, isApiMovie = true }) => {
+const MovieCasts = ({ movie = {}}) => {
   // Hàm render diễn viên từ danh sách
   const renderCasts = (castList = []) => {
     if (!castList.length) {
@@ -63,9 +63,8 @@ const MovieCasts = ({ movie = {}, isApiMovie = true }) => {
           }}
         >
           {/* Kiểm tra và render diễn viên */}
-          {isApiMovie 
-            ? renderCasts(movie?.casts?.cast || []) // Từ TMDB API
-            : renderCasts(movie?.cast || []) // Từ phim người dùng upload
+          {
+            renderCasts(movie?.cast || []) // Từ phim người dùng upload
           }
         </Swiper>
       </div>

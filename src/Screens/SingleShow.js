@@ -100,10 +100,12 @@ function SingleShow() {
       const showDoc = await getDoc(doc(db, "tvShows", id));
 
       let currentGenres = [];
+      let currentCountry = "";
       if (showDoc.exists()) {
         const showData = showDoc.data();
         setShow(showData);
         currentGenres = showData.genres || [];
+        currentCountry = showData.country || "";
         setVideos(showData.video);
       } else {
         console.error("Show not found");
@@ -142,11 +144,14 @@ function SingleShow() {
         if (doc.id !== id) {
           const showData = doc.data();
           const showGenres = showData.genres || [];
+          const showCountry = showData.country || "";
           const hasCommonGenre = currentGenres.some((genre) =>
             showGenres.includes(genre)
           );
+          const isSameCountry = showCountry === currentCountry;
 
-          if (hasCommonGenre) {
+
+          if (hasCommonGenre && isSameCountry) {
             recommendationsData.push({ id: doc.id, ...showData });
           }
         }
