@@ -6,14 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFirebase';
-
+import { GrNext, GrPrevious } from "react-icons/gr";
 import TitleCardsShow1 from '../Components/Home/TitleCards/TitleCardsShow1';
 import Layout from '../Layout/Layout';
+import LayoutGuest from '../Layout/LayoutGuest';
 import ChatbotPopup from './Popup/Chatbot_popup';
 import ShowDetail from './ShowDetail';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 
 import { useContext } from 'react';
-import { RecentlyContext } from '../Context/RecentlyContext';
 import { UserContext } from '../Context/UserContext';
 import VipPopup from './Popup/VipLimitPopup';
 
@@ -23,6 +24,9 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+
 import { db } from '../firebase';
 
 const ChatbotIconWrapper = styled.div`
@@ -41,68 +45,8 @@ const ChatbotIconWrapper = styled.div`
   }
 `;
 
-const BannerButton = styled.button`
-  padding: 10px 15px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s, color 0.3s;
-
-  &.btn-watch {
-    background-color: #28BD11;
-    color: #ffffff;
-
-    &:hover {
-      background-color: #24a70f;
-      color: #000000;
-    }
-  }
-
-  &.btn-detail {
-    background-color: #fff;
-    color: #000;
-
-    &:hover {
-      background-color: #8E8D8D;
-      color: #ffffff;
-    }
-  }
-`;
-
-// Style cho các nút điều khiển swiper
-const SwiperControls = styled.div`
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  padding: 0 20px;
-  z-index: 2;
-
-  button {
-    background-color: rgba(0, 0, 0, 0.5); 
-    color: #28BD11; 
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-
-    &:hover {
-      background-color: #28BD11;
-      color: #ffffff; 
-      transform: scale(1.1); 
-    }
-
-    svg {
-      font-size: 24px; 
-    }
-  }
-`;
-
 function Thethao() {
-  const { addRecently } = useContext(RecentlyContext);
+  const { isLoggedIn }  = useContext(UserContext);
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [bannerMovies, setBannerMovies] = useState([]);
@@ -113,11 +57,10 @@ function Thethao() {
 
   // Tạo một tham chiếu đến Swiper
   const swiperRef = useRef(null);
-
   useEffect(() => {
     const fetchMovieById = async () => {
       try {
-        const movieDoc = await getDoc(doc(db, "tvShows", "St9wjDjv95pryg4N180w"));
+        const movieDoc = await getDoc(doc(db, "tvShows", "KWiW9woHMzHT0uhAYUbY"));
         if (movieDoc.exists()) {
           setBannerMovies(movieDoc.data());
         } else {
@@ -130,7 +73,6 @@ function Thethao() {
   
     fetchMovieById();
   }, []);
-  
   
 
   const openPopup = () => {
@@ -177,7 +119,6 @@ function Thethao() {
     if (isItemVip === true && isUserVip === false) {
       openVipPopup("Bạn cần đăng ký gói VIP để xem nội dung này.");
     } else {
-      addRecently(tvShow);
       navigate(`/truyenhinh/${tvShowId}`);
     }
   };
@@ -192,73 +133,41 @@ function Thethao() {
     setVipPopupOpen(false);
   };
 
-  const bannerCaptionStyle = {
-    position: 'absolute',
-    width: '100%',
-    paddingLeft: '6%',
-    bottom: 0,
-    textAlign: 'left',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start', 
-  };
 
-  return (
-    <Layout>
+const ThethaoContent = () => (
       <div className="home">
-        <div className="banner" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
+       <div className="banner">
         <video
-            src="./videos/teaser_atsh.mp4"
+            src="./videos/Sport intro.mp4"
             autoPlay
             loop
             muted
-            style={{
-              width: '100%',
-              height: '100vh',
-              objectFit: 'cover',
-              maskImage: 'linear-gradient(to right, transparent, black 75%)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent, black 75%)',
-            }}
           />
-          <div className="banner-caption" style={bannerCaptionStyle}>
+          <div className="banner-caption">
             <p
               className="text-white"
-              style={{
-                maxWidth: '700px',
-                fontSize: '15px',
-                marginTop: '90px',
-                marginBottom: '35px',
-              }}
             >
-              { "Quy tụ 30 nam ca sĩ trẻ tượng trưng cho thế hệ mới, mang trông mình tuổi trẻ tươi nguyên, khát vọng đột phá và giấc mơ rạng danh văn hóa bản địa."}
+              { "Melon cung cấp thông tin, tin tức nóng hổi, kết quả trực tiếp, và video nổi bật từ các giải đấu hàng đầu thế giới. Hãy cùng khám phá đam mê thể thao bất tận!."}
             </p>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '30px' }}>
-            <BannerButton
-              className="btn-watch"
-              onClick={() => handleWatchNowClick(bannerMovies?.id, bannerMovies?.vip)}
-            >
+            <button className="banner-button btn-watch" onClick={() => handleWatchNowClick(bannerMovies?.id, bannerMovies?.vip)}>
               <FaPlay /> Xem ngay
-            </BannerButton>
-            <BannerButton
-              className="btn-detail"
-              onClick={() => handleMovieClick(bannerMovies)}
-            >
-              <IoInformationCircleOutline /> Thông tin
-            </BannerButton>
+              </button>
+                <button className="banner-button btn-detail" onClick={() => handleMovieClick(bannerMovies)}>
+                <IoInformationCircleOutline /> Chi tiết
+              </button>
           </div>
         </div>
       </div>
 
-        <div className="more-card" style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '40px', marginBottom: '40px', marginLeft: '15px', marginRight: '15px' }}>
-          <TitleCardsShow1 title={"AFC - BÓNG ĐÁ CHÂU Á"} category={"row1"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} /> 
-          <TitleCardsShow1  title={"SAIGON PHANTOM AOV"} category={"row2"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"NGOẠI HẠNG ANH - PREMIER LEAGUE"} category={"row3"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
-          <TitleCardsShow1  title={"THỂ THAO SẮP PHÁT SÓNG"} category={"row4"} genres={["Anh trai say hi"]} onMovieClick={handleMovieClick} />
+        <div className="more-card">
+          <TitleCardsShow1 title={"AFC - BÓNG ĐÁ CHÂU Á"} category={"row1"} genres={["Thể thao", "Bóng đá"]} onMovieClick={handleMovieClick} /> 
+          <TitleCardsShow1  title={"SAIGON PHANTOM AOV"} category={"row2"} genres={["Thể thao điện tử"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1  title={"NGOẠI HẠNG ANH - PREMIER LEAGUE"} category={"row3"} genres={["Thể thao", "Bóng đá"]} onMovieClick={handleMovieClick} />
+          <TitleCardsShow1  title={"THỂ THAO SẮP PHÁT SÓNG"} category={"row4"} genres={["Thể thao"]} onMovieClick={handleMovieClick} />
         </div>
-      </div>
-
       {!isPopupOpen && (
-        <ChatbotIconWrapper onClick={openPopup}>
+        <ChatbotIconWrapper onClick={openPopup} style={{ zIndex: 1000 }}>
           <IoIosChatbubbles />
         </ChatbotIconWrapper>
       )}
@@ -267,7 +176,16 @@ function Thethao() {
       {selectedMovie && <ShowDetail movie={selectedMovie} onClose={closeMoviePopup} />}
 
       {isVipPopupOpen && <VipPopup onClose={closeVipPopup} action={popupContent.action}/>}
-    </Layout>
+      </div>
+  );
+  return (
+    <>
+      {isLoggedIn ? (
+        <Layout>{ThethaoContent()}</Layout>
+      ) : (
+        <LayoutGuest>{ThethaoContent()}</LayoutGuest>
+      )}
+    </>
   );
 }
 

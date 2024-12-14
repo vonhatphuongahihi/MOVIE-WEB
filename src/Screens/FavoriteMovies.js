@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FiFilm, FiPlay } from "react-icons/fi"; 
 import { FaHeart } from "react-icons/fa";
-import Layout_main from "../Layout/Layout_main";
 import { FavoritesContext } from '../Context/FavoritesContext'; // Import context
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
 import { updateFavoriteMovies, getFavoriteMovies } from "../firebase";
 import { NavLink } from "react-router-dom";
+import LayoutGuest from '../Layout/LayoutGuest';
+import Layout from "../Layout/Layout";
+import { UserContext } from '../Context/UserContext';
 
 const MovieContainer = styled.div`
   border-radius: 8px;
@@ -18,6 +20,9 @@ const MovieContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  @media (max-width: 500px) {
+   justify-self: center;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -163,6 +168,7 @@ const PageButton = styled.button`
 
 
 function FavoriteMovies() {
+  const { isLoggedIn } = useContext(UserContext);
   const { favorites, setFavorites, removeFavorite } = useContext(FavoritesContext); // Make sure `removeFavorite` is in context
 
   // Thêm các state để quản lý phân trang
@@ -176,9 +182,9 @@ function FavoriteMovies() {
 
   // Hàm thay đổi trang
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  const LayoutComponent = isLoggedIn ? Layout : LayoutGuest;
   return (
-    <Layout_main>
+    <LayoutComponent>
       <br />
       <br />
       <NavLink to="/">
@@ -193,12 +199,13 @@ function FavoriteMovies() {
       </h3>
       <MoviesGrid>
         {currentMovies.length === 0 ? (
-          <div style={{ color: 'white', textAlign: 'center', gridColumn: '1 / -1' }}>
+          <div style={{ color: 'white', width:"98vw", display:'flex', alignItems:'center', justifyContent:'center', }}>
             <FiFilm className="text-4xl" />
             <p>Bạn chưa chọn thích phim nào</p>
           </div>
         ) : (
           currentMovies.map((movie, index) => {
+            console.log("Movie Type:", movie.type);  
             const backdropUrl = movie.backdrop_path
             ? ((["tmdb", "tvshow"].includes(movie.type) && !movie.backdrop_path.includes("http"))
                 ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
@@ -241,7 +248,7 @@ function FavoriteMovies() {
           </PageButton>
         ))}
       </Pagination>
-    </Layout_main>
+    </LayoutComponent>
   );
 }
 

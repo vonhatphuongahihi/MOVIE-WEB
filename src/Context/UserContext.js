@@ -5,23 +5,34 @@ import React, { createContext, useEffect, useState } from "react";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isUserVip, setIsUserVip] = useState(false);
+  const [user, setUser] = useState(null); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isUserVip, setIsUserVip] = useState(false); 
 
   useEffect(() => {
-    const auth = getAuth();
-    const db = getFirestore();
+    const auth = getAuth(); 
+    const db = getFirestore(); 
 
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userRef);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setIsLoggedIn(true); 
+        setUser(currentUser); 
 
-        if (userDoc.exists()) {
-          setUser(user);
-          setIsUserVip(userDoc.data().vip || false);
+        try {
+          const userRef = doc(db, "users", currentUser.uid);
+          const userDoc = await getDoc(userRef);
+
+          if (userDoc.exists()) {
+            setIsUserVip(userDoc.data().vip || false); // Cập nhật trạng thái VIP
+          } else {
+            console.warn("User document không tồn tại");
+            setIsUserVip(false);
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin người dùng:", error);
         }
       } else {
+        setIsLoggedIn(false);
         setUser(null);
         setIsUserVip(false);
       }
@@ -31,7 +42,14 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, isUserVip }}>
+    <UserContext.Provider
+      value={{
+        user,
+        isLoggedIn,
+        isUserVip,
+        setIsLoggedIn, 
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

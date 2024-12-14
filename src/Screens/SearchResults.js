@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import { FaRegCalendar } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { db } from "../firebase";
-import LayoutMain from "../Layout/Layout_main";
-
+import LayoutGuest1 from '../Layout/LayoutGuest1';
+import Layout1 from "../Layout/Layout1";
+import { useContext } from 'react';
+import { UserContext } from '../Context/UserContext';
 function SearchResults() {
+  const isLoggedIn = useContext(UserContext).isLoggedIn;
   const location = useLocation();
   const navigate = useNavigate();
   const query = new URLSearchParams(location.search).get("query");
@@ -37,8 +40,10 @@ function SearchResults() {
         if (language) filtersMovies.push(where("language", "==", language));
         if (genre) filtersMovies.push(where("genres", "array-contains", genre));
   
-        if (releaseDateFrom) filtersTVShows.push(where("first_air_date", ">=", releaseDateFrom));
-        if (releaseDateTo) filtersTVShows.push(where("first_air_date", "<=", releaseDateTo));
+        if (releaseDateFrom) filtersTVShows.push(where("release_date", ">=", releaseDateFrom));
+        if (releaseDateTo) filtersTVShows.push(where("release_date", "<=", releaseDateTo));
+        if (minDuration) filtersTVShows.push(where("runtime", ">=", minDuration));
+        if (maxDuration) filtersTVShows.push(where("runtime", "<=", maxDuration));
         if (language) filtersTVShows.push(where("language", "==", language));
         if (genre) filtersTVShows.push(where("genres", "array-contains", genre));
   
@@ -70,10 +75,9 @@ function SearchResults() {
         }, []);
   
   
-        const filteredResults = uniqueResults.filter((item) =>
-          (item.title && item.title.toLowerCase().includes(query.toLowerCase())) || 
-          (item.name && item.name.toLowerCase().includes(query.toLowerCase()))
-        );
+        const filteredResults = query ? uniqueResults.filter((item) =>
+          (item.title && item.title.toLowerCase().includes(query.toLowerCase()))
+        ) : uniqueResults;
   
         setResults(filteredResults);
       } catch (error) {
@@ -85,9 +89,9 @@ function SearchResults() {
     fetchSearchResults();
   }, [query, releaseDateFrom, releaseDateTo, duration, language, genre]);
   
-
+  const LayoutComponent = isLoggedIn ? Layout1 : LayoutGuest1;
   return (
-    <LayoutMain>
+    <LayoutComponent>
       {loading ? (
         <div className="loading">
           <img src="./images/spin.gif" alt="Loading" />
@@ -107,10 +111,10 @@ function SearchResults() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {results.map((item) => (
               <div
-                key={item.movieId}
+                key={item.movieId || item.id}
                 className="cursor-pointer hover:bg-neutral-800"
                 onClick={() =>
-                  navigate(`/movie/${item.movieId}`)
+                  navigate(item.itemType === "movie" ? `/movie/${item.movieId}` : `/truyenhinh/${item.id}`)
                 }
               >
                 <img
@@ -121,19 +125,19 @@ function SearchResults() {
                         : item.backdrop_path)
                     : null
                   }
-                  alt={item.title || item.name}
+                  alt={item.title}
                   loading="lazy"
                   className="w-full h-48 object-cover rounded-lg"
                 />
                 
                 <div className="p-4">
                   <h2 className="text-lg font-semibold hover:text-subMain">
-                    {item.title || item.name}
+                    {item.title}
                   </h2>
                   <div className="flex gap-4 mt-1">
                     <FaRegCalendar className="text-subMain w-4 h-4" />
                     <span className="text-sm">
-                      {item.release_date || item.first_air_date}
+                      {item.release_date}
                     </span>
                   </div>
                 </div>
@@ -142,7 +146,7 @@ function SearchResults() {
           </div>
         </div>
       )}
-    </LayoutMain>
+    </LayoutComponent>
   );
 }
 

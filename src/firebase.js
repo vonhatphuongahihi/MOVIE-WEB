@@ -180,10 +180,9 @@ const updateRecently = async (movieList) => {
     const uid = user.uid;
     const userDocRef = doc(db, "users", uid);
 
-    // Lưu toàn bộ `movieList` vào `history`
+    // Lưu toàn bộ movieList vào history
     await updateDoc(userDocRef, { history: movieList });
 
-    console.log("Cập nhật danh sách history:", movieList);
   } catch (error) {
     console.error("Không thể cập nhật lịch sử:", error);
   }
@@ -201,7 +200,6 @@ const getRecently = async () => {
 
     if (userDocSnap.exists()) {
       const history = userDocSnap.data().history;
-      console.log("Lấy danh sách history:", history);
       return history || []; // Trả về mảng rỗng nếu không có lịch sử
     } else {
       console.warn("Không tìm thấy tài liệu người dùng.");

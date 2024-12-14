@@ -2,9 +2,13 @@ import React from "react";
 import { FaCheckCircle, FaStar } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import LayoutMain from "../Layout/Layout_main";
+import { useContext } from 'react';
+import LayoutGuest1 from '../Layout/LayoutGuest1';
+import Layout1 from "../Layout/Layout1";
+import { UserContext } from '../Context/UserContext';
 
 function VipRegistration() {
+  const { isLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
   const vipPackages = [
@@ -16,9 +20,10 @@ function VipRegistration() {
   const handleChooseVip = (price, name) => {
     navigate("/payment", { state: { amount: price, packageName: name } });
   };
-
+  
+  const LayoutComponent = isLoggedIn ? Layout1 : LayoutGuest1;
   return (
-    <LayoutMain>
+    <LayoutComponent>
       <div className="container bg-white text-black mx-auto p-5 pt-16">
         <button
           onClick={() => navigate(-1)} // Điều hướng quay lại trang trước
@@ -27,17 +32,17 @@ function VipRegistration() {
           <IoIosArrowBack />
         </button>
         <h2 className="text-xl font-bold mb-5 text-left ml-10">CÁC GÓI VIP</h2>
-        <div className="mb-10 text-md flex gap-x-5 ml-16">
-          <p className="flex gap-x-1 items-center"><FaCheckCircle className="text-subMain"/>100,000+ giờ giải trí</p>
-          <p className="flex gap-x-1 items-center"><FaCheckCircle className="text-subMain"/>Xem sớm nhất</p>
-          <p className="flex gap-x-1 items-center"><FaCheckCircle className="text-subMain"/>Không quảng cáo</p>
-          <p className="flex gap-x-1 items-center"><FaCheckCircle className="text-subMain"/>Thuyết minh/Lồng tiếng/Phụ đề</p>
-          <p className="flex gap-x-1 items-center"><FaCheckCircle className="text-subMain"/>Full HD/4K</p>
+        <div className="flex-col md:flex-row mb-10 text-sm md:text-md flex gap-x-5 ml-10">
+          <p className="flex gap-x-1 items-center text-nowrap"><FaCheckCircle className="text-subMain"/>100,000+ giờ giải trí</p>
+          <p className="flex gap-x-1 items-center text-nowrap"><FaCheckCircle className="text-subMain"/>Xem sớm nhất</p>
+          <p className="flex gap-x-1 items-center text-nowrap"><FaCheckCircle className="text-subMain"/>Không quảng cáo</p>
+          <p className="flex gap-x-1 items-center text-nowrap"><FaCheckCircle className="text-subMain"/>Thuyết minh/Lồng tiếng/Phụ đề</p>
+          <p className="flex gap-x-1 items-center text-nowrap"><FaCheckCircle className="text-subMain"/>Full HD/4K</p>
         </div>
 
-        <div className="flex space-x-10 ml-10 mb-16">
+        <div className="flex-col md:flex-row flex justify-center items-center">
           {vipPackages.map((pkg) => (
-            <div key={pkg.id} className="border-2 border-black rounded-lg p-5 w-80">
+            <div key={pkg.id} className="border-2 border-black rounded-lg p-5 w-80 mx-10 md:mx-5 mb-10">
               <img
                 src={`/images/VIP_image_${pkg.id}.png`}
                 alt="VIP Offer"
@@ -60,7 +65,7 @@ function VipRegistration() {
         </div>
 
       </div>
-    </LayoutMain>
+    </LayoutComponent>
   );
 }
 

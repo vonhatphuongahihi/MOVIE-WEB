@@ -1,23 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaHeart } from "react-icons/fa";
 
 function Movie({ movie }) {
+  const backdropUrl = movie.backdrop_path
+  ? (!movie.backdrop_path.includes("http")
+      ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
+      : movie.backdrop_path)
+  : null;
+
   return (
     <>
       <div className="border border-border p-1 hover:scale-95 transitions relative rounded overflow-hidden">
-        <Link to={`/movie/${movie?.id}`} className="w-full">
+        <Link to={`/movie/${movie?.movieId}`} className="w-full">
           <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            src={backdropUrl}
             alt={movie.title}
-            className="w-full h-64 object-cover"
+            className="w-full lg:h-48 md:h-32 h-24 object-cover"
           />
         </Link>
-        <div className="absolute flex-btn gap-2 bottom-0 right-0 left-0 bg-main bg-opacity-60 text-white px-4 py-3">
-          <h3 className="font-semibold truncate">{movie.title}</h3>
-          <button className="h-9 w-9 text-sm flex-colo transitions hover:bg-transparent border-2 border-subMain rounded-md bg-subMain text-white">
-            <FaHeart />
-          </button>
+        <div className="absolute flex-btn gap-2 bottom-0 right-0 left-0 bg-main bg-opacity-60 text-white px-4 lg:py-3 md:py-2 py-1">
+          <h3 className="font-semibold truncate lg:text-base md:text-sm text-[13px]">{movie.title}</h3>
         </div>
       </div>
     </>

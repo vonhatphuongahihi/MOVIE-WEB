@@ -4,8 +4,7 @@ import { doc, getDoc, getFirestore } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
-import LayoutMain from "../Layout/Layout_main";
-
+import Layout1 from "../Layout/Layout1";
 function Payment() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -79,7 +78,7 @@ function Payment() {
     };
 
     return (
-        <LayoutMain>
+        <Layout1>
         <div className="container bg-white text-black mx-auto p-5 pt-16">
             <button
             onClick={() => navigate(-1)} // Điều hướng quay lại trang trước
@@ -93,28 +92,28 @@ function Payment() {
                 <div className="w-full max-w-md bg-white p-6 rounded-lg border-2 border-black">
                     <h1 className="text-2xl font-bold mb-4 mt-0 text-center">Thông tin chi tiết</h1>
                     <div className="mb-4">
-                        <div className="flex justify-between border-b pb-2 mb-2">
-                            <span className="font-medium">Tên người dùng</span>
+                        <div className="flex justify-between border-b pb-2 mb-2 gap-x-5">
+                            <span className="font-medium text-nowrap">Tên người dùng</span>
                             <span>{userName}</span>
                         </div>
-                        <div className="flex justify-between border-b pb-2 mb-2">
-                            <span className="font-medium">Tên gói</span>
+                        <div className="flex justify-between border-b pb-2 mb-2 gap-x-5">
+                            <span className="font-medium text-nowrap">Tên gói</span>
                             <span>{packageName}</span>
                         </div>
-                        <div className="flex justify-between border-b pb-2 mb-2">
-                            <span className="font-medium">Thời hạn gói</span>
+                        <div className="flex justify-between border-b pb-2 mb-2 gap-x-5">
+                            <span className="font-medium text-nowrap">Thời hạn gói</span>
                             <span>30 ngày - Tự động gia hạn</span>
                         </div>
-                        <div className="flex justify-between border-b pb-2 mb-2">
-                            <span className="font-medium">Ngày hiệu lực</span>
+                        <div className="flex justify-between border-b pb-2 mb-2 gap-x-5">
+                            <span className="font-medium text-nowrap">Ngày hiệu lực</span>
                             <span>{formattedToday}</span>
                         </div>
-                        <div className="flex justify-between border-b pb-2 mb-2">
-                            <span className="font-medium">Sử dụng đến</span>
+                        <div className="flex justify-between border-b pb-2 mb-2 gap-x-5">
+                            <span className="font-medium text-nowrap">Sử dụng đến</span>
                             <span>{formattedExpirationDate}</span>
                         </div>
-                        <div className="flex justify-between border-b pb-2 mb-4">
-                            <span className="font-medium">Trị giá</span>
+                        <div className="flex justify-between border-b pb-2 mb-4 gap-x-5">
+                            <span className="font-medium text-nowrap">Trị giá</span>
                             <span>{amount.toLocaleString()} VND</span>
                         </div>
                         </div>
@@ -125,7 +124,7 @@ function Payment() {
                         </div>
 
                         <p className="text-sm text-gray-600 mb-4 text-justify">
-                        Bằng việc thanh toán, bạn xác nhận đã đọc và đồng ý với Hợp đồng và Chính sách của Onion, chấp nhận cho Onion tự động gia hạn gói dịch vụ khi hết hạn. Bạn có thể hủy gia hạn bất cứ lúc nào.
+                        Bằng việc thanh toán, bạn xác nhận đã đọc và đồng ý với Hợp đồng và Chính sách của Melon, chấp nhận cho Melon tự động gia hạn gói dịch vụ khi hết hạn. Bạn có thể hủy gia hạn bất cứ lúc nào.
                         </p>
 
                         <button
@@ -139,7 +138,7 @@ function Payment() {
                 </div>       
             </div>
 
-        </LayoutMain>
+        </Layout1>
     );
 }
 

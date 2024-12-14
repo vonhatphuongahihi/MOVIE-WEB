@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # Thêm dòng này
+from flask_cors import CORS  
 from chat import get_response
 
 app = Flask(__name__)
-CORS(app)  # Thêm dòng này để cho phép CORS
+CORS(app)  
 
 @app.route('/predict', methods=['POST'])
 def predict():
