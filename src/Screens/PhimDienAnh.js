@@ -61,7 +61,7 @@ function PhimDienAnh() {
   useEffect(() => {
     const fetchBannerMovies = async () => {
       try {
-        const moviesRef = collection(db, "movies"); // Thay "movies" bằng tên collection của bạn
+        const moviesRef = collection(db, "movies"); 
         const q = query(
           moviesRef,
           where("category", "==", "popular"),
@@ -144,7 +144,9 @@ function PhimDienAnh() {
   };
 
 
+
 const PhimDienAnhContent = () => (
+
       <div className="home">
       <Swiper
         spaceBetween={0}
