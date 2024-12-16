@@ -1,6 +1,6 @@
-import { doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { collection, doc, getDoc, getDocs, query, where, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import React, { useContext, useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { BsCollectionFill } from "react-icons/bs";
 import { MdOutlineOndemandVideo } from "react-icons/md";
@@ -22,17 +22,17 @@ import { FaRegCalendar } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { RiGlobalLine } from "react-icons/ri";
 import { IoIosRadioButtonOn } from "react-icons/io";
-import { addCommentToMovie } from "../firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { db } from "../firebase";
 
 function SingleMoviePhimTrung() {
   const { movieId } = useParams();
+  const { addRecently } = useContext(RecentlyContext);
+  const { addFavorite, removeFavorite, favorites } = useContext(FavoritesContext);
   const [user, setUser] = useState(null);
   const [movie, setMovie] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [comments, setComments] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false); // Trạng thái yêu thích
-  const { addRecently } = useContext(RecentlyContext);
   const [play, setPlay] = useState(false);
 
   // Lấy thông tin người dùng hiện tại
@@ -42,56 +42,23 @@ function SingleMoviePhimTrung() {
       if (currentUser) {
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
         if (userDoc.exists()) {
-          setUser({ uid: currentUser.uid, ...userDoc.data() });
+          const userData = userDoc.data();
+          setUser({ uid: currentUser.uid, ...userData });
+          setIsFavorite(userData.fav?.includes(movieId));
         }
       } else {
         setUser(null);
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [movieId]);
 
   // Kiểm tra xem phim hiện tại có trong danh sách yêu thích không
   useEffect(() => {
-    const checkFavoriteStatus = async () => {
-      if (user) {
-        const favoriteDoc = await getDoc(doc(db, `users/${user.uid}/favorites`, movieId));
-        setIsFavorite(favoriteDoc.exists());
-      }
-    };
-    if (movieId && user) {
-      checkFavoriteStatus();
-    }
-  }, [movieId, user]);
-
-  // Hàm xử lý thêm vào yêu thích
-  const handleAddToFavorites = async () => {
     if (user) {
-      try {
-        await setDoc(doc(db, `users/${user.uid}/favorites`, movieId), {
-          movieId,
-          title: movie?.title,
-          backdropUrl: movie?.backdropUrl,
-          voteAverage: movie?.voteAverage,
-        });
-        setIsFavorite(true);
-      } catch (error) {
-        console.error("Lỗi khi thêm vào yêu thích:", error);
-      }
+      setIsFavorite(favorites.some(fav => fav.movieId === movieId));
     }
-  };
-
-  // Hàm xử lý xóa khỏi yêu thích
-  const handleRemoveFromFavorites = async () => {
-    if (user) {
-      try {
-        await deleteDoc(doc(db, `users/${user.uid}/favorites`, movieId));
-        setIsFavorite(false);
-      } catch (error) {
-        console.error("Lỗi khi xóa khỏi yêu thích:", error);
-      }
-    }
-  };
+  }, [favorites, movieId, user]);
 
   // Fetch dữ liệu phim
   useEffect(() => {
@@ -129,6 +96,58 @@ function SingleMoviePhimTrung() {
     fetchMovieData();
   }, [movieId]);
 
+  const toggleFavorite = async () => {
+    if (!user) {
+      alert("Bạn cần đăng nhập để yêu thích phim!");
+      return;
+    }
+
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+
+      if (isFavorite) {
+        // Gỡ bỏ phim khỏi danh sách yêu thích
+        await updateDoc(userDocRef, {
+          fav: arrayRemove(movieId),
+        });
+        removeFavorite(movieId);
+      } else {
+        // Thêm phim vào danh sách yêu thích
+        await updateDoc(userDocRef, {
+          fav: arrayUnion(movieId),
+        });
+        addFavorite({
+          movieId,
+          title: movie?.title,
+          backdrop_path: movie?.backdrop_path || movie?.backdropUrl,
+          type: "movie",
+        });
+      }
+
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái yêu thích:", error);
+    }
+  };
+
+  if (!movie) {
+    return <div>Loading...</div>;
+  }
+
+  const handlePlay = () => {
+    setPlay(true);
+
+    const movieToAdd = {
+      id: movie.movieId,
+      title: movie.title,
+      overview: movie.overview,
+      runtime: movie.runtime,
+      country: movie.country,
+      backdrop_path: movie.backdrop_path || movie.backdropUrl,
+      type: "movie",
+    };
+    addRecently(movieToAdd);
+  };
 
   return (
     <Layout>
@@ -215,17 +234,14 @@ function SingleMoviePhimTrung() {
               </div>
               <div
                 className="flex gap-3 items-center cursor-pointer"
-                onClick={isFavorite ? handleRemoveFromFavorites : handleAddToFavorites}
+                onClick={toggleFavorite}
               >
-                {isFavorite ? (
-                  <>
-                    <FaHeart className="text-red-500" /> <p>Đã yêu thích</p>
-                  </>
-                ) : (
-                  <>
-                    <PiHeart /> <p>Yêu thích</p>
-                  </>
-                )}
+                <PiHeart
+                  className={`text-2xl ${isFavorite ? "text-red-500" : ""}`}
+                />
+                <p className="md:text-lg font-medium">
+                  {isFavorite ? "Đã yêu thích" : "Yêu thích"}
+                </p>
               </div>
             </div>
           </div>

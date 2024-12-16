@@ -1,5 +1,5 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, query, where, updateDoc, arrayUnion, arrayRemove,} from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
 import { FaPlay, FaRegCalendar } from "react-icons/fa";
@@ -47,7 +47,7 @@ function SingleMovie() {
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setUser(userData);
-          setIsFavorite(userData.favoriteMovies?.includes(id));
+          setIsFavorite(userData.fav?.includes(id));
         }
       } else {
         setUser(null);
@@ -60,25 +60,11 @@ function SingleMovie() {
   }, [id]);
 
   useEffect(() => {
-    const fetchFavoriteStatus = async () => {
-      if (user) {
-        try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            setIsFavorite(userData.favoriteMovies?.includes(id));
-          }
-        } catch (error) {
-          console.error("Lỗi khi tải trạng thái yêu thích:", error);
-        }
-      }
-    };
-  
-    fetchFavoriteStatus();
-  }, [id, user]);
-  const handleSharePopupToggle = () => {
-    setShowSharePopup((prev) => !prev);
-};
+    if (user) {
+      setIsFavorite(favorites.some(fav => fav.movieId === id));
+    }
+  }, [favorites, id, user]);
+
   const fetchMovieData = async () => {
     try {
       const movieDoc = await getDoc(doc(db, "movies", id));
@@ -150,31 +136,38 @@ function SingleMovie() {
       alert("Bạn cần đăng nhập để yêu thích phim!");
       return;
     }
-  
+
     try {
       const userDocRef = doc(db, "users", user.uid);
-  
+
       if (isFavorite) {
         // Gỡ bỏ phim khỏi danh sách yêu thích
         await updateDoc(userDocRef, {
-          favoriteMovies: arrayRemove(id),
+          fav: arrayRemove(id),
         });
         removeFavorite(id);
       } else {
         // Thêm phim vào danh sách yêu thích
         await updateDoc(userDocRef, {
-          favoriteMovies: arrayUnion(id),
+          fav: arrayUnion(id),
         });
-        addFavorite(movie);
+        addFavorite({
+          movieId: id,
+          title: movie?.title,
+          backdrop_path: movie?.backdrop_path || movie?.backdropUrl,
+          type: "movie",
+        });
       }
-  
+
       setIsFavorite(!isFavorite);
     } catch (error) {
       console.error("Lỗi khi cập nhật trạng thái yêu thích:", error);
     }
   };
-  
-  
+
+  const handleSharePopupToggle = () => {
+    setShowSharePopup((prev) => !prev);
+  };
 
   if (!movie) {
     return <div>Loading...</div>;
@@ -305,8 +298,7 @@ function SingleMovie() {
                 {isFavorite ? "Đã thích" : "Yêu thích"}
               </p>
             </div>
-          </div>
-          
+          </div>          
             <div className="flex">
               <p className="font-medium md:w-20 lg:w-auto lg:mr-2 md:mr-0 mr-2">Diễn viên:</p>
               <p className="font-medium">
@@ -325,7 +317,6 @@ function SingleMovie() {
                 {movie.genres.join(', ')}
               </p>
             </div>
-            
           </div>
         </div>
       </div>

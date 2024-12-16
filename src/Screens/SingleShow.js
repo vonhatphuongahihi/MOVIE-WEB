@@ -1,5 +1,5 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, query, where, setDoc, deleteDoc, updateDoc, arrayUnion, arrayRemove, } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where, setDoc, deleteDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
 import { FaHeart, FaPlay, FaRegCalendar } from "react-icons/fa";
@@ -57,16 +57,10 @@ function SingleShow() {
   }, [id]);
 
   useEffect(() => {
-    const checkFavoriteStatus = async () => {
-      if (user) {
-        const favoriteDoc = await getDoc(doc(db, `users/${user.uid}/favorites`, id));
-        setIsFavorite(favoriteDoc.exists());
-      }
-    };
-    if (id && user) {
-      checkFavoriteStatus();
+    if (user) {
+      setIsFavorite(favorites.some(fav => fav.id === id));
     }
-  }, [id, user]);
+  }, [favorites, id, user]);
 
   const handleAddToFavorites = async () => {
     if (user) {
@@ -177,13 +171,13 @@ function SingleShow() {
       if (isFavorite) {
         // Gỡ bỏ phim khỏi danh sách yêu thích
         await updateDoc(userDocRef, {
-          favoriteMovies: arrayRemove(id),
+          fav: arrayRemove(id),
         });
         removeFavorite(id);
       } else {
         // Thêm phim vào danh sách yêu thích
         await updateDoc(userDocRef, {
-          favoriteMovies: arrayUnion(id),
+          fav: arrayUnion(id),
         });
         addFavorite(show);
       }
