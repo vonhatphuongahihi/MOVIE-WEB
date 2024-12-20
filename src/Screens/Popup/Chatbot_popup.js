@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Chatbot_popup.css';
 import { AiOutlineDelete } from "react-icons/ai";
-import { LuSendHorizonal } from "react-icons/lu";
+import { LuSendHorizontal } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
 
 const ChatbotPopup = ({ closePopup }) => {
@@ -88,7 +88,7 @@ const ChatbotPopup = ({ closePopup }) => {
             className="chatbox__send--footer send__button bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
             onClick={handleSendMessage}
           >
-            <LuSendHorizonal />
+            <LuSendHorizontal />
           </button>
 
           <button 
