@@ -17,7 +17,7 @@
    ```bash
    git clone https://github.com/vonhatphuongahihi/MOVIE-WEB
    cd MOVIE-WEB
-   npm install aos firebase react-router-dom react-toastify styled-components react-icons classnames swiper
+   npm install aos firebase react-router-dom react-toastify styled-components react-icons classnames swiper transformers
 
 2. **Cài đặt một số cấu hình cần thiết**
 
@@ -55,8 +55,30 @@
          ```bash
          node .\server\src\momo\momo_server.js
          ```
+3. **Cài đặt và khởi chạy Chatbot**
+   3.1. Cài đặt Chabot
+      - Di chuyển đến thư mục Chatbot:
+   
+         ```bash
+         cd src/Chatbot
+         ```
+   3.2. Huấn luyện và chạy chatbot  
+      - Huấn luyện mô hình chatbot:
+          
+         ```bash
+         python train.py
+         ```
+      - Chạy chatbot:
+       
+         ```bash
+         python chat.py
+         ```
+      - Khởi động chatbot với Flask:
 
-3. **Khởi động dự án**
+        ```bash
+         python chatbot.py
+         ```
+4. **Khởi động dự án**
   ```bash
    npm run start
 
