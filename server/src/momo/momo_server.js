@@ -37,7 +37,7 @@ app.post('/payment', async (req, res) => {
     var partnerCode = 'MOMO';
     var redirectUrl = 'http://localhost:3000';
 
-    var ipnUrl = 'https://4e83-113-161-91-102.ngrok-free.app/callback';
+    var ipnUrl = 'https://3237-115-79-41-37.ngrok-free.app/callback';
     var requestType = "payWithMethod";
     
     var orderId = partnerCode + new Date().getTime();

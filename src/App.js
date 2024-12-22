@@ -1,7 +1,7 @@
 import Aos from 'aos';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useContext, useEffect, useState } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from './firebase';
@@ -32,7 +32,6 @@ import WatchPage from './Screens/WatchPage';
 import SplashScreen from './Splash';
 
 import { createGlobalStyle } from 'styled-components';
-import { RecentlyContext } from "./Context/RecentlyContext";
 import { SleepTimerProvider } from './Context/SleepTimerContext';
 import MovieFetcher from './MovieFetcher';
 import Admin from './Screens/Dashboard/Admin/Admin';
@@ -44,7 +43,6 @@ import AddShow from './Screens/Dashboard/Admin/AddShow';
 import SingleShow from './Screens/SingleShow';
 import FAQScreen from './Screens/FAQScreen';
 import Payment from './Screens/Payment';
-import SingleMoviePhimTrung from './Screens/SingleMoviePhimTrung';
 import Thieunhi from './Screens/Thieunhi';
 import VipRegistration from './Screens/VipRegistration';
 import TvShowFetcher from './TvShowFetcher';
@@ -56,9 +54,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 function App() {
   const [loading, setLoading] = useState(true);
-  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);  const navigate = useNavigate();
-  const location = useLocation(); 
-  const {loadRecently } = useContext(RecentlyContext);  
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);  
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -126,7 +122,6 @@ function App() {
           <Route path="/admin/userslist" element={<UsersList />} />
           <Route path="/admin/addmovie" element={<AddMovie />} />
           <Route path="/admin/addshow" element={<AddShow />} />
-          <Route path="/phimtrung/:movieId" element={<SingleMoviePhimTrung />} />
           <Route path="/faqs" element={<FAQScreen />} />
           <Route path="/truyenhinh/:id" element={<SingleShow />} />
           <Route path="/phimdienanh/:id" element={<SingleMovie />} />

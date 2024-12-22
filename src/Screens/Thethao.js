@@ -6,13 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { GetShowsInfoFromFirebase } from '../Components/Home/GetShowsInfoFromFirebase';
-import { GrNext, GrPrevious } from "react-icons/gr";
 import TitleCardsShow1 from '../Components/Home/TitleCards/TitleCardsShow1';
 import Layout from '../Layout/Layout';
 import LayoutGuest from '../Layout/LayoutGuest';
 import ChatbotPopup from './Popup/Chatbot_popup';
 import ShowDetail from './ShowDetail';
-import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 
 import { useContext } from 'react';
 import { UserContext } from '../Context/UserContext';
@@ -24,8 +22,6 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { collection, getDocs, query, where } from "firebase/firestore";
 
 import { db } from '../firebase';
 
@@ -56,7 +52,6 @@ function Thethao() {
   });
 
   // Tạo một tham chiếu đến Swiper
-  const swiperRef = useRef(null);
   useEffect(() => {
     const fetchMovieById = async () => {
       try {
