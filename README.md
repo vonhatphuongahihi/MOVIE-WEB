@@ -17,7 +17,7 @@
    ```bash
    git clone https://github.com/vonhatphuongahihi/MOVIE-WEB
    cd MOVIE-WEB
-   npm install aos firebase react-router-dom react-toastify styled-components react-icons classnames swiper transformers
+   npm install aos firebase react-router-dom react-toastify styled-components react-icons classnames swiper transformers numpy sentence-transformers flask flask-cors
 
 2. **Cài đặt một số cấu hình cần thiết**
 
