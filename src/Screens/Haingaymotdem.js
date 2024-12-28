@@ -134,7 +134,7 @@ const HaingaymotdemContent = () => (
       <div className="home">
         <div className="banner">
         <video
-            src="./videos/teaser_2n1d.mp4"
+            src="/videos/teaser_2n1d.mp4"
             autoPlay
             loop
             muted
