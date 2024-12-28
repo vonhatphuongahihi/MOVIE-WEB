@@ -135,7 +135,7 @@ const AnhtraisayhiContent = () => (
       <div className="home">
         <div className="banner">
         <video
-            src="./videos/teaser_atsh.mp4"
+            src="/videos/teaser_atsh.mp4"
             autoPlay
             loop
             muted

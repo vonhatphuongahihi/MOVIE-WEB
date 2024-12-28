@@ -133,7 +133,7 @@ const ThethaoContent = () => (
       <div className="home">
        <div className="banner">
         <video
-            src="./videos/Sport intro.mp4"
+            src="/videos/Sport intro.mp4"
             autoPlay
             loop
             muted
